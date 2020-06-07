@@ -4,6 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+class ChoiceMapType {
+  MapType map_type;
+  String name;
+
+  ChoiceMapType({this.map_type, this.name});
+}
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -23,18 +30,19 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   MapSampleState() {
-    _getLocation().then((LatLng loc) async{
+    _getLocation().then((LatLng loc) async {
       setState(() {
         loc_to_device[0] = loc;
         loc_to_device[1] = loc;
       });
       final GoogleMapController controller = await _controller.future;
-      CameraPosition cp = CameraPosition(
-          target: loc,
-          zoom: 15);
+      CameraPosition cp = CameraPosition(target: loc, zoom: 15);
       controller.animateCamera(CameraUpdate.newCameraPosition(cp));
     });
   }
+  List<ChoiceMapType> choices =
+      MapType.values.map((e) => ChoiceMapType(map_type: e, name: e.toString())).toList();
+
   Completer<GoogleMapController> _controller = Completer();
   var rng = new Random();
   List<LatLng> device_coordinates = [
@@ -53,6 +61,13 @@ class MapSampleState extends State<MapSample> {
     zoom: 13.5,
   );
 
+  MapType current_map_type = MapType.satellite;
+  void _select(ChoiceMapType c){
+    setState(() {
+      current_map_type = c.map_type;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Set<Marker> markers = {};
@@ -64,7 +79,6 @@ class MapSampleState extends State<MapSample> {
           );
       markers.add(m);
     }
-
     lines = {
       Polyline(
         polylineId: PolylineId("device_path"),
@@ -83,12 +97,24 @@ class MapSampleState extends State<MapSample> {
     };
 
     return new Scaffold(
-        // appBar: AppBar(
-        //   title: Text("First Maps"),
-        //   actions: <Widget>[],
-        // ),
+        appBar: AppBar(
+          title: Text("First Maps"),
+          actions: <Widget>[
+            PopupMenuButton<ChoiceMapType>(
+              onSelected: _select,
+              itemBuilder: (BuildContext context) {
+                return choices.map((ChoiceMapType choice) {
+                  return PopupMenuItem<ChoiceMapType>(
+                    value: choice,
+                    child: Text(choice.name),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+        ),
         body: GoogleMap(
-          mapType: MapType.satellite,
+          mapType: current_map_type,
           initialCameraPosition: _initialPosition,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
@@ -142,6 +168,7 @@ class MapSampleState extends State<MapSample> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
   }
+
   void _addNewPoint() {
     setState(() {
       var point = _generateRandomSC();
@@ -198,7 +225,7 @@ class MapSampleState extends State<MapSample> {
     final GoogleMapController controller = await _controller.future;
     CameraPosition cp = CameraPosition(
         bearing: _bearing(loc_to_device[0], loc_to_device[1]),
-        target: LatLng(loc_to_device[0].latitude, loc_to_device[0].longitude),
+        target: loc_to_device[0],
         tilt: 70.0,
         zoom: 17);
     controller.animateCamera(CameraUpdate.newCameraPosition(cp));
