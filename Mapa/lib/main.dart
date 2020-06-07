@@ -11,6 +11,13 @@ class ChoiceMapType {
   ChoiceMapType({this.map_type, this.name});
 }
 
+class PositionData {
+  LatLng gps;
+  double altitude = 0;
+  int time;
+  PositionData({this.gps, this.altitude});
+}
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Google Maps Demo',
+      debugShowCheckedModeBanner: false,
       home: MapSample(),
     );
   }
@@ -30,29 +38,31 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   MapSampleState() {
-    _getLocation().then((LatLng loc) async {
+    _getLocation().then((PositionData loc) async {
       setState(() {
         loc_to_device[0] = loc;
         loc_to_device[1] = loc;
       });
       final GoogleMapController controller = await _controller.future;
-      CameraPosition cp = CameraPosition(target: loc, zoom: 15);
+      CameraPosition cp = CameraPosition(target: loc.gps, zoom: 15);
       controller.animateCamera(CameraUpdate.newCameraPosition(cp));
     });
   }
-  List<ChoiceMapType> choices =
-      MapType.values.map((e) => ChoiceMapType(map_type: e, name: e.toString())).toList();
 
   Completer<GoogleMapController> _controller = Completer();
+
+  List<ChoiceMapType> choices = MapType.values
+      .map((e) => ChoiceMapType(map_type: e, name: e.toString()))
+      .toList();
   var rng = new Random();
-  List<LatLng> device_coordinates = [
+  List<PositionData> device_coordinates = [
     // LatLng(-22.00698, -47.89676),
     // LatLng(-22.00144, -47.93198),
     // LatLng(-21.98365, -47.88166),
   ];
-  List<LatLng> loc_to_device = [
-    LatLng(-22.00698, -47.89676),
-    LatLng(-22.00698, -47.89676),
+  List<PositionData> loc_to_device = [
+    PositionData(gps: LatLng(-22.00698, -47.89676)),
+    PositionData(gps: LatLng(-22.00698, -47.89676)),
   ];
   Set<Polyline> lines = {};
 
@@ -62,7 +72,7 @@ class MapSampleState extends State<MapSample> {
   );
 
   MapType current_map_type = MapType.satellite;
-  void _select(ChoiceMapType c){
+  void _select(ChoiceMapType c) {
     setState(() {
       current_map_type = c.map_type;
     });
@@ -73,26 +83,33 @@ class MapSampleState extends State<MapSample> {
     Set<Marker> markers = {};
     for (var position in device_coordinates) {
       Marker m = Marker(
-          position: position,
-          markerId: MarkerId((position.longitude + position.latitude)
-              .toString()) // this is problematic; solution use received index
+          position: position.gps,
+          zIndex: position.altitude,
+          alpha: 0.75,
+          infoWindow: InfoWindow(
+              title: "Alt: ${position.altitude.toStringAsFixed(4)}",
+              snippet:
+                  "(${position.gps.latitude.toStringAsFixed(4)},${position.gps.latitude.toStringAsFixed(4)})"),
+          markerId: MarkerId((position.gps.longitude + position.gps.latitude)
+              .toString()) // this is problematic;.toStringAsFixed(4) solution use received index
           );
       markers.add(m);
     }
     lines = {
       Polyline(
-        polylineId: PolylineId("device_path"),
-        consumeTapEvents: false,
-        color: Colors.pink,
-        width: 2,
-        points: device_coordinates,
-      ),
+          polylineId: PolylineId("device_path"),
+          consumeTapEvents: false,
+          color: Colors.pink,
+          width: 2,
+          points: device_coordinates.map((e) => e.gps).toList(),
+          zIndex: 1),
       Polyline(
         polylineId: PolylineId("loc_to_device"),
         consumeTapEvents: false,
         color: Colors.blue,
         width: 5,
-        points: loc_to_device,
+        points: loc_to_device.map((e) => e.gps).toList(),
+        zIndex: 0,
       )
     };
 
@@ -101,9 +118,11 @@ class MapSampleState extends State<MapSample> {
           title: Text("First Maps"),
           actions: <Widget>[
             PopupMenuButton<ChoiceMapType>(
+              tooltip: "Select Map Type",
+              icon: Icon(Icons.map),
               onSelected: _select,
               itemBuilder: (BuildContext context) {
-                return choices.map((ChoiceMapType choice) {
+                return choices.skip(1).map((ChoiceMapType choice) {
                   return PopupMenuItem<ChoiceMapType>(
                     value: choice,
                     child: Text(choice.name),
@@ -150,18 +169,20 @@ class MapSampleState extends State<MapSample> {
         ));
   }
 
-  LatLng _generateRandomSC() {
+  PositionData _generateRandomSC() {
     var r = rng.nextDouble(); // 0.x
-    if (rng.nextBool()) r *= -1;
     if (rng.nextBool()) r *= r;
+    if (rng.nextBool()) r *= -1;
     var lat = -22.000;
     lat += r / 10;
     r = rng.nextDouble();
-    if (rng.nextBool()) r *= -1;
+
     if (rng.nextBool()) r *= r;
+    if (rng.nextBool()) r *= -1;
     var lng = -47.90;
     lng += r / 10;
-    return LatLng(lat, lng);
+    var alt = rng.nextDouble() * rng.nextDouble() * 1000;
+    return PositionData(gps: LatLng(lat, lng), altitude: alt);
   }
 
   Future<void> _goHome() async {
@@ -177,7 +198,7 @@ class MapSampleState extends State<MapSample> {
     });
   }
 
-  Future<LatLng> _getLocation() async {
+  Future<PositionData> _getLocation() async {
     // Location location = new Location();
     // bool _serviceEnabled;
     // PermissionStatus _permissionGranted;
@@ -202,7 +223,7 @@ class MapSampleState extends State<MapSample> {
     // _locationData = await location.getLocation();
     // return LatLng(_locationData.latitude,_locationData.longitude);
     return Future.delayed(Duration(seconds: 1), () {
-      return LatLng(-22.00144, -47.93198);
+      return PositionData(gps: LatLng(-22.00144, -47.93198));
     });
   }
 
@@ -223,9 +244,11 @@ class MapSampleState extends State<MapSample> {
 
   Future<void> _setBearingView() async {
     final GoogleMapController controller = await _controller.future;
-    CameraPosition cp = CameraPosition(
-        bearing: _bearing(loc_to_device[0], loc_to_device[1]),
-        target: loc_to_device[0],
+    print(loc_to_device[0].toString());
+    var cp = CameraPosition(
+        bearing: _bearing(loc_to_device[0].gps, loc_to_device[1].gps),
+        target: loc_to_device[0]
+            .gps, //LatLng(loc_to_device[0].latitude, loc_to_device[0].longitude),
         tilt: 70.0,
         zoom: 17);
     controller.animateCamera(CameraUpdate.newCameraPosition(cp));
