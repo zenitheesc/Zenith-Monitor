@@ -8,6 +8,10 @@ Gera posições aleatorias em sao carlos, simulando a sonda. Faz uma animaçãoz
 ## Note
 Precisa da API do google maps em `android/app/src/main/AndroidManifest.xml`
 
+
+![sc1](screenshot-1.png)
+![sc2](screenshot-2.png)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
