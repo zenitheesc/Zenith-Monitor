@@ -2,14 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-
-class ChoiceMapType {
-  MapType map_type;
-  String name;
-
-  ChoiceMapType({this.map_type, this.name});
-}
 
 class PositionData {
   LatLng gps;
@@ -18,25 +10,17 @@ class PositionData {
   PositionData({this.gps, this.altitude});
 }
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Google Maps Demo',
-      debugShowCheckedModeBanner: false,
-      home: MapSample(),
-    );
-  }
-}
-
 class MapSample extends StatefulWidget {
+  StreamController<MapType> mapStreamController = StreamController<MapType>();
+  MapSample(Key key, this.mapStreamController) : super(key: key);
+
   @override
   State<MapSample> createState() => MapSampleState();
 }
 
 class MapSampleState extends State<MapSample> {
+  var scaffoldMapKey = GlobalKey<ScaffoldState>();
+
   MapSampleState() {
     _getLocation().then((PositionData loc) async {
       setState(() {
@@ -51,9 +35,6 @@ class MapSampleState extends State<MapSample> {
 
   Completer<GoogleMapController> _controller = Completer();
 
-  List<ChoiceMapType> choices = MapType.values
-      .map((e) => ChoiceMapType(map_type: e, name: e.toString()))
-      .toList();
   var rng = new Random();
   List<PositionData> device_coordinates = [
     // LatLng(-22.00698, -47.89676),
@@ -72,11 +53,6 @@ class MapSampleState extends State<MapSample> {
   );
 
   MapType current_map_type = MapType.satellite;
-  void _select(ChoiceMapType c) {
-    setState(() {
-      current_map_type = c.map_type;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,59 +90,30 @@ class MapSampleState extends State<MapSample> {
     };
 
     return new Scaffold(
-        appBar: AppBar(
-          title: Text("First Maps"),
-          actions: <Widget>[
-            PopupMenuButton<ChoiceMapType>(
-              tooltip: "Select Map Type",
-              icon: Icon(Icons.map),
-              onSelected: _select,
-              itemBuilder: (BuildContext context) {
-                return choices.skip(1).map((ChoiceMapType choice) {
-                  return PopupMenuItem<ChoiceMapType>(
-                    value: choice,
-                    child: Text(choice.name),
-                  );
-                }).toList();
-              },
-            ),
-          ],
-        ),
-        body: GoogleMap(
-          mapType: current_map_type,
-          initialCameraPosition: _initialPosition,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-          markers: markers,
-          mapToolbarEnabled: false,
-          polylines: lines,
-          compassEnabled: true,
-        ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Spacer(),
-            FloatingActionButton(
-              onPressed: _goHome,
-              child: Icon(Icons.home),
-            ),
-            Spacer(),
-            FloatingActionButton.extended(
-              onPressed: _addNewPoint,
-              label: Text('Add'),
-              icon: Icon(Icons.location_on),
-            ),
-            Spacer(),
-            FloatingActionButton.extended(
-              onPressed: _setBearingView,
-              label: Text('Point to Device'),
-              icon: Icon(Icons.arrow_upward),
-            ),
-            Spacer(),
-          ],
-        ));
+      body: GoogleMap(
+        mapType: current_map_type,
+        initialCameraPosition: _initialPosition,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+        markers: markers,
+        mapToolbarEnabled: false,
+        polylines: lines,
+        compassEnabled: true,
+      ),
+    );
+  }
+
+  void initState() {
+    super.initState();
+
+    widget.mapStreamController.stream.listen((mapType) => _select(mapType));
+  }
+
+  void _select(MapType new_map_type) {
+    setState(() {
+      current_map_type = new_map_type;
+    });
   }
 
   PositionData _generateRandomSC() {
@@ -185,7 +132,7 @@ class MapSampleState extends State<MapSample> {
     return PositionData(gps: LatLng(lat, lng), altitude: alt);
   }
 
-  Future<void> _goHome() async {
+  Future<void> goHome() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
   }
@@ -242,7 +189,7 @@ class MapSampleState extends State<MapSample> {
     return (theta * 180 / pi + 360) % 360; // in degrees
   }
 
-  Future<void> _setBearingView() async {
+  Future<void> setBearingView() async {
     final GoogleMapController controller = await _controller.future;
     print(loc_to_device[0].toString());
     var cp = CameraPosition(

@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 import '../datatypes.dart';
-import '../function.dart';
-
-List<String> zenith_user_side_bar_list = [
-  "Terminal",
-  "Últimas missões",
-  "Sobre nós"
-];
-List<String> entusiasta_side_bar_list = ["Últimas missões", "Sobre nós"];
+import '../scale_screen_size.dart';
 
 class SideBar extends StatefulWidget {
   User user;
-
   SideBar(this.user);
 
   @override
@@ -19,6 +11,31 @@ class SideBar extends StatefulWidget {
 }
 
 class SideBarState extends State<SideBar> {
+  List<String> zenithUserSideBarList = [
+    "Terminal",
+    "Últimas missões",
+    "Sobre nós"
+  ];
+  List<String> entusiastaSideBarList = ["Últimas missões", "Sobre nós"];
+
+  Widget build_side_bar(
+      BuildContext context, int index, List<String> sideBarList) {
+    return new Padding(
+        padding: EdgeInsets.only(
+          left: 15,
+          top: 10,
+          bottom: 10,
+        ),
+        child: Text(
+          sideBarList[index],
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: (SizeConfig.blockSizeHorizontal) * 5,
+            fontWeight: FontWeight.bold,
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -30,7 +47,7 @@ class SideBarState extends State<SideBar> {
               style: TextStyle(fontSize: 18.0),
             ),
             // Using accountEmail atribute to show access level
-            accountEmail: Text(widget.user.access_level),
+            accountEmail: Text(widget.user.accessLevel),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.white,
               child: (widget.user.image == null)
@@ -46,14 +63,14 @@ class SideBarState extends State<SideBar> {
           ),
           new ListView.builder(
             shrinkWrap: true,
-            itemCount: (widget.user.access_level == "Entusiasta")
-                ? entusiasta_side_bar_list.length
-                : zenith_user_side_bar_list.length,
-            itemBuilder: (widget.user.access_level == "Entusiasta")
+            itemCount: (widget.user.accessLevel == "Entusiasta")
+                ? entusiastaSideBarList.length
+                : zenithUserSideBarList.length,
+            itemBuilder: (widget.user.accessLevel == "Entusiasta")
                 ? (BuildContext context, int index) =>
-                    build_side_bar(context, index, entusiasta_side_bar_list)
+                    build_side_bar(context, index, entusiastaSideBarList)
                 : (BuildContext context, int index) =>
-                    build_side_bar(context, index, zenith_user_side_bar_list),
+                    build_side_bar(context, index, zenithUserSideBarList),
           )
         ],
       ),

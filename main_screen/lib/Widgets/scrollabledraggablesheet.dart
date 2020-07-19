@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import '../function.dart';
 import '../datatypes.dart';
 import '../scale_screen_size.dart';
 
@@ -19,7 +18,7 @@ class _DraggableSheetState extends State<DraggableSheet> {
         builder: (BuildContext context, scroller) {
           return Container(
               decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Colors.grey[200].withOpacity(0.9),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25),
@@ -139,7 +138,7 @@ class _ScrollableSheetCardState extends State<ScrollableSheetCard> {
                   Padding(
                     padding: EdgeInsets.all(0),
                     child: Text(
-                      widget.datatype.numeric_data,
+                      widget.datatype.numericData,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: (SizeConfig.blockSizeHorizontal) * 6.5,
@@ -167,6 +166,31 @@ class ScrollableSheetMainCard extends StatefulWidget {
 }
 
 class _ScrollableSheetMainCardState extends State<ScrollableSheetMainCard> {
+  List<Widget> generate_sheet_line_list() {
+    List<DataType> datatypeList = [
+      MissionTime,
+      null,
+      Temperatura,
+      null,
+      Radiacao,
+      null,
+      Other1,
+      null,
+      Other2
+    ];
+    List<Widget> scrollableSheetList = [];
+
+    for (var i = 0; i < datatypeList.length; i++) {
+      if (datatypeList[i] == null) {
+        scrollableSheetList.add(ScrollableSheetDivider());
+      } else {
+        scrollableSheetList.add(ScrollableSheetLine(datatypeList[i]));
+      }
+    }
+
+    return scrollableSheetList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -176,17 +200,7 @@ class _ScrollableSheetMainCardState extends State<ScrollableSheetMainCard> {
           width: 400,
           child: Card(
             child: ListView(
-              children: <Widget>[
-                ScrollableSheetLine(MissionTime),
-                ScrollableSheetDivider(),
-                ScrollableSheetLine(Temperatura),
-                ScrollableSheetDivider(),
-                ScrollableSheetLine(Radiacao),
-                ScrollableSheetDivider(),
-                ScrollableSheetLine(Other1),
-                ScrollableSheetDivider(),
-                ScrollableSheetLine(Other2),
-              ],
+              children: generate_sheet_line_list(),
             ),
             color: Colors.white,
             shadowColor: Colors.black,
@@ -220,6 +234,40 @@ class ScrollableSheetLine extends StatefulWidget {
 }
 
 class _ScrollableSheetLineState extends State<ScrollableSheetLine> {
+  Widget build_previous_text() {
+    if (widget.datatype.name != "MISSION TIME") {
+      return Expanded(
+          flex: 2,
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "PREVIOUS:",
+                  style: TextStyle(
+                    color: Colors.grey[350],
+                    fontSize: (SizeConfig.blockSizeHorizontal) * 2.5,
+                  ),
+                ),
+                Text(
+                  (widget.datatype.unit == "°")
+                      ? widget.datatype.previousData + widget.datatype.unit
+                      : widget.datatype.previousData +
+                          " " +
+                          widget.datatype.unit,
+                  style: TextStyle(
+                    color: Colors.grey[350],
+                    fontSize: (SizeConfig.blockSizeHorizontal) * 3,
+                  ),
+                ),
+              ],
+            ),
+          ));
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -260,7 +308,7 @@ class _ScrollableSheetLineState extends State<ScrollableSheetLine> {
               bottom: 20,
             ),
             child: Text(
-              widget.datatype.numeric_data,
+              widget.datatype.numericData,
               textAlign: (widget.datatype.name == "MISSION TIME")
                   ? TextAlign.center
                   : TextAlign.left,
@@ -272,8 +320,7 @@ class _ScrollableSheetLineState extends State<ScrollableSheetLine> {
             ),
           ),
         ),
-        build_previous_text(widget.datatype.name, widget.datatype.previous_data,
-            widget.datatype.unit)
+        build_previous_text()
       ],
     );
   }

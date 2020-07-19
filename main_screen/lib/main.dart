@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:zenith_monitor/datatypes.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'Widgets/lineofbuttons.dart';
+import 'datatypes.dart';
 import 'Widgets/scrollabledraggablesheet.dart';
 import 'Widgets/sidebar.dart';
+import 'map.dart';
 
 void main() {
   runApp(MainScreen());
@@ -14,7 +18,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class MainScreenState extends State<MainScreen> {
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<MapSampleState> mapKey = GlobalKey<MapSampleState>();
+  StreamController<MapType> mapStreamController = StreamController<MapType>();
+
+  void dispose() {
+    mapStreamController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +39,15 @@ class MainScreenState extends State<MainScreen> {
         backgroundColor: Colors.black,
         body: Stack(
           children: <Widget>[
+            MapSample(mapKey, mapStreamController),
+            Align(
+              alignment: Alignment(-0.9, -0.9),
+              child: LineOfButtons(scaffoldKey, mapKey, mapStreamController),
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: DraggableSheet(),
             ),
-            Align(
-                alignment: Alignment(-0.9, -0.9),
-                child: FloatingActionButton(
-                  onPressed: () => scaffoldKey.currentState.openDrawer(),
-                  child: Icon(Icons.list),
-                  foregroundColor: Colors.black54,
-                  backgroundColor: Colors.white,
-                )),
           ],
         ),
         drawer: SideBar(user),
