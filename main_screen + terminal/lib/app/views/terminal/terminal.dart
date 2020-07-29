@@ -1,0 +1,143 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'Widgets/customAppbar.dart';
+
+class TerminalView extends StatefulWidget {
+  final Stream<String> input;
+
+  TerminalView({Key key, this.input}) : super(key: key);
+
+  @override
+  _TerminalViewState createState() => _TerminalViewState();
+}
+
+class _TerminalViewState extends State<TerminalView> {
+  final _textController = TextEditingController();
+  final _scrollController = ScrollController();
+
+  Color backgroundColor = Colors.black87;
+  Color textColor = Colors.grey[100];
+
+  List<String> accumulator = [];
+  List<String> cleanAccumulator = [];
+
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  Widget _terminalMainBody() {
+    return Container(
+      color: backgroundColor,
+      child: StreamBuilder(
+          stream: widget.input,
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.active ||
+                snapshot.connectionState == ConnectionState.done) {
+              accumulator.add(snapshot.data);
+              cleanAccumulator.add(snapshot.data);
+            }
+            return ListView.builder(
+                controller: _scrollController,
+                shrinkWrap: true,
+                itemCount: cleanAccumulator.length,
+                itemBuilder: (context, int index) {
+                  // -------------------- Adjust time according to data receving
+                  _scrollController.animateTo(
+                      _scrollController.position.maxScrollExtent,
+                      duration: Duration(seconds: 1),
+                      curve: Curves.easeOut);
+                  // -----------------------------------------------------------
+                  return Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 7),
+                        child: Text(
+                          index.toString(),
+                          style: GoogleFonts.sourceCodePro(
+                              fontSize: 14, color: textColor),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Text(
+                            cleanAccumulator[index].toString(),
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
+                            textDirection: TextDirection.ltr,
+                            style: GoogleFonts.sourceCodePro(
+                                fontSize: 14, color: textColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                });
+          }),
+    );
+  }
+
+  Widget _terminalWriteLine() {
+    return Container(
+      height: 25,
+      decoration: BoxDecoration(
+          color: backgroundColor,
+          border: Border.all(
+            color: Colors.grey[800],
+            width: 0.5,
+          )),
+      child: TextField(
+        controller: _textController,
+        textAlign: TextAlign.start,
+        cursorColor: Colors.grey[600],
+        style: GoogleFonts.sourceCodePro(color: textColor, fontSize: 14),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.only(bottom: 12),
+          fillColor: backgroundColor,
+          icon: Icon(Icons.arrow_forward_ios, color: textColor, size: 20),
+          hintText: "Escreva um comando",
+          hintStyle: GoogleFonts.sourceCodePro(
+            color: Colors.grey,
+            fontSize: 14,
+          ),
+        ),
+        onSubmitted: (string) =>
+            _commandLine(accumulator, string, _textController),
+      ),
+    );
+  }
+
+  void _commandLine(List<String> accumulator, String command,
+      TextEditingController controller) {
+    accumulator.add(command);
+    cleanAccumulator.add(command);
+    controller.clear();
+
+    // Send command to the Space Probe
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: CustomAppBar(textColor, accumulator, cleanAccumulator),
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: false,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              flex: 20,
+              child: _terminalMainBody(),
+            ),
+            _terminalWriteLine(),
+          ],
+        ));
+  }
+}
