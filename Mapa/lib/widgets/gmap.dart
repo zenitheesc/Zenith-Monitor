@@ -1,85 +1,75 @@
 import 'dart:async';
 
+import 'package:firstattemptatmaps/bloc/data_bloc/data_bloc.dart';
+import 'package:firstattemptatmaps/bloc/location_bloc/location_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firstattemptatmaps/models/map_event.dart';
 import 'package:location/location.dart';
 
 class GMapsConsumer extends StatefulWidget {
-  final Stream<TargetTrajectory> input;
-  GMapsConsumer({Key key, @required this.input}) : super(key: key);
+  GMapsConsumer({Key key}) : super(key: key);
 
   @override
   _GMapsConsumerState createState() => _GMapsConsumerState();
 }
 
 class _GMapsConsumerState extends State<GMapsConsumer> {
-  StreamSubscription<LocationData> user_position;
-  var user_loc = LatLng(-22.00144, -47.93198); // SC
   List<TargetTrajectory> points = [];
 
-  var location = Location();
-  bool _serviceEnabled;
-  PermissionStatus _permissionGranted;
-
-  _GMapsConsumerState() {
-    _initLocation().then((loc) => user_loc = loc);
-
-    user_position = location.onLocationChanged.listen((loc) {
-      setState(() => user_loc = LatLng(loc.latitude, loc.longitude));
-    });
-  }
-
   @override
-  void dispose() {
-    user_position.cancel();
-    super.dispose();
-  }
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-  Future<LatLng> _initLocation() async {
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        print('location service is disabled');
-        return user_loc;
-      }
-    }
-
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        print('permission was denied');
-        return user_loc;
-      }
-    }
-
-    var loc = await location.getLocation();
-    return LatLng(loc.latitude, loc.longitude);
+    BlocProvider.of<LocationBloc>(context).add(LocationStart());
+    BlocProvider.of<DataBloc>(context).add(DataStart());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: StreamBuilder<TargetTrajectory>(
-          stream: widget.input,
-          initialData: TargetTrajectory(id: -1),
-          builder: (context, AsyncSnapshot<TargetTrajectory> snapshot) {
-            if (snapshot.connectionState == ConnectionState.active ||snapshot.connectionState == ConnectionState.done ) {
-              if (snapshot.data.id > -1) points.add(snapshot.data);
-              return Center(
-                  child: GMapsView(
-                target_points: points,
-                user_position: user_loc,
-              ));
-            } else if (snapshot.connectionState == ConnectionState.waiting){
-              return Center(
-                child: Text("stream disconnected"),
-              );
-            }
-          }),
+    return BlocBuilder<DataBloc, DataState>(
+      builder: (context, DataState data_state) {
+        if (data_state is DataInitial) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (data_state is DataUpdated) {
+          points.add(data_state.packet);
+          return Container(
+            child: BlocBuilder<LocationBloc, LocationState>(
+              builder: (context, LocationState state) {
+                print(state);
+                if (state is LocationInitial) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (state is LocationLoading) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (state is LocationUpdated) {
+                  print('new data');
+                  print(state.packet);
+                  return Center(
+                      child: GMapsView(
+                    target_points: points,
+                    user_position: state.packet,
+                  ));
+                }
+                if (state is LocationFailed) {
+                  print('location failed');
+                  return Center(child: Text("nothing"));
+                }
+                return Center(child: Text("This is an Error"));
+              },
+            ),
+          );
+        }
+        return Center(
+          child: Text("This is an Error"),
+        );
+      },
     );
   }
 }
@@ -95,70 +85,86 @@ class GMapsView extends StatefulWidget {
 }
 
 class _GMapsViewState extends State<GMapsView> {
-  var _initialPosition = CameraPosition(
-    target: LatLng(-22.9034, -43.2655), // SC
+  final CameraPosition _initialPosition = CameraPosition(
+    target: LatLng(-22.016720, -47.891972), // SC
     zoom: 7.0,
   );
+
+  Set<Marker> markers = {};
+  Set<Polyline> lines = {};
 
   Completer<GoogleMapController> _controller = Completer();
 
   _GMapsViewState() {}
 
   @override
+  void didChangeDependencies() {
+    print('update  dep');
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Set<Marker> markers = {};
-    Set<Polyline> lines = {};
-    List<LatLng> loc_to_device = [
-      widget.user_position,
-      widget.target_points.last.position
-    ];
-
     for (var position in widget.target_points) {
-      Marker m = Marker(
-          position: position.position,
-          zIndex: position.altitude,
-          alpha: 0.75,
-          infoWindow: InfoWindow(
-              title: "Alt: ${position.altitude.toStringAsFixed(4)}",
-              snippet:
-                  "(${position.position.latitude.toStringAsFixed(4)},${position.position.latitude.toStringAsFixed(4)})"),
-          markerId: MarkerId((position.position.longitude +
-                  position.position.latitude)
-              .toString()) // this is problematic;.toStringAsFixed(4) solution use received index
-          );
-      markers.add(m);
+      markers.add(_makeMarker(position));
+      lines.add(_makeDevicePath(position));
 
-      var device_path = Polyline(
-          polylineId: PolylineId("device_path"),
-          consumeTapEvents: false,
-          color: Colors.pink,
-          width: 2,
-          points: widget.target_points.map((e) => e.position).toList(),
-          zIndex: 1);
-      lines.add(device_path);
-      var ltd = Polyline(
-        polylineId: PolylineId("loc_to_device"),
-        consumeTapEvents: false,
-        color: Colors.blue,
-        width: 5,
-        points: loc_to_device.map((e) => e).toList(),
-        zIndex: 0,
-      );
-      lines.add(ltd);
+      // List<LatLng> loc_to_device = [
+      //   widget.user_position,
+      //   widget.target_points.last.position
+      // ];
+      // var ltd = Polyline(
+      //   polylineId: PolylineId("loc_to_device"),
+      //   consumeTapEvents: false,
+      //   color: Colors.blue,
+      //   width: 5,
+      //   points: loc_to_device.map((e) => e).toList(),
+      //   zIndex: 0,
+      // );
+      // lines.add(ltd);
     }
 
     return Container(
       child: GoogleMap(
-        mapType: MapType.satellite,
+        mapType: MapType.normal,
+        trafficEnabled: true,
+        myLocationButtonEnabled: true,
         initialCameraPosition: _initialPosition,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
         markers: markers,
-        mapToolbarEnabled: false,
+        mapToolbarEnabled: true,
+        liteModeEnabled: false, // lite mode is a static image
         polylines: lines,
+        myLocationEnabled: true,
         compassEnabled: true,
       ),
     );
+  }
+
+  Marker _makeMarker(TargetTrajectory position) {
+    return Marker(
+        position: position.position,
+        zIndex: position.altitude,
+        alpha: 0.75,
+        infoWindow: InfoWindow(
+            title: "Alt: ${position.altitude.toStringAsFixed(4)}",
+            snippet:
+                "(${position.position.latitude.toStringAsFixed(4)},${position.position.latitude.toStringAsFixed(4)})"),
+        markerId: MarkerId((position.position.longitude +
+                position.position.latitude)
+            .toString()) // this is problematic;.toStringAsFixed(4) solution use received index
+        );
+  }
+
+  Polyline _makeDevicePath(position) {
+    return Polyline(
+        polylineId: PolylineId("device_path"),
+        consumeTapEvents: false,
+        color: Colors.pink,
+        width: 2,
+        points: widget.target_points.map((e) => e.position).toList(),
+        zIndex: 1);
   }
 }
