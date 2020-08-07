@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:firstattemptatmaps/bloc/data_bloc/data_bloc.dart';
-import 'package:firstattemptatmaps/bloc/location_bloc/location_bloc.dart';
+import 'package:firstattemptatmaps/bloc/map_bloc/map_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:firstattemptatmaps/models/map_event.dart';
-import 'package:location/location.dart';
+import 'package:firstattemptatmaps/models/target_trajectory.dart';
 
 class GMapsConsumer extends StatefulWidget {
   GMapsConsumer({Key key}) : super(key: key);
@@ -22,53 +20,26 @@ class _GMapsConsumerState extends State<GMapsConsumer> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    BlocProvider.of<LocationBloc>(context).add(LocationStart());
-    BlocProvider.of<DataBloc>(context).add(DataStart());
+    BlocProvider.of<MapBloc>(context).add(MapStart());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DataBloc, DataState>(
-      builder: (context, DataState data_state) {
-        if (data_state is DataInitial) {
-          return Center(
-            child: CircularProgressIndicator(),
+    return BlocBuilder<MapBloc, MapState>(
+      builder: (context, state) {
+        if (state is MapFailed) {
+          return Center(child: Text(state.message));
+        } else if (state is MapUpdated) {
+          return GMapsView(
+            target_points: state.target_trajectory,
+            user_position: state.user_position,
+            mapType: state.mapType,
+            showTraffic: state.showTraffic,
           );
+        } else if (state is MapInitial) {
+          return Center(child: CircularProgressIndicator());
         }
-        if (data_state is DataUpdated) {
-          points.add(data_state.packet);
-          return Container(
-            child: BlocBuilder<LocationBloc, LocationState>(
-              builder: (context, LocationState state) {
-                print(state);
-                if (state is LocationInitial) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (state is LocationLoading) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (state is LocationUpdated) {
-                  print('new data');
-                  print(state.packet);
-                  return Center(
-                      child: GMapsView(
-                    target_points: points,
-                    user_position: state.packet,
-                  ));
-                }
-                if (state is LocationFailed) {
-                  print('location failed');
-                  return Center(child: Text("nothing"));
-                }
-                return Center(child: Text("This is an Error"));
-              },
-            ),
-          );
-        }
-        return Center(
-          child: Text("This is an Error"),
-        );
+        return Center(child: Text("you shouldn't be seeing this"));
       },
     );
   }
@@ -77,7 +48,14 @@ class _GMapsConsumerState extends State<GMapsConsumer> {
 class GMapsView extends StatefulWidget {
   final List<TargetTrajectory> target_points;
   final LatLng user_position;
-  GMapsView({Key key, this.target_points, this.user_position})
+  final MapType mapType;
+  final bool showTraffic;
+  GMapsView(
+      {Key key,
+      this.target_points,
+      this.user_position,
+      this.mapType,
+      this.showTraffic})
       : super(key: key);
 
   @override
@@ -95,17 +73,9 @@ class _GMapsViewState extends State<GMapsView> {
 
   Completer<GoogleMapController> _controller = Completer();
 
-  _GMapsViewState() {}
-
-  @override
-  void didChangeDependencies() {
-    print('update  dep');
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
-    for (var position in widget.target_points) {
+    for (TargetTrajectory position in widget.target_points) {
       markers.add(_makeMarker(position));
       lines.add(_makeDevicePath(position));
 
@@ -126,8 +96,8 @@ class _GMapsViewState extends State<GMapsView> {
 
     return Container(
       child: GoogleMap(
-        mapType: MapType.normal,
-        trafficEnabled: true,
+        mapType: widget.mapType,
+        trafficEnabled: widget.showTraffic,
         myLocationButtonEnabled: true,
         initialCameraPosition: _initialPosition,
         onMapCreated: (GoogleMapController controller) {
@@ -158,7 +128,7 @@ class _GMapsViewState extends State<GMapsView> {
         );
   }
 
-  Polyline _makeDevicePath(position) {
+  Polyline _makeDevicePath(TargetTrajectory position) {
     return Polyline(
         polylineId: PolylineId("device_path"),
         consumeTapEvents: false,

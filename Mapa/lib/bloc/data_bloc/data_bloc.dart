@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:firstattemptatmaps/components/data.dart';
-import 'package:firstattemptatmaps/models/map_event.dart';
+import 'package:firstattemptatmaps/models/target_trajectory.dart';
 import 'package:meta/meta.dart';
 
 part 'data_event.dart';
