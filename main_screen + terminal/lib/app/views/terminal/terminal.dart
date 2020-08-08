@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'Widgets/customAppbar.dart';
+import 'package:zenith_monitor/app/bloc/terminal_bloc/terminal_bloc.dart';
+import 'widgets/customAppbar.dart';
 
 class TerminalView extends StatefulWidget {
   final Stream<String> input;
@@ -139,5 +140,108 @@ class _TerminalViewState extends State<TerminalView> {
             _terminalWriteLine(),
           ],
         ));
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Codigo usando BLoC
+class TerminalView2 extends StatefulWidget {
+  TerminalView2({Key key}) : super(key: key);
+
+  @override
+  _TerminalView2State createState() => _TerminalView2State();
+}
+
+class _TerminalView2State extends State<TerminalView2> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<TerminalBloc>(context)
+        .add(TerminalStart()); // this shoud be somewhere else
+    // aí todo terminal vai poder ser stateless
+    // se não o terminal não vai mostrar os dados de antes dele ser aberto
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Terminal"),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.linear_scale),
+              onPressed: () {
+                BlocProvider.of<TerminalBloc>(context)
+                    .add(TerminalNewData(123));
+              })
+        ],
+      ),
+      body: BlocBuilder<TerminalBloc, TerminalState>(
+        builder: (context, state) {
+          print(state);
+          if (state is TerminalInitial) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is TerminalUpdate) {
+            return TerminalList(
+              data: state.data,
+            );
+          } else
+            return Container();
+        },
+      ),
+    );
+  }
+}
+
+class TerminalList extends StatelessWidget {
+  final List<dynamic> data;
+  final Color backgroundColor = Colors.black87;
+  final Color textColor = Colors.grey[100];
+  final controller = ScrollController();
+  TerminalList({Key key, this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      child: ListView.builder(
+        controller: controller,
+        itemCount: data.length,
+        shrinkWrap: true,
+        itemBuilder: (context, int index) {
+          if (controller.position.maxScrollExtent != null) {
+            controller.animateTo(controller.position.maxScrollExtent,
+                duration: Duration(milliseconds: 500), curve: Curves.easeOut);
+          }
+          return Row(
+            children: <Widget>[
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25.0, vertical: 7),
+                child: Text(
+                  index.toString(),
+                  style:
+                      GoogleFonts.sourceCodePro(fontSize: 14, color: textColor),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 5),
+                  child: Text(
+                    data[index].toString(),
+                    maxLines: 5,
+                    overflow: TextOverflow.ellipsis,
+                    textDirection: TextDirection.ltr,
+                    style: GoogleFonts.sourceCodePro(
+                        fontSize: 14, color: textColor),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }

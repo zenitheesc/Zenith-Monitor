@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../datatypes.dart';
 import '../../../scale_screen_size.dart';
+import '../datatypes.dart';
 
 class DraggableSheet extends StatefulWidget {
   @override
@@ -14,12 +14,13 @@ class _DraggableSheetState extends State<DraggableSheet> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return DraggableScrollableSheet(
+        // fps sofre muito com sheet parcial
         initialChildSize: 0.27,
         minChildSize: 0.1,
         builder: (BuildContext context, scroller) {
           return Container(
               decoration: BoxDecoration(
-                  color: Colors.grey[200].withOpacity(0.9),
+                  color: Colors.grey[200].withOpacity(0.9), //note
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25),

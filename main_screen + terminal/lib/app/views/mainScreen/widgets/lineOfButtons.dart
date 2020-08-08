@@ -1,19 +1,9 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../map.dart';
+import 'package:zenith_monitor/app/bloc/map_bloc/map_bloc.dart';
 
-class LineOfButtons extends StatefulWidget {
-  GlobalKey<MapSampleState> __mapKey;
-  StreamController<MapType> mapStreamController = StreamController<MapType>();
-
-  LineOfButtons(this.__mapKey, this.mapStreamController);
-
-  @override
-  _LineOfButtonsState createState() => _LineOfButtonsState();
-}
-
-class _LineOfButtonsState extends State<LineOfButtons> {
+class LineOfButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,7 +30,7 @@ class _LineOfButtonsState extends State<LineOfButtons> {
           padding: const EdgeInsets.all(5.0),
           child: FloatingActionButton(
             heroTag: "goHomeBtn",
-            onPressed: widget.__mapKey.currentState.goHome,
+            onPressed: () {}, //widget.__mapKey.currentState.goHome,
             child: Icon(Icons.home),
             foregroundColor: Colors.black54,
             backgroundColor: Colors.white,
@@ -50,15 +40,17 @@ class _LineOfButtonsState extends State<LineOfButtons> {
           padding: const EdgeInsets.all(5.0),
           child: FloatingActionButton(
             heroTag: "setBearingViewBtn",
-            onPressed: widget.__mapKey.currentState.setBearingView,
-            child: Icon(Icons.near_me),
+            onPressed: () => BlocProvider.of<MapBloc>(context).add(
+                MapTrafficChange(
+                    true)), // widget.__mapKey.currentState.setBearingView,
+            child: Icon(Icons.traffic),
             foregroundColor: Colors.black54,
             backgroundColor: Colors.white,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(5.0),
-          child: MapTypeFab(widget.mapStreamController),
+          child: MapTypeFab(),
         )
       ],
     );
@@ -66,8 +58,7 @@ class _LineOfButtonsState extends State<LineOfButtons> {
 }
 
 class MapTypeFab extends StatefulWidget {
-  StreamController<MapType> mapStreamController = StreamController<MapType>();
-  MapTypeFab(this.mapStreamController);
+  MapTypeFab();
 
   @override
   _MapTypeFabState createState() => _MapTypeFabState();
@@ -81,16 +72,15 @@ class _MapTypeFabState extends State<MapTypeFab>
   Animation<Color> _buttonColor;
   Animation<double> _animateIcon;
   Animation<double> _translateButton;
-  double _mapButtonsHeight = 45.0;
-
-  List<String> mapType = [
+  final double _mapButtonsHeight = 45.0;
+  final List<String> mapType = [
     " Default Map ",
     "Satellite Map",
     "  Hybrid Map ",
     " Terrain Map "
   ];
 
-  List<MapType> mapTypeList = [
+  final List<MapType> mapTypeList = [
     MapType.normal,
     MapType.satellite,
     MapType.hybrid,
@@ -179,7 +169,9 @@ class _MapTypeFabState extends State<MapTypeFab>
             visible: isOpened,
             child: RaisedButton(
               onPressed: () {
-                widget.mapStreamController.add(mapTypeList[i]);
+                // widget.mapStreamController.add(mapTypeList[i]);
+                BlocProvider.of<MapBloc>(context)
+                    .add(MapTypeChange(mapTypeList[i]));
                 animate();
               },
               shape: RoundedRectangleBorder(
@@ -199,7 +191,6 @@ class _MapTypeFabState extends State<MapTypeFab>
         ),
       ));
     }
-
     return mapTypeButtons;
   }
 

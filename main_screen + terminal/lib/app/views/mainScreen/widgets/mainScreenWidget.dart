@@ -2,26 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:zenith_monitor/app/views/mainScreen/gmap.dart';
 
-import 'lineofbuttons.dart';
-import 'scrollabledraggablesheet.dart';
+import './lineOfButtons.dart';
+import './scrollableDraggableSheet.dart';
 import 'sidebar.dart';
 import '../datatypes.dart';
-import '../map.dart';
 
-class MainScreen extends StatefulWidget {
-  @override
-  _MainScreenState createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  GlobalKey<MapSampleState> __mapKey = GlobalKey<MapSampleState>();
-  StreamController<MapType> mapStreamController = StreamController<MapType>();
-
-  void dispose() {
-    mapStreamController.close();
-    super.dispose();
-  }
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +18,10 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          MapSample(__mapKey, mapStreamController),
+          GMapsConsumer(),
           Align(
             alignment: Alignment(-0.9, -0.9),
-            child: LineOfButtons(__mapKey, mapStreamController),
+            child: LineOfButtons(),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -41,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       drawer: SideBar(user),
-      drawerEnableOpenDragGesture: true,
+      // drawerEnableOpenDragGesture: true,
     );
   }
 }
