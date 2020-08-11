@@ -17,7 +17,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
   @override
   Stream<LocationState> mapEventToState(LocationEvent event) async* {
-    print(event);
     if (event is LocationStart) {
       await location.init();
       _src?.cancel();

@@ -26,7 +26,13 @@ class DataManager {
     lng += r / 10;
 
     var alt = rng.nextDouble() * rng.nextDouble() * 1000;
+    var spd = rng.nextDouble() * rng.nextDouble() * 100;
 
-    return TargetTrajectory(position: LatLng(lat, lng), altitude: alt, id: id);
+    return TargetTrajectory(
+      position: LatLng(lat, lng),
+      altitude: alt,
+      id: id,
+      speed: spd,
+    );
   }
 }

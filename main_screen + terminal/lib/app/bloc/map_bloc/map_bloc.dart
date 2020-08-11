@@ -61,4 +61,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       yield MapFailed("There was an error while loading the map");
     }
   }
+
+  void dispose() {
+    _dataBlocSubscription?.cancel();
+    _locationBlocSubscription?.cancel();
+  }
 }
