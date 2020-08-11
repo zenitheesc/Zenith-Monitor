@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -35,38 +34,3 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     _src?.cancel();
   }
 }
-=======
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:zenith_monitor/app/components/data.dart';
-import 'package:zenith_monitor/app/models/target_trajectory.dart';
-
-part 'data_event.dart';
-part 'data_state.dart';
-
-class DataBloc extends Bloc<DataEvent, DataState> {
-  final DataManager data;
-  StreamSubscription _src;
-  DataBloc(this.data) : super(DataInitial());
-
-  @override
-  Stream<DataState> mapEventToState(DataEvent event) async* {
-    if (event is DataStart) {
-      _src?.cancel();
-      _src = data.receive().listen((packet) {
-        add(DataNewPacket(packet));
-      });
-    }
-    if (event is DataNewPacket) {
-      yield DataUpdated(event.packet);
-    }
-  }
-
-  @override
-  void dispose() {
-    _src?.cancel();
-  }
-}
->>>>>>> parent of bf01af1... logger, follower, +terminal
