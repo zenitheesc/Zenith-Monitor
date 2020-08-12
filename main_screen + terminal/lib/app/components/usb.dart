@@ -11,7 +11,6 @@ class UsbManager {
   Future<void> init() async {
     // if ok
     await Future.delayed(Duration(milliseconds: 10), () {});
-    print('initating usb');
     _statusStream.add(1);
   }
 
@@ -23,7 +22,6 @@ class UsbManager {
   }
 
   TargetTrajectory _generateRandomSC(int id) {
-    _statusStream.add(2);
     var r = rng.nextDouble(); // 0.x
     if (rng.nextBool()) r *= r;
     if (rng.nextBool()) r *= -1;

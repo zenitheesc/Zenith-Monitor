@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
 import 'package:zenith_monitor/app/bloc/status_bloc/status_bloc.dart';
+import 'package:zenith_monitor/app/models/status_packet.dart';
 
 part 'terminal_event.dart';
 part 'terminal_state.dart';
@@ -26,8 +27,9 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
       });
       _statusSub?.cancel();
       _statusSub = statusBloc.listen((statusState) {
-        if (statusState is StatusUpdate)
+        if (statusState is StatusUpdate) {
           add(TerminalNewData(statusState.packet));
+        }
       });
     } else if (event is TerminalNewData) {
       data.add(event.packet);

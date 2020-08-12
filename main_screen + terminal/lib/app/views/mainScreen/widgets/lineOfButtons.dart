@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
+import 'package:zenith_monitor/app/bloc/logger_bloc/logger_bloc.dart';
 import 'package:zenith_monitor/app/bloc/map_bloc/map_bloc.dart';
 
 class LineOfButtons extends StatelessWidget {
@@ -30,8 +32,11 @@ class LineOfButtons extends StatelessWidget {
           padding: const EdgeInsets.all(5.0),
           child: FloatingActionButton(
             heroTag: "goHomeBtn",
-            onPressed: () {}, //widget.__mapKey.currentState.goHome,
-            child: Icon(Icons.home),
+            onPressed: () {
+              BlocProvider.of<DataBloc>(context).add(UsbStart());
+              BlocProvider.of<LoggerBloc>(context).add(LoggerStart());
+            }, //widget.__mapKey.currentState.goHome,
+            child: Icon(Icons.usb),
             foregroundColor: Colors.black54,
             backgroundColor: Colors.white,
           ),

@@ -8,4 +8,10 @@ class StatusPacket {
   String toString() {
     return "Status: [down:$download, usb: $usb, up:$upload]";
   }
+
+  // bool isEqual(StatusPacket other) {
+  //   return (this.download == other.download &&
+  //       this.usb == other.usb &&
+  //       this.upload == other.upload);
+  // }
 }

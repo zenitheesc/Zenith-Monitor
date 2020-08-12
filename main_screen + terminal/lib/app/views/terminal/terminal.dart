@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
 import 'package:zenith_monitor/app/bloc/terminal_bloc/terminal_bloc.dart';
+import 'package:zenith_monitor/app/models/status_packet.dart';
 import 'widgets/customAppbar.dart';
 
 class TerminalView extends StatefulWidget {
@@ -156,8 +158,7 @@ class _TerminalView2State extends State<TerminalView2> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    BlocProvider.of<TerminalBloc>(context)
-        .add(TerminalStart()); // this shoud be somewhere else
+    // this shoud be somewhere else
     // aí todo terminal vai poder ser stateless
     // se não o terminal não vai mostrar os dados de antes dele ser aberto
   }
@@ -197,7 +198,7 @@ class _TerminalView2State extends State<TerminalView2> {
 class TerminalList extends StatelessWidget {
   final List<dynamic> data;
   final Color backgroundColor = Colors.black87;
-  final Color textColor = Colors.grey[100];
+  Color textColor = Colors.grey[100];
   final controller = ScrollController();
   TerminalList({Key key, this.data}) : super(key: key);
 
@@ -214,6 +215,12 @@ class TerminalList extends StatelessWidget {
             controller.animateTo(controller.position.maxScrollExtent,
                 duration: Duration(milliseconds: 500), curve: Curves.easeOut);
           }
+          if (data[index] is StatusPacket) {
+            textColor = Colors.blue[200];
+          } else {
+            textColor = Colors.grey[100];
+          }
+
           return Row(
             children: <Widget>[
               Padding(

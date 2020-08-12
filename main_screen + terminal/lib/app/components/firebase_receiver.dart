@@ -9,7 +9,7 @@ class FirebaseReceiver {
   var _statusStream = StreamController<int>();
 
   Stream<int> status() {
-    return Stream.fromFuture(Future.delayed(Duration(seconds: 3), () => 2));
+    return _statusStream.stream;
   }
 
   Future<void> init() async {
@@ -20,7 +20,6 @@ class FirebaseReceiver {
   }
 
   TargetTrajectory _generateRandomRJ(int id) {
-    _statusStream.add(2);
     var r = rng.nextDouble(); // 0.x
     if (rng.nextBool()) r *= r;
     if (rng.nextBool()) r *= -1;

@@ -10,7 +10,7 @@ class TargetTrajectory {
 
   @override
   String toString() {
-    return "Packet: { id: ${this.id};  pos: ${this.position.toString()};  alt: ${this.altitude};  spd: ${this.speed}; }";
+    return "Packet: { id: ${this.id};  pos: (${this.position.latitude.toStringAsFixed(4)},${this.position.longitude.toStringAsFixed(4)} }); alt: ${this.altitude.toStringAsFixed(2)};  spd: ${this.speed}; }";
   }
 }
 
