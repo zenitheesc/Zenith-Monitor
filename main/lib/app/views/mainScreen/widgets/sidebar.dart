@@ -4,7 +4,7 @@ import '../datatypes.dart';
 import '../../../scale_screen_size.dart';
 
 class SideBar extends StatefulWidget {
-  User user;
+  final User user;
   SideBar(this.user);
 
   @override

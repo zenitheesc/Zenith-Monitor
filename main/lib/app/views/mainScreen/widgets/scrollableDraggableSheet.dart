@@ -71,7 +71,7 @@ class _DraggableSheetState extends State<DraggableSheet> {
 }
 
 class ScrollableSheetCard extends StatefulWidget {
-  DataType datatype;
+  final DataType datatype;
   ScrollableSheetCard(this.datatype);
 
   @override
@@ -228,7 +228,7 @@ class ScrollableSheetDivider extends StatelessWidget {
 }
 
 class ScrollableSheetLine extends StatefulWidget {
-  DataType datatype;
+  final DataType datatype;
   ScrollableSheetLine(this.datatype);
 
   @override
