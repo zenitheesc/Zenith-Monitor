@@ -64,7 +64,7 @@ class Application extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        showPerformanceOverlay: false,
+        showPerformanceOverlay: false, // shows fps
         debugShowCheckedModeBanner: false,
         title: 'Main Screen',
         theme: ThemeData(
