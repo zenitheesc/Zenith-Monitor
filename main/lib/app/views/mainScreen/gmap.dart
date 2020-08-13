@@ -29,8 +29,8 @@ class _GMapsConsumerState extends State<GMapsConsumer> {
           return Center(child: Text(state.message));
         } else if (state is MapUpdated) {
           return GMapsView(
-            target_points: state.targetTrajectory,
-            user_position: state.userPosition,
+            targetPoints: state.targetTrajectory,
+            userPosition: state.userPosition,
             mapType: state.mapType,
             showTraffic: state.showTraffic,
           );
@@ -45,14 +45,14 @@ class _GMapsConsumerState extends State<GMapsConsumer> {
 }
 
 class GMapsView extends StatefulWidget {
-  final List<TargetTrajectory> target_points;
-  final LatLng user_position;
+  final List<TargetTrajectory> targetPoints;
+  final LatLng userPosition;
   final MapType mapType;
   final bool showTraffic;
   GMapsView(
       {Key key,
-      this.target_points,
-      this.user_position,
+      this.targetPoints,
+      this.userPosition,
       this.mapType,
       this.showTraffic})
       : super(key: key);
@@ -74,7 +74,7 @@ class _GMapsViewState extends State<GMapsView> {
 
   @override
   Widget build(BuildContext context) {
-    for (TargetTrajectory position in widget.target_points) {
+    for (TargetTrajectory position in widget.targetPoints) {
       markers.add(_makeMarker(position));
       lines.add(_makeDevicePath(position));
 
@@ -133,7 +133,7 @@ class _GMapsViewState extends State<GMapsView> {
         consumeTapEvents: false,
         color: Colors.pink,
         width: 2,
-        points: widget.target_points.map((e) => e.position).toList(),
+        points: widget.targetPoints.map((e) => e.position).toList(),
         zIndex: 1);
   }
 }

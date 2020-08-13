@@ -19,7 +19,7 @@ class SideBarState extends State<SideBar> {
   ];
   List<String> entusiastaSideBarList = ["Últimas missões", "Sobre nós"];
 
-  Widget build_side_bar(
+  Widget buildSideBar(
       BuildContext context, int index, List<String> sideBarList) {
     return new ListTile(
       title: Text(
@@ -68,9 +68,9 @@ class SideBarState extends State<SideBar> {
                 : zenithUserSideBarList.length,
             itemBuilder: (widget.user.accessLevel == "Entusiasta")
                 ? (BuildContext context, int index) =>
-                    build_side_bar(context, index, entusiastaSideBarList)
+                    buildSideBar(context, index, entusiastaSideBarList)
                 : (BuildContext context, int index) =>
-                    build_side_bar(context, index, zenithUserSideBarList),
+                    buildSideBar(context, index, zenithUserSideBarList),
           )
         ],
       ),

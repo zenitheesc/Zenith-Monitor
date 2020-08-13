@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
 import 'package:zenith_monitor/app/bloc/status_bloc/status_bloc.dart';
-import 'package:zenith_monitor/app/models/status_packet.dart';
 
 part 'terminal_event.dart';
 part 'terminal_state.dart';

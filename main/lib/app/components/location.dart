@@ -75,7 +75,6 @@ class LocationManager {
     return _statusCtrl.stream;
   }
 
-  @override
   void dispose() {
     _statusCtrl.close();
   }

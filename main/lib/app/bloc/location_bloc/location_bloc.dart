@@ -37,7 +37,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  @override
   void dispose() {
     _src?.cancel();
     _stat?.cancel();

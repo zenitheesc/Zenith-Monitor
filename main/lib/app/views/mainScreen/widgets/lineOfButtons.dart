@@ -145,7 +145,7 @@ class _MapTypeFabState extends State<MapTypeFab>
     isOpened = !isOpened;
   }
 
-  Widget main_button() {
+  Widget mainButton() {
     return Container(
       child: FloatingActionButton(
         heroTag: "mapTypeBtn",
@@ -161,7 +161,7 @@ class _MapTypeFabState extends State<MapTypeFab>
     );
   }
 
-  List<Widget> map_type_buttons() {
+  List<Widget> mapTypeButtons() {
     List<Widget> mapTypeButtons = [];
 
     for (var i = 0; i < 4; i++) {
@@ -205,10 +205,10 @@ class _MapTypeFabState extends State<MapTypeFab>
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        main_button(),
+        mainButton(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: map_type_buttons(),
+          children: mapTypeButtons(),
         ),
       ],
     );

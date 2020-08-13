@@ -168,7 +168,7 @@ class ScrollableSheetMainCard extends StatefulWidget {
 }
 
 class _ScrollableSheetMainCardState extends State<ScrollableSheetMainCard> {
-  List<Widget> generate_sheet_line_list() {
+  List<Widget> generateSheetLineList() {
     List<DataType> datatypeList = [
       missionTime,
       null,
@@ -202,7 +202,7 @@ class _ScrollableSheetMainCardState extends State<ScrollableSheetMainCard> {
           width: 400,
           child: Card(
             child: ListView(
-              children: generate_sheet_line_list(),
+              children: generateSheetLineList(),
             ),
             color: Colors.white,
             shadowColor: Colors.black,
@@ -236,7 +236,7 @@ class ScrollableSheetLine extends StatefulWidget {
 }
 
 class _ScrollableSheetLineState extends State<ScrollableSheetLine> {
-  Widget build_previous_text() {
+  Widget buildPreviousText() {
     if (widget.datatype.name != "MISSION TIME") {
       return Expanded(
           flex: 2,
@@ -322,7 +322,7 @@ class _ScrollableSheetLineState extends State<ScrollableSheetLine> {
             ),
           ),
         ),
-        build_previous_text()
+        buildPreviousText()
       ],
     );
   }

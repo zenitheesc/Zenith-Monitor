@@ -1,9 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:zenith_monitor/app/bloc/logger_bloc/logger_bloc.dart';
 import 'package:zenith_monitor/app/bloc/status_bloc/status_bloc.dart';
 import 'package:zenith_monitor/app/bloc/terminal_bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/app/views/mainScreen/gmap.dart';
