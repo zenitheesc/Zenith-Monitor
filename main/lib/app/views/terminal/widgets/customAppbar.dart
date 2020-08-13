@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  Color textColor = Colors.grey[100];
-  List<String> accumulator;
-  List<String> cleanAccumulator;
+  final Color textColor;
+  final List<String> accumulator;
+  final List<String> cleanAccumulator;
   final Size preferredSize;
 
-  CustomAppBar(this.textColor, this.accumulator, this.cleanAccumulator)
-      : preferredSize = Size.fromHeight(110.0);
+  CustomAppBar(
+    this.textColor,
+    this.accumulator,
+    this.cleanAccumulator,
+  ) : preferredSize = Size.fromHeight(110.0);
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();

@@ -197,12 +197,13 @@ class _TerminalView2State extends State<TerminalView2> {
 class TerminalList extends StatelessWidget {
   final List<dynamic> data;
   final Color backgroundColor = Colors.black87;
-  Color textColor = Colors.grey[100];
+
   final controller = ScrollController();
   TerminalList({Key key, this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var textColor = Colors.grey[100];
     return Container(
       color: backgroundColor,
       child: ListView.builder(
