@@ -12,7 +12,7 @@ class DataType {
       {this.name, this.numericData, this.unit, this.previousData, this.icon});
 }
 
-DataType Altitude = DataType(
+DataType altitude = DataType(
   name: "Altitude",
   numericData: "1884.48",
   unit: "KM",
@@ -20,7 +20,7 @@ DataType Altitude = DataType(
   icon: Icons.terrain,
 );
 
-DataType Velocidade = DataType(
+DataType velocidade = DataType(
   name: "Velocidade",
   numericData: "447.58",
   unit: "KM/H",
@@ -28,7 +28,7 @@ DataType Velocidade = DataType(
   icon: Speedometer.speedometer,
 );
 
-DataType Latitude = DataType(
+DataType latitude = DataType(
   name: "Latitude",
   numericData: "- 64.23",
   unit: "°",
@@ -36,7 +36,7 @@ DataType Latitude = DataType(
   icon: Icons.gps_fixed,
 );
 
-DataType Longitude = DataType(
+DataType longitude = DataType(
   name: "Longitude",
   numericData: "47.69",
   unit: "°",
@@ -44,7 +44,7 @@ DataType Longitude = DataType(
   icon: Icons.gps_fixed,
 );
 
-DataType MissionTime = DataType(
+DataType missionTime = DataType(
   name: "MISSION TIME",
   numericData: "01:25:43",
   unit: "H",
@@ -52,7 +52,7 @@ DataType MissionTime = DataType(
   icon: null,
 );
 
-DataType Temperatura = DataType(
+DataType temperatura = DataType(
   name: "TEMPERATURA",
   numericData: "95.69",
   unit: "°C",
@@ -60,7 +60,7 @@ DataType Temperatura = DataType(
   icon: null,
 );
 
-DataType Radiacao = DataType(
+DataType radiacao = DataType(
   name: "RADIAÇÃO",
   numericData: "748",
   unit: "R",
@@ -68,7 +68,7 @@ DataType Radiacao = DataType(
   icon: null,
 );
 
-DataType Other1 = DataType(
+DataType other1 = DataType(
   name: "SOME OTHER DATA",
   numericData: "47.69",
   unit: "N",
@@ -76,7 +76,7 @@ DataType Other1 = DataType(
   icon: null,
 );
 
-DataType Other2 = DataType(
+DataType other2 = DataType(
   name: "SOME OTHER DATA",
   numericData: "547.69",
   unit: "°",

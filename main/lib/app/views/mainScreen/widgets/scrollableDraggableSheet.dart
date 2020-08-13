@@ -38,8 +38,8 @@ class _DraggableSheetState extends State<DraggableSheet> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        ScrollableSheetCard(Altitude),
-                        ScrollableSheetCard(Velocidade),
+                        ScrollableSheetCard(altitude),
+                        ScrollableSheetCard(velocidade),
                       ],
                     ),
                   ),
@@ -48,8 +48,8 @@ class _DraggableSheetState extends State<DraggableSheet> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        ScrollableSheetCard(Latitude),
-                        ScrollableSheetCard(Longitude),
+                        ScrollableSheetCard(latitude),
+                        ScrollableSheetCard(longitude),
                       ],
                     ),
                   ),
@@ -170,15 +170,15 @@ class ScrollableSheetMainCard extends StatefulWidget {
 class _ScrollableSheetMainCardState extends State<ScrollableSheetMainCard> {
   List<Widget> generate_sheet_line_list() {
     List<DataType> datatypeList = [
-      MissionTime,
+      missionTime,
       null,
-      Temperatura,
+      temperatura,
       null,
-      Radiacao,
+      radiacao,
       null,
-      Other1,
+      other1,
       null,
-      Other2
+      other2
     ];
     List<Widget> scrollableSheetList = [];
 
