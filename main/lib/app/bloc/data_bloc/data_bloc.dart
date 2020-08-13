@@ -35,7 +35,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
   }
 
-  @override
   void dispose() {
     _src?.cancel();
   }

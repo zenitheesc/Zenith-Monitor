@@ -4,8 +4,8 @@ part of 'map_bloc.dart';
 abstract class MapState {}
 
 class MapInitial extends MapState {
-  final List<TargetTrajectory> target_trajectory = [];
-  final LatLng user_position = LatLng(0, 0);
+  final List<TargetTrajectory> targetTrajectory = [];
+  final LatLng userPosition = LatLng(0, 0);
   final MapType mapType = MapType.normal;
   MapInitial();
 }
