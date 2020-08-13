@@ -22,6 +22,7 @@ jobs:
         with:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
-      - run: cd main/
-      - run: flutter pub get
-      - run: flutter build apk --release
+      - name: dep
+        run: cd main && flutter pub get
+      - name: apk
+        run:  cd main && flutter build apk --release
