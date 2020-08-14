@@ -34,22 +34,18 @@ class _DraggableSheetState extends State<DraggableSheet> {
                     size: 50,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    padding: const EdgeInsets.all(8.0),
+                    child: GridView.count(
+                      shrinkWrap: true,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      childAspectRatio: 2,
                       children: <Widget>[
-                        ScrollableSheetCard(altitude),
-                        ScrollableSheetCard(velocidade),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        ScrollableSheetCard(latitude),
-                        ScrollableSheetCard(longitude),
+                        ScrollableSheetCard(Altitude),
+                        ScrollableSheetCard(Velocidade),
+                        ScrollableSheetCard(Latitude),
+                        ScrollableSheetCard(Longitude)
                       ],
                     ),
                   ),
@@ -82,82 +78,92 @@ class _ScrollableSheetCardState extends State<ScrollableSheetCard> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Container(
-      width: 200,
-      height: 100,
-      child: Card(
-        child: Row(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Icon(
-                widget.datatype.icon,
-                color: Colors.white,
-                size: 25,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            color: Colors.transparent,
+            height: 100,
+            child: Card(
+              child: Row(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Text(
-                          widget.datatype.name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: widget.datatype.name == "Velocidade"
-                                ? (SizeConfig.blockSizeHorizontal) * 3.3
-                                : (SizeConfig.blockSizeHorizontal) * 4,
-                          ),
-                        ),
-                      ),
-                      Container(
-                          margin: widget.datatype.name == "Velocidade"
-                              ? EdgeInsets.all(2.0)
-                              : EdgeInsets.all(4.0),
-                          padding: widget.datatype.name == "Velocidade"
-                              ? EdgeInsets.all(2.0)
-                              : EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            border: Border.all(color: Colors.white),
-                          ),
-                          child: Text(
-                            widget.datatype.unit,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: widget.datatype.name == "Velocidade"
-                                  ? (SizeConfig.blockSizeHorizontal) * 1.7
-                                  : (SizeConfig.blockSizeHorizontal) * 2,
-                            ),
-                          )),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      widget.datatype.icon,
+                      color: Colors.white,
+                      size: 25,
+                    ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(0),
-                    child: Text(
-                      widget.datatype.numericData,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: (SizeConfig.blockSizeHorizontal) * 6.5,
-                      ),
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.all(2),
+                              child: Text(
+                                widget.datatype.name,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: widget.datatype.name == "Velocidade"
+                                      ? (SizeConfig.blockSizeHorizontal) * 3.3
+                                      : (SizeConfig.blockSizeHorizontal) * 4,
+                                ),
+                              ),
+                            ),
+                            Container(
+                                margin: widget.datatype.name == "Velocidade"
+                                    ? EdgeInsets.all(2.0)
+                                    : EdgeInsets.all(4.0),
+                                padding: widget.datatype.name == "Velocidade"
+                                    ? EdgeInsets.all(2.0)
+                                    : EdgeInsets.all(4.0),
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                  border: Border.all(color: Colors.white),
+                                ),
+                                child: Text(
+                                  widget.datatype.unit,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: widget.datatype.name ==
+                                            "Velocidade"
+                                        ? (SizeConfig.blockSizeHorizontal) * 1.7
+                                        : (SizeConfig.blockSizeHorizontal) * 2,
+                                  ),
+                                )),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(0),
+                          child: Text(
+                            widget.datatype.numericData,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: (SizeConfig.blockSizeHorizontal) * 6.5,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              color: Colors.black87,
+              elevation: 10,
             ),
-          ],
+          ),
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        color: Colors.black87,
-        elevation: 10,
-      ),
+      ],
     );
   }
 }
