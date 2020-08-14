@@ -14,7 +14,6 @@ class _DraggableSheetState extends State<DraggableSheet> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return DraggableScrollableSheet(
-        // fps sofre muito com sheet parcial
         initialChildSize: 0.27,
         minChildSize: 0.1,
         builder: (BuildContext context, scroller) {
@@ -42,10 +41,10 @@ class _DraggableSheetState extends State<DraggableSheet> {
                       mainAxisSpacing: 5,
                       childAspectRatio: 2,
                       children: <Widget>[
-                        ScrollableSheetCard(Altitude),
-                        ScrollableSheetCard(Velocidade),
-                        ScrollableSheetCard(Latitude),
-                        ScrollableSheetCard(Longitude)
+                        ScrollableSheetCard(altitude),
+                        ScrollableSheetCard(velocidade),
+                        ScrollableSheetCard(latitude),
+                        ScrollableSheetCard(longitude)
                       ],
                     ),
                   ),
