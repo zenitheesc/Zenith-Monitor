@@ -160,7 +160,7 @@ class _ScrollableSheetCardState extends State<ScrollableSheetCard> {
                             child: Padding(
                               padding: EdgeInsets.all(0),
                               child: FittedBox(
-                                fit: BoxFit.fitHeight,
+                                fit: BoxFit.fitWidth,
                                 child: Text(
                                   widget.datatype.numericData,
                                   maxLines: 1,
