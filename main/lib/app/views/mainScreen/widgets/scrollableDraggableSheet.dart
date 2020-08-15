@@ -74,9 +74,57 @@ class ScrollableSheetCard extends StatefulWidget {
 }
 
 class _ScrollableSheetCardState extends State<ScrollableSheetCard> {
+  Widget _firstLine() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          flex: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: FittedBox(
+              fit: BoxFit.fitHeight,
+              child: Text(
+                widget.datatype.name,
+                maxLines: 1,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+              margin: widget.datatype.name == "Velocidade"
+                  ? EdgeInsets.all(2.0)
+                  : EdgeInsets.all(3.0),
+              padding: widget.datatype.name == "Velocidade"
+                  ? EdgeInsets.all(2.0)
+                  : EdgeInsets.all(3.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                border: Border.all(color: Colors.white),
+              ),
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  widget.datatype.unit,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -88,68 +136,43 @@ class _ScrollableSheetCardState extends State<ScrollableSheetCard> {
             child: Card(
               child: Row(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(
-                      widget.datatype.icon,
-                      color: Colors.white,
-                      size: 25,
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(
+                        widget.datatype.icon,
+                        color: Colors.white,
+                        size: 25,
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.all(2),
-                              child: Text(
-                                widget.datatype.name,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: widget.datatype.name == "Velocidade"
-                                      ? (SizeConfig.blockSizeHorizontal) * 3.3
-                                      : (SizeConfig.blockSizeHorizontal) * 4,
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Container(height: 25, child: _firstLine()),
+                          Container(
+                            height: 35,
+                            child: Padding(
+                              padding: EdgeInsets.all(0),
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text(
+                                  widget.datatype.numericData,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                            Container(
-                                margin: widget.datatype.name == "Velocidade"
-                                    ? EdgeInsets.all(2.0)
-                                    : EdgeInsets.all(4.0),
-                                padding: widget.datatype.name == "Velocidade"
-                                    ? EdgeInsets.all(2.0)
-                                    : EdgeInsets.all(4.0),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  border: Border.all(color: Colors.white),
-                                ),
-                                child: Text(
-                                  widget.datatype.unit,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: widget.datatype.name ==
-                                            "Velocidade"
-                                        ? (SizeConfig.blockSizeHorizontal) * 1.7
-                                        : (SizeConfig.blockSizeHorizontal) * 2,
-                                  ),
-                                )),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Text(
-                            widget.datatype.numericData,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: (SizeConfig.blockSizeHorizontal) * 6.5,
-                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
