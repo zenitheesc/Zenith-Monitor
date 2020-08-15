@@ -12,6 +12,7 @@ class DataType {
       {this.name, this.numericData, this.unit, this.previousData, this.icon});
 }
 
+// test
 DataType altitude = DataType(
   name: "Altitude",
   numericData: "18084.48",
