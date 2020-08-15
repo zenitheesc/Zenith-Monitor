@@ -14,7 +14,7 @@ class DataType {
 
 DataType altitude = DataType(
   name: "Altitude",
-  numericData: "1884.48",
+  numericData: "18084.48",
   unit: "KM",
   previousData: null,
   icon: Icons.terrain,
@@ -31,7 +31,7 @@ DataType velocidade = DataType(
 DataType latitude = DataType(
   name: "Latitude",
   numericData: "- 64.23",
-  unit: "°",
+  unit: "o",
   previousData: null,
   icon: Icons.gps_fixed,
 );
@@ -39,7 +39,7 @@ DataType latitude = DataType(
 DataType longitude = DataType(
   name: "Longitude",
   numericData: "47.69",
-  unit: "°",
+  unit: "o",
   previousData: null,
   icon: Icons.gps_fixed,
 );
