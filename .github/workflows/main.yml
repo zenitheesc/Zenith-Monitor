@@ -1,11 +1,7 @@
 name: Build iOS
 on:
   push:
-    branches:
-      - login
-  pull_request:
-    branches:
-      - login
+    branches: [ master ]
 jobs:
   build_ios:
     name: Build Flutter (iOS)
