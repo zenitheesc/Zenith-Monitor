@@ -4,8 +4,8 @@ import 'package:zenith_monitor/app/bloc/status_bloc/status_bloc.dart';
 import 'package:zenith_monitor/app/bloc/terminal_bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/app/views/mainScreen/gmap.dart';
 
-import 'lineOfButtons.dart';
-import 'scrollableDraggableSheet.dart';
+import 'line_of_buttons.dart';
+import 'scrollable_draggable_sheet.dart';
 import 'sidebar.dart';
 import '../datatypes.dart';
 
