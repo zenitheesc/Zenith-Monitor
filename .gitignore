@@ -1,1 +1,9 @@
+# Em teoria o .gitignore do diretório já exclui eles
+# mas só por precaução
+google-services.json
+local.properties
 
+# Ainda não sei se vale excluir esses sideffects do 
+# flutter run
+#*.bin
+#.lock
