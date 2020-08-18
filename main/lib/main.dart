@@ -13,7 +13,7 @@ import 'package:zenith_monitor/app/components/location.dart';
 import 'package:zenith_monitor/app/bloc/logger_bloc/logger_bloc.dart';
 
 import 'app/views/loginPage/fakeLoginPage.dart';
-import 'app/views/mainScreen/widgets/mainScreenWidget.dart';
+import 'app/views/mainScreen/widgets/main_screen_widget.dart';
 import 'app/views/terminal/terminal.dart';
 
 void main() {

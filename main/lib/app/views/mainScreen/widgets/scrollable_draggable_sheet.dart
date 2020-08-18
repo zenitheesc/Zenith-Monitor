@@ -16,6 +16,7 @@ class _DraggableSheetState extends State<DraggableSheet> {
     return DraggableScrollableSheet(
         initialChildSize: 0.27,
         minChildSize: 0.1,
+        expand: false,
         builder: (BuildContext context, scroller) {
           return Container(
               decoration: BoxDecoration(
@@ -35,6 +36,7 @@ class _DraggableSheetState extends State<DraggableSheet> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GridView.count(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       crossAxisCount: 2,
                       crossAxisSpacing: 5,
@@ -230,7 +232,9 @@ class _ScrollableSheetMainCardState extends State<ScrollableSheetMainCard> {
       child: Container(
         width: double.infinity,
         child: Card(
-          child: Column(children: generateSheetLineList()),
+          child: Column(
+            children: generateSheetLineList(),
+          ),
           color: Colors.white,
           shadowColor: Colors.black,
           shape: RoundedRectangleBorder(
