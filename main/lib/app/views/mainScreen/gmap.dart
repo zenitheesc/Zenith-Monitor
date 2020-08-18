@@ -108,6 +108,8 @@ class _GMapsViewState extends State<GMapsView> {
         polylines: lines,
         myLocationEnabled: true,
         compassEnabled: true,
+        circles: {}, // talvez seja util no futuro
+        padding: EdgeInsets.only(bottom: 64.0), // bump up zoom controls
       ),
     );
   }
