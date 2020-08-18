@@ -1,9 +1,15 @@
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
+    println "Found local.properties file"
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
     }
+}
+def googleMapApiKey = localProperties.getProperty('google.mapkey')
+// println "Using MapKey: '${googleMapApiKey}'"
+if(googleMapApiKey == null){
+    throw new GradleException("No GoogleMapsApi in the local.properties file")
 }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
@@ -21,9 +27,14 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+
+
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+
 
 android {
     compileSdkVersion 28
@@ -53,6 +64,8 @@ android {
         }
     }
 }
+
+
 
 flutter {
     source '../..'

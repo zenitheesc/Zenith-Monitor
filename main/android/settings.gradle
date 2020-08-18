@@ -10,6 +10,8 @@ def properties = new Properties()
 assert localPropertiesFile.exists()
 localPropertiesFile.withReader("UTF-8") { reader -> properties.load(reader) }
 
+def googleMapApiKey = properties.getProperty('google.mapkey')
+assert googleMapApiKey != null, "googleMapApiKey not set in local.properties"
 def flutterSdkPath = properties.getProperty("flutter.sdk")
 assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
 apply from: "$flutterSdkPath/packages/flutter_tools/gradle/app_plugin_loader.gradle"
