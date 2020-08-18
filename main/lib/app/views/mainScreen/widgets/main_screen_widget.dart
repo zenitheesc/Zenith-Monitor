@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
           children: <Widget>[
             GMapsConsumer(),
             Align(
-              alignment: Alignment(-0.9, -0.9),
+              alignment: Alignment.topLeft,
               child: LineOfButtons(),
             ),
             Align(
