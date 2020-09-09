@@ -42,7 +42,7 @@ app.*.symbols
 app.*.map.json
 android/app/src/main
 google-services.json
-local.properties
+android/local.properties
 # Android Related
 *.lock
 *.bin
