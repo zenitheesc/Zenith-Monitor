@@ -22,12 +22,19 @@
 @import path_provider;
 #endif
 
+#if __has_include(<usb_serial/UsbSerialPlugin.h>)
+#import <usb_serial/UsbSerialPlugin.h>
+#else
+@import usb_serial;
+#endif
+
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [FLTGoogleMapsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleMapsPlugin"]];
   [LocationPlugin registerWithRegistrar:[registry registrarForPlugin:@"LocationPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
+  [UsbSerialPlugin registerWithRegistrar:[registry registrarForPlugin:@"UsbSerialPlugin"]];
 }
 
 @end

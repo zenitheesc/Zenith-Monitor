@@ -34,7 +34,10 @@ class _MainScreenState extends State<MainScreen> {
             GMapsConsumer(),
             Align(
               alignment: Alignment.topLeft,
-              child: LineOfButtons(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: LineOfButtons(),
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
