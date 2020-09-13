@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
-import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
-import 'package:zenith_monitor/app/bloc/location_bloc/location_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/location/location_bloc.dart';
 import 'package:zenith_monitor/app/models/target_trajectory.dart';
 
 part 'map_event.dart';

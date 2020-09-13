@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:zenith_monitor/app/components/firebase_receiver.dart';
-import 'package:zenith_monitor/app/components/usb.dart';
+import 'package:zenith_monitor/app/services/mock/firebase_receiver.dart';
+import 'package:zenith_monitor/app/services/mock/usb.dart';
 import 'package:zenith_monitor/app/models/target_trajectory.dart';
 
 part 'data_event.dart';

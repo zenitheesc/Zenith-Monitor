@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
-import 'package:zenith_monitor/app/components/firebase_uploader.dart';
-import 'package:zenith_monitor/app/components/local_database.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
+import 'package:zenith_monitor/app/services/mock/firebase_uploader.dart';
+import 'package:zenith_monitor/app/services/mock/local_database.dart';
 import 'package:zenith_monitor/app/models/target_trajectory.dart';
 
 part 'logger_event.dart';

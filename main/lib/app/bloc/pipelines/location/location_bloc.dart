@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
-import 'package:zenith_monitor/app/components/location.dart';
+import 'package:zenith_monitor/app/services/location/location.dart';
 
 part 'location_event.dart';
 part 'location_state.dart';

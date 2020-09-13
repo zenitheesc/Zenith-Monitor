@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
-import 'package:zenith_monitor/app/bloc/location_bloc/location_bloc.dart';
-import 'package:zenith_monitor/app/bloc/map_bloc/map_bloc.dart';
-import 'package:zenith_monitor/app/bloc/status_bloc/status_bloc.dart';
-import 'package:zenith_monitor/app/bloc/terminal_bloc/terminal_bloc.dart';
-import 'package:zenith_monitor/app/components/firebase_receiver.dart';
-import 'package:zenith_monitor/app/components/firebase_uploader.dart';
-import 'package:zenith_monitor/app/components/local_database.dart';
-import 'package:zenith_monitor/app/components/usb.dart';
-import 'package:zenith_monitor/app/components/location.dart';
-import 'package:zenith_monitor/app/bloc/logger_bloc/logger_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/location/location_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/logger/logger_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/status/status_bloc.dart';
+
+import 'package:zenith_monitor/app/services/mock/firebase_receiver.dart';
+import 'package:zenith_monitor/app/services/mock/firebase_uploader.dart';
+import 'package:zenith_monitor/app/services/mock/local_database.dart';
+import 'package:zenith_monitor/app/services/mock/usb.dart';
+import 'package:zenith_monitor/app/services/location/location.dart';
+
+import 'package:zenith_monitor/app/bloc/controllers/map/map_bloc.dart';
+import 'package:zenith_monitor/app/bloc/controllers/terminal/terminal_bloc.dart';
 
 import 'app/views/loginPage/fakeLoginPage.dart';
 import 'app/views/mainScreen/widgets/main_screen_widget.dart';

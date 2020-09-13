@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../scale_screen_size.dart';
-import '../datatypes.dart';
+import 'package:zenith_monitor/app/views/mainScreen/datatypes.dart';
 
 class DraggableSheet extends StatefulWidget {
   @override

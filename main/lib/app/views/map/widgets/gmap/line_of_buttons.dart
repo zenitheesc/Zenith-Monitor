@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
-import 'package:zenith_monitor/app/bloc/logger_bloc/logger_bloc.dart';
-import 'package:zenith_monitor/app/bloc/map_bloc/map_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/logger/logger_bloc.dart';
+import 'package:zenith_monitor/app/bloc/controllers/map/map_bloc.dart';
 
 class LineOfButtons extends StatelessWidget {
   @override

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:zenith_monitor/app/bloc/terminal_bloc/terminal_bloc.dart';
+import 'package:zenith_monitor/app/bloc/controllers/terminal/terminal_bloc.dart';
 import 'package:zenith_monitor/app/models/status_packet.dart';
 import 'widgets/customAppbar.dart';
 

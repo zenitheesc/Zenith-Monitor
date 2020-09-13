@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zenith_monitor/app/bloc/status_bloc/status_bloc.dart';
-import 'package:zenith_monitor/app/bloc/terminal_bloc/terminal_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/status/status_bloc.dart';
+import 'package:zenith_monitor/app/bloc/controllers/terminal/terminal_bloc.dart';
 import 'package:zenith_monitor/app/views/mainScreen/gmap.dart';
 
 import 'line_of_buttons.dart';

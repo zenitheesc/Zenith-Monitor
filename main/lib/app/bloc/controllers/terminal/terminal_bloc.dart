@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:zenith_monitor/app/bloc/data_bloc/data_bloc.dart';
-import 'package:zenith_monitor/app/bloc/status_bloc/status_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/status/status_bloc.dart';
 
 part 'terminal_event.dart';
 part 'terminal_state.dart';
