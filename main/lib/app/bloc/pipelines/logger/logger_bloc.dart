@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
 import 'package:zenith_monitor/app/services/mock/firebase_uploader.dart';
 import 'package:zenith_monitor/app/services/mock/local_database.dart';
-import 'package:zenith_monitor/app/models/target_trajectory.dart';
+import 'package:zenith_monitor/app/models/data_packet.dart';
 
 part 'logger_event.dart';
 part 'logger_state.dart';

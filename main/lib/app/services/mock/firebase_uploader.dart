@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:zenith_monitor/app/models/target_trajectory.dart';
+import 'package:zenith_monitor/app/models/data_packet.dart';
 
 // MOCK
 class FirebaseUploader {

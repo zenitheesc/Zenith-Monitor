@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/location/location_bloc.dart';
-import 'package:zenith_monitor/app/models/target_trajectory.dart';
+import 'package:zenith_monitor/app/models/data_packet.dart';
 
 part 'map_event.dart';
 part 'map_state.dart';

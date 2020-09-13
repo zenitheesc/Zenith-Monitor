@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:zenith_monitor/app/models/target_trajectory.dart';
+import 'package:zenith_monitor/app/models/data_packet.dart';
 
 class UsbManager {
   final rng = Random();
