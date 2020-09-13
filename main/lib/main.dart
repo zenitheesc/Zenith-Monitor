@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/location/location_bloc.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/logger/logger_bloc.dart';
