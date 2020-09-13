@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:zenith_monitor/app/services/mock/firebase_receiver.dart';
-import 'package:zenith_monitor/app/services/mock/firebase_uploader.dart';
+import 'package:zenith_monitor/app/services/uploader/firebase_uploader.dart';
 import 'package:zenith_monitor/app/services/mock/usb.dart';
 import 'package:zenith_monitor/app/models/status_packet.dart';
 

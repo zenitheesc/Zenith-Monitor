@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/data/data_bloc.dart';
-import 'package:zenith_monitor/app/services/mock/firebase_uploader.dart';
+import 'package:zenith_monitor/app/services/uploader/firebase_uploader.dart';
 import 'package:zenith_monitor/app/services/mock/local_database.dart';
 import 'package:zenith_monitor/app/models/data_packet.dart';
 
