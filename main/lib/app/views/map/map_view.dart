@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/status/status_bloc.dart';
 import 'package:zenith_monitor/app/bloc/controllers/terminal/terminal_bloc.dart';
-import 'package:zenith_monitor/app/views/mainScreen/gmap.dart';
+import 'package:zenith_monitor/app/views/map/widgets/gmap/gmap.dart';
 
 import './widgets/gmap/line_of_buttons.dart';
 import './widgets/realtime/scrollable_draggable_sheet.dart';
 import './widgets/sidebar.dart';
-import 'package:zenith_monitor/app/views/mainScreen/datatypes.dart';
+import 'package:zenith_monitor/app/views/map/widgets/datatypes.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);

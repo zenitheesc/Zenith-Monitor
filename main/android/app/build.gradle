@@ -7,7 +7,7 @@ if (localPropertiesFile.exists()) {
     }
 }
 def googleMapApiKey = localProperties.getProperty('google.mapkey')
-// println "Using MapKey: '${googleMapApiKey}'"
+println "Using MapKey: '${googleMapApiKey}'"
 if(googleMapApiKey == null){
     throw new GradleException("No GoogleMapsApi in the local.properties file")
 }
@@ -54,6 +54,7 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [googleMapApiKey:"${googleMapApiKey}"]
     }
 
     buildTypes {

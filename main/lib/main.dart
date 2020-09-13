@@ -14,8 +14,7 @@ import 'package:zenith_monitor/app/services/location/location.dart';
 import 'package:zenith_monitor/app/bloc/controllers/map/map_bloc.dart';
 import 'package:zenith_monitor/app/bloc/controllers/terminal/terminal_bloc.dart';
 
-import 'app/views/loginPage/fakeLoginPage.dart';
-import 'app/views/mainScreen/widgets/main_screen_widget.dart';
+import 'app/views/map/map_view.dart';
 import 'app/views/terminal/terminal.dart';
 
 void main() {
@@ -75,7 +74,7 @@ class Application extends StatelessWidget {
         ),
         initialRoute: '/map',
         routes: {
-          '/login': (context) => LoginPage(),
+          // '/login': (context) => LoginPage(),
           '/map': (context) => MainScreen(),
           '/terminal': (context) => TerminalView2(),
         },

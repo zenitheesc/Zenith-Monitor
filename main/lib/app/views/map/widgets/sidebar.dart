@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:zenith_monitor/app/views/mainScreen/datatypes.dart';
-import '../../../scale_screen_size.dart';
+import 'package:zenith_monitor/app/views/map/widgets/datatypes.dart';
+
+import 'package:zenith_monitor/app/views/scale_screen_size.dart';
 
 class SideBar extends StatefulWidget {
   final User user;
