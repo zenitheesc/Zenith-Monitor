@@ -1,16 +1,39 @@
-import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:typed_data';
 import 'dart:async';
 import 'package:usb_serial/usb_serial.dart';
 import 'package:usb_serial/transaction.dart';
+import 'package:zenith_monitor/app/models/data_packet.dart';
+
+//##### adb connect 192.168.99.101:5555 #####//
 
 class UsbManager {
   UsbPort _port;
-  List<Widget> _serialData = [];
+  List<TargetTrajectory> _serialData = [];
   StreamSubscription<String> _subscription;
   Transaction<String> _transaction;
-  StreamController<String> dados = StreamController<String>.broadcast();
+  StreamController<TargetTrajectory> dados =
+      StreamController<TargetTrajectory>.broadcast();
   StreamController<bool> status = StreamController<bool>.broadcast();
+
+  TargetTrajectory makePackage(String line) {
+    List<String> dados = line.split(";");
+    TargetTrajectory res;
+
+    double alt, vel;
+    LatLng pos;
+    int id;
+
+    id = int.tryParse(dados.elementAt(0));
+    pos = LatLng(double.tryParse(dados.elementAt(1)),
+        double.tryParse(dados.elementAt(2)));
+    alt = double.tryParse(dados.elementAt(3));
+    vel = double.tryParse(dados.elementAt(4));
+
+    res =
+        new TargetTrajectory(id: id, position: pos, altitude: alt, speed: vel);
+    return res;
+  }
 
   Future<bool> _connectTo(device) async {
     _serialData.clear();
@@ -50,11 +73,14 @@ class UsbManager {
         _port.inputStream, Uint8List.fromList([13, 10]));
 
     _subscription = _transaction.stream.listen((String line) {
-      _serialData.add(Text(line));
+      TargetTrajectory data = makePackage(line);
+      print(line);
+
+      _serialData.add(data);
       if (_serialData.length > 20) {
         _serialData.removeAt(0);
       }
-      dados.add(line);
+      dados.add(data);
     });
 
     return true;
@@ -62,6 +88,7 @@ class UsbManager {
 
   Future<void> _getPorts() async {
     List<UsbDevice> devices = await UsbSerial.listDevices();
+    print("Devices:");
     print(devices);
 
     devices.forEach((device) async {
