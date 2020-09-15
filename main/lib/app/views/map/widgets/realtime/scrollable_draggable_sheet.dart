@@ -5,6 +5,14 @@ import '../../../scale_screen_size.dart';
 import 'package:zenith_monitor/app/views/map/widgets/datatypes.dart';
 
 class DraggableSheet extends StatefulWidget {
+  final DataType topLeft;
+  final DataType topRight;
+  final DataType bottomLeft;
+  final DataType bottomRight;
+
+  const DraggableSheet(
+      {Key key, this.topLeft, this.topRight, this.bottomLeft, this.bottomRight})
+      : super(key: key);
   @override
   _DraggableSheetState createState() => _DraggableSheetState();
 }
@@ -43,10 +51,10 @@ class _DraggableSheetState extends State<DraggableSheet> {
                       mainAxisSpacing: 5,
                       childAspectRatio: 2,
                       children: <Widget>[
-                        ScrollableSheetCard(altitude),
-                        ScrollableSheetCard(velocidade),
-                        ScrollableSheetCard(latitude),
-                        ScrollableSheetCard(longitude)
+                        ScrollableSheetCard(widget.topLeft),
+                        ScrollableSheetCard(widget.topRight),
+                        ScrollableSheetCard(widget.bottomLeft),
+                        ScrollableSheetCard(widget.bottomRight)
                       ],
                     ),
                   ),

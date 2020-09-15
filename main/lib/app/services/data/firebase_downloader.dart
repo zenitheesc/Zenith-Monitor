@@ -20,7 +20,9 @@ class FirebaseReceiver {
 
     var qSnap =
         await _subCollectionReference.orderBy("id").getDocuments(); //? .then
-    qSnap.documents.forEach((DocumentSnapshot doc) {
+    qSnap.documents
+        .getRange(0, qSnap.documents.length - 1)
+        .forEach((DocumentSnapshot doc) {
       _dataStream.add(parser(doc));
     });
 
@@ -28,7 +30,9 @@ class FirebaseReceiver {
     //! O ultimo dado vindo da query anterior vai aparecer aqui tbm
     //! então vai pra pipeline duas vezes
     _subCollectionReference.orderBy("id").snapshots().listen((event) {
-      return _dataStream.add(parser(event.documents.last));
+      TargetTrajectory packet = parser(event.documents.last);
+      // if(...)
+      return _dataStream.add(packet);
     });
     _statusStream.add(10);
   }
