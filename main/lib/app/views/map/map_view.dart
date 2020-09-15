@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/status/status_bloc.dart';
 import 'package:zenith_monitor/app/bloc/controllers/terminal/terminal_bloc.dart';
 import 'package:zenith_monitor/app/views/map/widgets/gmap/gmap.dart';
+import 'package:zenith_monitor/app/views/map/widgets/realtime/real_time_wrapper.dart';
 
 import './widgets/gmap/line_of_buttons.dart';
 import './widgets/realtime/scrollable_draggable_sheet.dart';
@@ -41,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: DraggableSheet(),
+              child: RealTimeSheet(),
             ),
           ],
         ),
