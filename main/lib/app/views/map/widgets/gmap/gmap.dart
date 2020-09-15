@@ -123,7 +123,7 @@ class _GMapsViewState extends State<GMapsView> {
         infoWindow: InfoWindow(
             title: "Alt: ${position.altitude.toStringAsFixed(4)}",
             snippet:
-                "(${position.position.latitude.toStringAsFixed(4)},${position.position.latitude.toStringAsFixed(4)})"),
+                "(${position.position.latitude.toStringAsFixed(4)},${position.position.longitude.toStringAsFixed(4)})"),
         markerId: MarkerId((position.position.longitude +
                 position.position.latitude)
             .toString()) // this is problematic;.toStringAsFixed(4) solution use received index

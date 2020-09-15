@@ -1,4 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
@@ -22,6 +22,7 @@ class FirebaseUploader {
       "lng": packet.position.longitude,
       "alt": packet.altitude,
       "vel": packet.speed,
+      "id": packet.id
     };
 
     // crude check if data is comming from FirebaseReceiver

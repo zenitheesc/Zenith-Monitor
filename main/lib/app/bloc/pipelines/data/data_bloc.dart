@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:zenith_monitor/app/services/mock/firebase_receiver.dart';
+import 'package:zenith_monitor/app/services/data/firebase_downloader.dart';
 import 'package:zenith_monitor/app/services/mock/usb.dart';
 import 'package:zenith_monitor/app/models/data_packet.dart';
 
@@ -19,6 +19,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   Stream<DataState> mapEventToState(DataEvent event) async* {
     if (event is DataStart) {
       _src?.cancel();
+      await dataReceiver.init();
+
       _src = dataReceiver.receive().listen((packet) {
         add(DataNewPacket(packet));
       });
