@@ -20,15 +20,13 @@ class FirebaseReceiver {
 
     var qSnap =
         await _subCollectionReference.orderBy("id").getDocuments(); //? .then
-    qSnap.documents
-        .getRange(0, qSnap.documents.length - 1)
+    qSnap.documents.getRange(0, qSnap.documents.length - 1) // !
         .forEach((DocumentSnapshot doc) {
       _dataStream.add(parser(doc));
     });
 
     _statusStream.add(2);
-    //! O ultimo dado vindo da query anterior vai aparecer aqui tbm
-    //! então vai pra pipeline duas vezes
+
     _subCollectionReference.orderBy("id").snapshots().listen((event) {
       TargetTrajectory packet = parser(event.documents.last);
       // if(...)
