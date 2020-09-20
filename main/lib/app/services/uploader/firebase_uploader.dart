@@ -10,9 +10,9 @@ class FirebaseUploader {
   CollectionReference _subCollectionReference;
 
   FirebaseUploader() {
-    _subCollectionReference = Firestore.instance
+    _subCollectionReference = FirebaseFirestore.instance
         .collection("missoes")
-        .document("test-launch")
+        .doc("test-launch")
         .collection("logs");
   }
 
@@ -32,7 +32,6 @@ class FirebaseUploader {
     print("Saving to Firebase (id:${packet.id})");
     await _subCollectionReference.add(data);
 
-    // await Future.delayed(Duration(milliseconds: 300), () {});
     // handle errors...
     _statusStream.add(10); // some code meaning status OK
   }

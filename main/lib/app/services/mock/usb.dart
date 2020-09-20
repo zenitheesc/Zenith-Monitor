@@ -17,7 +17,7 @@ class UsbManager {
   Stream<TargetTrajectory> receive() {
     _statusStream.add(2);
     return Stream.periodic(Duration(seconds: 1), (int count) {
-      return _generateRandomSC(count);
+      return _generateRandomSC(1 + count);
     }).take(12);
   }
 

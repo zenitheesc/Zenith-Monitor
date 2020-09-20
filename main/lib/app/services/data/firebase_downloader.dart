@@ -11,37 +11,45 @@ class FirebaseReceiver {
 
   Future<void> init() async {
     _statusStream.add(1);
-    _subCollectionReference = Firestore.instance
+    _subCollectionReference = FirebaseFirestore.instance
         .collection("missoes")
-        .document("test-launch")
+        .doc("test-launch")
         .collection("logs");
 
     _statusStream.add(1);
 
-    var qSnap =
-        await _subCollectionReference.orderBy("id").getDocuments(); //? .then
-    qSnap.documents.getRange(0, qSnap.documents.length - 1) // !
-        .forEach((DocumentSnapshot doc) {
-      _dataStream.add(parser(doc));
-    });
+    var qSnap = await _subCollectionReference.orderBy("id").get();
+    if (qSnap.docs.length > 1) {
+      qSnap.docs
+          .getRange(0, qSnap.docs.length - 1)
+          .forEach((DocumentSnapshot doc) {
+        _dataStream.add(parser(doc));
+      });
+    }
 
     _statusStream.add(2);
 
-    _subCollectionReference.orderBy("id").snapshots().listen((event) {
-      TargetTrajectory packet = parser(event.documents.last);
-      // if(...)
-      return _dataStream.add(packet);
+    _subCollectionReference
+        .orderBy("id")
+        .snapshots(includeMetadataChanges: true)
+        .listen((event) {
+      if (event.docs.length > 0) {
+        TargetTrajectory packet = parser(event.docs.last);
+        _dataStream.add(packet);
+      }
     });
     _statusStream.add(10);
+
+    // Firestore.instance
   }
 
   TargetTrajectory parser(DocumentSnapshot doc) {
     // if(...) //TODO: Check if is valid Packet
     return TargetTrajectory(
-      position: LatLng(doc["lat"], doc["lng"]),
-      altitude: doc["alt"],
-      speed: doc["vel"],
-      id: doc["id"],
+      position: LatLng(doc.data()["lat"], doc.data()["lng"]),
+      altitude: doc.data()["alt"],
+      speed: doc.data()["vel"],
+      id: doc.data()["id"],
     );
   }
 
