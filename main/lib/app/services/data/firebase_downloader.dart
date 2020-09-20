@@ -19,9 +19,8 @@ class FirebaseReceiver {
     _statusStream.add(1);
 
     var qSnap = await _subCollectionReference.orderBy("id").get();
-    if (qSnap.docs.length > 1) {
-      qSnap.docs
-          .getRange(0, qSnap.docs.length - 1)
+    if (qSnap.docs.length > 0) {
+      qSnap.docs.getRange(0, qSnap.docs.length - 1) // [a b[
           .forEach((DocumentSnapshot doc) {
         _dataStream.add(parser(doc));
       });
@@ -31,7 +30,7 @@ class FirebaseReceiver {
 
     _subCollectionReference
         .orderBy("id")
-        .snapshots(includeMetadataChanges: true)
+        .snapshots(includeMetadataChanges: false)
         .listen((event) {
       if (event.docs.length > 0) {
         TargetTrajectory packet = parser(event.docs.last);
@@ -39,8 +38,6 @@ class FirebaseReceiver {
       }
     });
     _statusStream.add(10);
-
-    // Firestore.instance
   }
 
   TargetTrajectory parser(DocumentSnapshot doc) {
