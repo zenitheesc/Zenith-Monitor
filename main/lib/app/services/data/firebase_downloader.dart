@@ -18,22 +18,12 @@ class FirebaseReceiver {
 
     _statusStream.add(1);
 
-    var qSnap = await _subCollectionReference.orderBy("id").get();
-    if (qSnap.docs.length > 0) {
-      qSnap.docs.getRange(0, qSnap.docs.length - 1) // [a b[
-          .forEach((DocumentSnapshot doc) {
-        _dataStream.add(parser(doc));
-      });
-    }
-
-    _statusStream.add(2);
-
     _subCollectionReference
         .orderBy("id")
         .snapshots(includeMetadataChanges: false)
         .listen((event) {
-      if (event.docs.length > 0) {
-        TargetTrajectory packet = parser(event.docs.last);
+      for (var change in event.docChanges) {
+        TargetTrajectory packet = parser(change.doc);
         _dataStream.add(packet);
       }
     });
