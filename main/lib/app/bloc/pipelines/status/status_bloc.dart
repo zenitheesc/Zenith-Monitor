@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:zenith_monitor/app/services/data/firebase_downloader.dart';
 import 'package:zenith_monitor/app/services/uploader/firebase_uploader.dart';
-import 'package:zenith_monitor/app/services/mock/usb.dart';
+import 'package:zenith_monitor/app/services/usb/usb.dart';
 import 'package:zenith_monitor/app/models/status_packet.dart';
 
 part 'status_event.dart';

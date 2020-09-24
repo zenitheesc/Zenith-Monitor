@@ -14,7 +14,8 @@ class UsbManager {
   Transaction<String> _transaction;
   StreamController<TargetTrajectory> dados =
       StreamController<TargetTrajectory>.broadcast();
-  StreamController<bool> status = StreamController<bool>.broadcast();
+  StreamController<int> _status = StreamController<int>.broadcast();
+  StreamController<bool> _attatched = StreamController<bool>.broadcast();
 
   TargetTrajectory makePackage(String line) {
     List<String> dados = line.split(";");
@@ -62,7 +63,7 @@ class UsbManager {
       return false;
     }
 
-    status.add(true);
+    _status.add(1);
 
     await _port.setDTR(true);
     await _port.setRTS(true);
@@ -103,14 +104,28 @@ class UsbManager {
     UsbSerial.usbEventStream.listen((UsbEvent event) {
       if (event.event == UsbEvent.ACTION_USB_ATTACHED) {
         _getPorts();
+        _attatched.add(true);
       }
       if (event.event == UsbEvent.ACTION_USB_DETACHED) {
         _connectTo(null);
-        status.add(false);
+        _status.add(0);
+        _attatched.add(false);
       }
     });
 
     _getPorts();
-    status.add(false);
+    _status.add(0);
+  }
+
+  Stream<int> status() {
+    return _status.stream;
+  }
+
+  Stream<bool> attached() {
+    return _attatched.stream;
+  }
+
+  Stream<TargetTrajectory> receive() {
+    return dados.stream;
   }
 }

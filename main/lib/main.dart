@@ -9,7 +9,7 @@ import 'package:zenith_monitor/app/bloc/pipelines/status/status_bloc.dart';
 import 'package:zenith_monitor/app/services/data/firebase_downloader.dart';
 import 'package:zenith_monitor/app/services/uploader/firebase_uploader.dart';
 import 'package:zenith_monitor/app/services/mock/local_database.dart';
-import 'package:zenith_monitor/app/services/mock/usb.dart';
+import 'package:zenith_monitor/app/services/usb/usb.dart';
 import 'package:zenith_monitor/app/services/location/location.dart';
 
 import 'package:zenith_monitor/app/bloc/controllers/map/map_bloc.dart';
