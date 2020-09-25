@@ -10,3 +10,5 @@ class LoggerNewPacket extends LoggerEvent {
 }
 
 class LoggerStart extends LoggerEvent {}
+
+class LoggerBegin extends LoggerEvent {}

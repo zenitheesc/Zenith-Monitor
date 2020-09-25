@@ -50,6 +50,7 @@ class Application extends StatelessWidget {
             BlocProvider.of<DataBloc>(context),
             FirebaseUploader(),
             LocalDatabase(),
+            BlocProvider.of<DataBloc>(context).usbManager,
           ),
           child: Container(),
         ),

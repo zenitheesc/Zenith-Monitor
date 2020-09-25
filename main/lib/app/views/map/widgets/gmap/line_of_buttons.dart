@@ -33,8 +33,8 @@ class LineOfButtons extends StatelessWidget {
           child: FloatingActionButton(
             heroTag: "goHomeBtn",
             onPressed: () {
-              BlocProvider.of<DataBloc>(context).add(UsbStart());
-              BlocProvider.of<LoggerBloc>(context).add(LoggerStart());
+              // BlocProvider.of<DataBloc>(context).add(UsbStart());
+              // BlocProvider.of<LoggerBloc>(context).add(LoggerStart());
             }, //widget.__mapKey.currentState.goHome,
             child: Icon(Icons.usb),
             foregroundColor: Colors.black54,

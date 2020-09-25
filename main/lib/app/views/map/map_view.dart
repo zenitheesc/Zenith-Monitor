@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/app/bloc/pipelines/logger/logger_bloc.dart';
 import 'package:zenith_monitor/app/bloc/pipelines/status/status_bloc.dart';
 import 'package:zenith_monitor/app/bloc/controllers/terminal/terminal_bloc.dart';
 import 'package:zenith_monitor/app/views/map/widgets/gmap/gmap.dart';
@@ -21,6 +22,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    BlocProvider.of<LoggerBloc>(context).add(LoggerStart());
     BlocProvider.of<StatusBloc>(context).add(StatusStart());
     BlocProvider.of<TerminalBloc>(context).add(TerminalStart());
   }
