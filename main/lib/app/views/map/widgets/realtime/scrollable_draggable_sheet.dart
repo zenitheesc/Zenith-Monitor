@@ -24,6 +24,7 @@ class _DraggableSheetState extends State<DraggableSheet> {
     return DraggableScrollableSheet(
         initialChildSize: 0.27,
         minChildSize: 0.1,
+        maxChildSize: .34, // ! ESCONDE O RESTO
         expand: false,
         builder: (BuildContext context, scroller) {
           return Container(
@@ -58,17 +59,17 @@ class _DraggableSheetState extends State<DraggableSheet> {
                       ],
                     ),
                   ),
-                  ScrollableSheetDivider(),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text("\n     MORE INFORMATION",
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: (SizeConfig.blockSizeHorizontal) * 3,
-                        )),
-                  ),
-                  ScrollableSheetMainCard(),
-                  ScrollableSheetButton(),
+                  // ScrollableSheetDivider(),
+                  // Padding(
+                  //   padding: EdgeInsets.all(5),
+                  //   child: Text("\n     MORE INFORMATION",
+                  //       style: TextStyle(
+                  //         color: Colors.grey[600],
+                  //         fontSize: (SizeConfig.blockSizeHorizontal) * 3,
+                  //       )),
+                  // ),
+                  // ScrollableSheetMainCard(),
+                  // ScrollableSheetButton(),
                 ],
               ));
         });

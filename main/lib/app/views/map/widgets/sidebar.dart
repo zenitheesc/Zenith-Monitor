@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/app/models/user.dart';
+import 'package:zenith_monitor/app/services/auth/firebase_authentication.dart';
 
 import 'package:zenith_monitor/app/views/map/widgets/datatypes.dart';
 
@@ -13,6 +15,13 @@ class SideBar extends StatefulWidget {
 }
 
 class SideBarState extends State<SideBar> {
+  AuthManager _authManager;
+
+  ZUser _user;
+
+  SideBarState() {
+    _authManager = AuthManager();
+  }
   List<String> zenithUserSideBarList = [
     "Terminal",
     "Últimas missões",
@@ -42,26 +51,36 @@ class SideBarState extends State<SideBar> {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              widget.user.name,
-              style: TextStyle(fontSize: 18.0),
-            ),
-            // Using accountEmail atribute to show access level
-            accountEmail: Text(widget.user.accessLevel),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: (widget.user.image == null)
-                  ? Text(
-                      widget.user.name[0],
-                      style: TextStyle(
-                        fontSize: 40.0,
-                        color: Colors.black12,
-                      ),
-                    )
-                  : Image.asset(widget.user.image),
-            ),
-          ),
+          StreamBuilder(
+              stream: _authManager.user,
+              initialData: _authManager.preLoggedUser,
+              builder: (context, AsyncSnapshot<ZUser> snap) {
+                // print(snap.data.name);
+                if (snap.connectionState == ConnectionState.active &&
+                    snap.data != null) {
+                  return UserAccountsDrawerHeader(
+                    accountName: Text(
+                      snap.data.email.split('@')[0],
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    // Using accountEmail atribute to show access level
+                    accountEmail: Text(snap.data.email),
+                    currentAccountPicture: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: (snap.data.imageUrl == null)
+                          ? Text(
+                              snap.data.email[0],
+                              style: TextStyle(
+                                fontSize: 40.0,
+                                color: Colors.black12,
+                              ),
+                            )
+                          : Image.asset(snap.data.imageUrl),
+                    ),
+                  );
+                } else
+                  return Container();
+              }),
           new ListView.builder(
             shrinkWrap: true,
             itemCount: (widget.user.accessLevel == "Entusiasta")
@@ -72,7 +91,22 @@ class SideBarState extends State<SideBar> {
                     buildSideBar(context, index, entusiastaSideBarList)
                 : (BuildContext context, int index) =>
                     buildSideBar(context, index, zenithUserSideBarList),
-          )
+          ),
+          ListTile(
+            // title: Text("Sair"),
+            title: Text(
+              "Sair",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: (SizeConfig.blockSizeHorizontal) * 5,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () {
+              _authManager.signOut();
+              Navigator.of(context).popAndPushNamed('/login');
+            },
+          ),
         ],
       ),
     );

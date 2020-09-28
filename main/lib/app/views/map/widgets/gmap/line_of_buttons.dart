@@ -28,19 +28,19 @@ class LineOfButtons extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: FloatingActionButton(
-            heroTag: "goHomeBtn",
-            onPressed: () {
-              // BlocProvider.of<DataBloc>(context).add(UsbStart());
-              // BlocProvider.of<LoggerBloc>(context).add(LoggerStart());
-            }, //widget.__mapKey.currentState.goHome,
-            child: Icon(Icons.usb),
-            foregroundColor: Colors.black54,
-            backgroundColor: Colors.white,
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(5.0),
+        //   child: FloatingActionButton(
+        //     heroTag: "goHomeBtn",
+        //     onPressed: () {
+        //       // BlocProvider.of<DataBloc>(context).add(UsbStart());
+        //       // BlocProvider.of<LoggerBloc>(context).add(LoggerStart());
+        //     }, //widget.__mapKey.currentState.goHome,
+        //     child: Icon(Icons.usb),
+        //     foregroundColor: Colors.black54,
+        //     backgroundColor: Colors.white,
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: FloatingActionButton(
