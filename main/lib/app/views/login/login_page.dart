@@ -22,26 +22,29 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state is LoginSignInSuccesful) {
-          Navigator.popAndPushNamed(context, '/map');
-        }
-      },
-      builder: (context, state) {
-        if (state is LoginLoading) {
-          return Loader();
-        } else if (state is LoginInitial) {
-          return Login();
-          // } else if (state is LoginRegisterPage) {
-          //   debugPrint("change to register page");
-          //   return Register();
-        } else if (state is LoginResetPage) {
-          return UpdatePassword();
-        } else {
-          return Login();
-        }
-      },
-    );
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: BlocConsumer<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state is LoginSignInSuccesful) {
+              Navigator.popAndPushNamed(context, '/map');
+            }
+          },
+          builder: (context, state) {
+            if (state is LoginLoading) {
+              return Loader();
+            } else if (state is LoginInitial) {
+              return Login();
+              // } else if (state is LoginRegisterPage) {
+              //   debugPrint("change to register page");
+              //   return Register();
+            } else if (state is LoginResetPage) {
+              return UpdatePassword();
+            } else {
+              return Login();
+            }
+          },
+        ));
+    //   return ;
   }
 }
