@@ -20,7 +20,7 @@ jobs:
       - name: "💫  Dynamic Template Render"
         uses: varunsridharan/action-dynamic-readme@main
         with:
-          GLOBAL_TEMPLATE_REPOSITORY: zenitheesc/new-zenith-template/
+          GLOBAL_TEMPLATE_REPOSITORY: zenitheesc/Zenith-Monitor/
           files: |
             README.md
         env:
