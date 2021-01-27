@@ -1,24 +1,24 @@
-name: Build iOS
-on:
-  push:
-    branches: [ master ]
-jobs:
-  build_ios:
-    name: Build Flutter (iOS)
-    runs-on: macOS-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1
-      with:
-          channel: 'dev'
-    - run: cd main && flutter pub get
-    - run: cd main && flutter clean
-    - run: cd main && flutter build ios --release --no-codesign
-    - name: Upload iPA
-      uses: actions/upload-artifact@master
-      with:
-        name: ios-build
-        path: main/build/ios/iphoneos
+# name: Build iOS
+# on:
+#   push:
+#     branches: [ master ]
+# jobs:
+#   build_ios:
+#     name: Build Flutter (iOS)
+#     runs-on: macOS-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - uses: actions/setup-java@v1
+#       with:
+#         java-version: '12.x'
+#     - uses: subosito/flutter-action@v1
+#       with:
+#           channel: 'dev'
+#     - run: cd main && flutter pub get
+#     - run: cd main && flutter clean
+#     - run: cd main && flutter build ios --release --no-codesign
+#     - name: Upload iPA
+#       uses: actions/upload-artifact@master
+#       with:
+#         name: ios-build
+#         path: main/build/ios/iphoneos
