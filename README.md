@@ -39,17 +39,24 @@
 
 ## Environment and tools
 
-`Add list of dependencies and software needed to run this project (if possible add the versions that were used in development).`
+This is a [Flutter](https://flutter.dev) Project. Once you have Flutter installed, you can run `flutter pub get` on the `main` folder to fetch dependencies.
+These are the main ones:
+ - [FlutterFire](https://github.com/FirebaseExtended/flutterfire) for Firestore and Auth
+ - [BLoC](https://bloclibrary.dev/)
+ - [Google Maps](https://pub.dev/packages/google_maps_flutter)
+ - [USB Serial](https://pub.dev/packages/usb_serial)
+ - [Location](https://pub.dev/packages/location)
+ 
+## Steps to run
 
-## Steps to run and debug
-
-`A simple list of steps indicating how one can run and test the project.`
+```shell
+flutter run
+```
+Be sure to have either a phone or an emulator connected with Flutter. You can always check with `flutter doctor`.
 
 ## How to contribute
 
-`(optional, depends on the project) list of simple rules to help people work on the project.`
-
-`Examples: How to format a pull request\n How to format an issue`
+**Fork** this repository. Use git to clone it and create a new branch with a name: `feature/<feature-name>`. Then open a Pull-Request. You should be greeted by a bot to help you after that :smile:. Also check out this [Contributing Guide](https://guides.github.com/activities/forking/)
 
 ---
 
