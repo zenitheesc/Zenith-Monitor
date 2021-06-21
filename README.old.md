@@ -1,3 +1,0 @@
-# Zenith Monitor
-
-Open-Source project developed to ease Space Probe monitoring and data visualization during Zenith Aerospace's launches. Still working...
