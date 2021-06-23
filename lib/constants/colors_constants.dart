@@ -6,3 +6,4 @@ const eerieBlack = Color(0xFF161719);
 const mantisGreen = Color(0xFF7dc579);
 const lightCoral = Color(0xFFeb7676);
 const white = Color(0xFFfcfcff);
+const gray = Color(0xFFf747479);
