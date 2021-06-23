@@ -41,7 +41,7 @@ class UserProfile extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
+			Text(
               user.name,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
@@ -49,6 +49,21 @@ class UserProfile extends StatelessWidget {
                 fontFamily: 'DMSans',
               ),
             ),
+			Container(
+				padding: const EdgeInsets.all(12.0),
+				decoration: const BoxDecoration(
+					color: gray,
+					borderRadius: BorderRadius.all(Radius.circular(30)),
+				),
+				child : Text(
+					user.accessLevel,
+					style: const TextStyle(
+						fontWeight: FontWeight.bold,
+						color: white,
+						fontFamily: 'DMSans',
+					),
+				),
+			), 
           ],
         ),
       ),
