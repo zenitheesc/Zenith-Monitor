@@ -46,27 +46,27 @@ class NossosValores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Spacer(flex: 2),
-            nossosValoresContainer(
-                "Incentivar a produção científica nacional\n e facilitar o acesso à ciência no\n ambiente universitário",
-                "assets/images/figGroup.png"),
-            Spacer(flex: 1),
-            nossosValoresContainer(
-                "O zenith possui uma hierarquia horizontal,\n onde todos os integrantes possuem voz,\n mas responsabilidades distintas",
-                "assets/images/figProfessional.png"),
-            Spacer(flex: 1),
-            nossosValoresContainer(
-                "Os integrantes tem oportunidades de\n desenvolver capacitações técnicas\n em grupo, praticando suas soft skills.",
-                "assets/images/figScientist.png"),
-            Spacer(flex: 8),
-          ],
+    return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Spacer(flex: 2),
+              nossosValoresContainer(
+                  "Incentivar a produção científica nacional\n e facilitar o acesso à ciência no\n ambiente universitário",
+                  "assets/images/figGroup.png"),
+              Spacer(flex: 1),
+              nossosValoresContainer(
+                  "O zenith possui uma hierarquia horizontal,\n onde todos os integrantes possuem voz,\n mas responsabilidades distintas",
+                  "assets/images/figProfessional.png"),
+              Spacer(flex: 1),
+              nossosValoresContainer(
+                  "Os integrantes tem oportunidades de\n desenvolver capacitações técnicas\n em grupo, praticando suas soft skills.",
+                  "assets/images/figScientist.png"),
+              Spacer(flex: 8),
+            ],
+          ),
         ),
-      ),
-    );
+        backgroundColor: raisingBlack);
   }
 }

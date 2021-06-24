@@ -20,14 +20,6 @@ class ZenithMonitor extends StatelessWidget {
 class Pagina extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              NossosValores(),
-            ],
-          ),
-        ),
-        backgroundColor: raisingBlack);
+    return NossosValores();
   }
 }
