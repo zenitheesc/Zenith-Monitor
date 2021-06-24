@@ -3,48 +3,51 @@
 // This is still for testing purposes
 
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/constants/colors_constants.dart';
 
-void main() {
-  runApp(MyApp());
-}
+class NossosValores extends StatelessWidget {
+  NossosValores({Key? key});
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+  Widget nossosValoresContainer(String text, String pathToImg) {
+    return Container(
+      width: 331,
+      height: 94,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: eerieBlack,
       ),
-      home: MyHomePage(title: 'Nossos Valores'),
+      child: Row(
+        children: [
+          Spacer(flex: 4),
+          Container(
+              child: Image.asset(
+            pathToImg,
+            color: null,
+            fit: BoxFit.cover,
+            width: 37.0,
+            height: 38.11,
+            colorBlendMode: BlendMode.dstATop,
+          )),
+          Spacer(flex: 1),
+          Container(height: 49, child: VerticalDivider(color: white)),
+          Spacer(flex: 4),
+          Container(
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: white),
+            ),
+          ),
+          Spacer(flex: 4)
+        ],
+      ),
     );
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  //Cores:
-  var backgroundColor = 0xff292B2D;
-  var backgroundTextsColor = 0xff161719;
-  var fontColor = 0xffffffff;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(backgroundColor),
-      appBar: AppBar(
-        backgroundColor: Color(backgroundColor),
-        title: Text(widget.title),
-      ),
-      body: Center(
+    return SafeArea(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -66,51 +69,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
-
-Widget nossosValoresContainer(String text, String pathToImg) {
-  var backgroundTextsColor = 0xff161719;
-  var fontColor = 0xffffffff;
-  final ret = Container(
-    width: 331,
-    height: 94,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(15),
-      color: Color(backgroundTextsColor),
-    ),
-    child: Row(
-      children: [
-        Spacer(
-          flex: 4,
-        ),
-        Container(
-            child: Image.asset(
-          pathToImg,
-          color: null,
-          fit: BoxFit.cover,
-          width: 37.0,
-          height: 38.11,
-          colorBlendMode: BlendMode.dstATop,
-        )),
-        Spacer(
-          flex: 1,
-        ),
-        Container(height: 49, child: VerticalDivider(color: Color(fontColor))),
-        Spacer(
-          flex: 4,
-        ),
-        Container(
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Color(fontColor)),
-          ),
-        ),
-        Spacer(
-          flex: 4,
-        )
-      ],
-    ),
-  );
-  return ret;
 }
