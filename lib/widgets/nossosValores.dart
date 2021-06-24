@@ -1,6 +1,6 @@
-// This file isn't complete
-// It shouldn't be inclued on the main application
-// This is still for testing purposes
+// To-Do:
+//        Add phrase under figure
+//        Add top bar with 'Nossos valores' and return button.
 
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
@@ -10,35 +10,38 @@ class NossosValores extends StatelessWidget {
 
   Widget nossosValoresContainer(String text, String pathToImg) {
     return Container(
-      width: 331,
+      width: 340,
       height: 94,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: eerieBlack,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Spacer(flex: 4),
           Container(
-              child: Image.asset(
-            pathToImg,
-            color: null,
-            fit: BoxFit.cover,
-            width: 37.0,
-            height: 38.11,
-            colorBlendMode: BlendMode.dstATop,
-          )),
-          Spacer(flex: 1),
-          Container(height: 49, child: VerticalDivider(color: white)),
-          Spacer(flex: 4),
+            child: Image.asset(
+              pathToImg,
+              color: null,
+              fit: BoxFit.cover,
+              width: 37.0,
+              height: 38.11,
+              colorBlendMode: BlendMode.dstATop,
+            ),
+            padding: EdgeInsets.all(10),
+          ),
+          Container(
+            height: 49,
+            child: VerticalDivider(color: white),
+          ),
           Container(
             child: Text(
               text,
               textAlign: TextAlign.center,
               style: TextStyle(color: white),
             ),
+            padding: EdgeInsets.all(2),
           ),
-          Spacer(flex: 4)
         ],
       ),
     );
