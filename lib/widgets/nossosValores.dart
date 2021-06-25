@@ -71,17 +71,14 @@ class NossosValores extends StatelessWidget {
                 width: double.infinity,
                 height: 100,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                        padding: EdgeInsets.all(25),
-                        child: Image.asset(
-                          "assets/images/botaoVoltar.png",
-                          color: white,
-                          fit: BoxFit.cover,
-                          width: 12,
-                          height: 12,
-                        )),
+                      padding: EdgeInsets.all(25),
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: white,
+                      ),
+                    ),
                     Container(
                       child: Text(
                         "Nossos Valores",
