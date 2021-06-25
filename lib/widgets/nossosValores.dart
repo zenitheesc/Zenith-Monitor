@@ -62,50 +62,44 @@ class NossosValores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Spacer(),
-              Container(
-                width: double.infinity,
-                height: 100,
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(25),
-                      child: Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: white,
-                      ),
-                    ),
-                    Container(
-                      child: Text(
-                        "Nossos Valores",
-                        style: TextStyle(color: white, fontSize: 18),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              nossosValoresContainer(
-                  "Incentivar a produção científica nacional\n e facilitar o acesso à ciência no\n ambiente universitário",
-                  "assets/images/figScientist.png",
-                  "Ciência"),
-              Spacer(flex: 1),
-              nossosValoresContainer(
-                  "O zenith possui uma hierarquia\n horizontal, onde todos os integrantes\n possuem voz, mas responsabilidades\n distintas",
-                  "assets/images/figGroup.png",
-                  "Pessoas"),
-              Spacer(flex: 1),
-              nossosValoresContainer(
-                  "Os integrantes tem oportunidades de\n desenvolver capacitações técnicas\n em grupo, praticando suas soft skills.",
-                  "assets/images/figProfessional.png",
-                  "Habilidade"),
-              Spacer(flex: 12),
-            ],
-          ),
-        ),
+        appBar: buildAppBar(),
+        body: buildMainBody(),
         backgroundColor: raisingBlack);
+  }
+
+  Center buildMainBody() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          nossosValoresContainer(
+              "Incentivar a produção científica nacional\n e facilitar o acesso à ciência no\n ambiente universitário",
+              "assets/images/figScientist.png",
+              "Ciência"),
+          Spacer(flex: 1),
+          nossosValoresContainer(
+              "O zenith possui uma hierarquia\n horizontal, onde todos os integrantes\n possuem voz, mas responsabilidades\n distintas",
+              "assets/images/figGroup.png",
+              "Pessoas"),
+          Spacer(flex: 1),
+          nossosValoresContainer(
+              "Os integrantes tem oportunidades de\n desenvolver capacitações técnicas\n em grupo, praticando suas soft skills.",
+              "assets/images/figProfessional.png",
+              "Habilidade"),
+          Spacer(flex: 12),
+        ],
+      ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+        toolbarHeight: 120,
+        backgroundColor: raisingBlack,
+        elevation: 0.0,
+        title: Text("Nossos Valores",
+            style: TextStyle(color: white, fontSize: 20)),
+        leading: IconButton(
+            onPressed: () {}, icon: Icon(Icons.arrow_back_ios_new_rounded)));
   }
 }
