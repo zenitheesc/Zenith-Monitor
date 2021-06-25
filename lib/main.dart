@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/widgets/nossosValores.dart';
 
 void main() {
