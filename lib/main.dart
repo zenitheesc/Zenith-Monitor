@@ -21,6 +21,7 @@ class ZenithMonitor extends StatelessWidget {
 class PagQualquer extends StatelessWidget {
   User user = User(
       "Leonardo Baptistela",
+      //null,
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2O-oloCyx1l_-eeEaj4Irgt9WsIBbzwli5A&usqp=CAU",
       "Membro Zenith");
 

@@ -10,15 +10,25 @@ class UserProfile extends StatelessWidget {
   //método para fazer a verificação se o user possui algum link de foto
   Widget profileChild() {
     if (user.imageLink == null) {
-      return const Icon(Icons
-          .person); //coloquei um icone mas acho que a ideia eh colocar a primeira letra do nome da pessoa
+      return CircleAvatar(
+        child: Text(
+          user.name[0],
+          style: TextStyle(
+            fontSize: 60.0,
+            color: white,
+          ),
+        ),
+        backgroundColor: eerieBlack,
+        radius: 80.0,
+      );
     }
 
-    return ClipOval(
-      child: Image.network(
+    return CircleAvatar(
+      backgroundImage: NetworkImage(
         user.imageLink!, //aqui é possível ver como ocorre o nullSafety, se tirar a exclamacao não vai funcionar porque imageLink pode guardar null
-        fit: BoxFit.cover,
       ),
+      backgroundColor: eerieBlack,
+      radius: 80.0,
     );
   }
 
@@ -31,15 +41,7 @@ class UserProfile extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 80.0, 0, 20.0),
-              child: Container(
-                width: 160,
-                //height: screenWidth / 3,
-                child: profileChild(),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: lightCoral,
-                ),
-              ),
+              child: profileChild(),
             ),
             Text(
               user.name,
