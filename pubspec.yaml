@@ -71,6 +71,14 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DM_Sans/DMSans-Bold.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-BoldItalic.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Italic.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Medium.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-MediumItalic.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

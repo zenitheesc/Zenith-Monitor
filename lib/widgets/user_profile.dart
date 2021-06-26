@@ -55,7 +55,7 @@ class UserProfile extends StatelessWidget {
                 color: gray,
                 borderRadius: BorderRadius.all(Radius.circular(30)),
               ),
-              child : Text(
+              child: Text(
                 user.accessLevel,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
