@@ -8,7 +8,10 @@ class UserProfile extends StatelessWidget {
   final User user;
 
   //método para fazer a verificação se o user possui algum link de foto
-  Widget profileChild() {
+  Widget profileChild(double screenWidth) {
+    double radius = 80.0;
+    Color color = eerieBlack;
+
     if (user.imageLink == null) {
       return CircleAvatar(
         child: Text(
@@ -18,8 +21,8 @@ class UserProfile extends StatelessWidget {
             color: white,
           ),
         ),
-        backgroundColor: eerieBlack,
-        radius: 80.0,
+        backgroundColor: color,
+        radius: radius,
       );
     }
 
@@ -27,8 +30,8 @@ class UserProfile extends StatelessWidget {
       backgroundImage: NetworkImage(
         user.imageLink!, //aqui é possível ver como ocorre o nullSafety, se tirar a exclamacao não vai funcionar porque imageLink pode guardar null
       ),
-      backgroundColor: eerieBlack,
-      radius: 80.0,
+      backgroundColor: color,
+      radius: radius,
     );
   }
 
@@ -41,7 +44,7 @@ class UserProfile extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 80.0, 0, 20.0),
-              child: profileChild(),
+              child: profileChild(screenWidth),
             ),
             Text(
               user.name,
@@ -52,7 +55,7 @@ class UserProfile extends StatelessWidget {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 5.0),
               decoration: const BoxDecoration(
                 color: gray,
                 borderRadius: BorderRadius.all(Radius.circular(30)),
