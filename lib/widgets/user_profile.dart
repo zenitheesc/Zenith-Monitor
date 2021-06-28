@@ -9,6 +9,7 @@ class UserProfile extends StatelessWidget {
 
   //método para fazer a verificação se o user possui algum link de foto
   Widget profileChild(double screenWidth) {
+    print(screenWidth);
     double radius = 80.0;
     Color color = eerieBlack;
 
@@ -52,6 +53,7 @@ class UserProfile extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: white,
                 fontFamily: 'DMSans',
+		fontSize: 24.0
               ),
             ),
             Container(
