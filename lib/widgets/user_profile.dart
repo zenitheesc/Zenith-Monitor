@@ -56,6 +56,7 @@ class UserProfile extends StatelessWidget {
 		fontSize: 24.0
               ),
             ),
+            SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 5.0),
               decoration: const BoxDecoration(
