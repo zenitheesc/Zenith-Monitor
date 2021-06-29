@@ -12,37 +12,10 @@ class UserProfile extends StatelessWidget {
   Widget profileChild() {
     double radius = 80.0;
     Color color = eerieBlack;
-    /*String? imageLink = await user.getImageLink();
-
-    if (imageLink == null) {
-      return CircleAvatar(
-        child: Text(
-          user.getName()[0].toUpperCase(),
-          style: TextStyle(
-            fontSize: 60.0,
-            color: white,
-          ),
-        ),
-        backgroundColor: color,
-        radius: radius,
-      );
-    }
-
-    return CircleAvatar(
-      backgroundImage: NetworkImage(
-        imageLink,
-      ),
-      backgroundColor: color,
-      radius: radius,
-    );*/
 
     return FutureBuilder(
         future: user.getImageLink(),
         builder: (context, AsyncSnapshot<String?> snapshot) {
-          if (!snapshot.hasData) {
-            return CircularProgressIndicator();
-          }
-
           if (snapshot.data == null) {
             return CircleAvatar(
               child: Text(

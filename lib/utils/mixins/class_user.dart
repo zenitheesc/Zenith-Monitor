@@ -29,11 +29,16 @@ class User {
   Future<String?> _linkValidity(String? link) async {
     if (link == null) return null;
 
-    final response = await http.get(Uri.parse(link));
-
-    if (response.statusCode == 200) return link;
-
-    return null;
+    try {
+      final response = await http.get(Uri.parse(link));
+      if (response.statusCode == 200)
+        return link;
+      else
+        return null;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 
   String getName() {

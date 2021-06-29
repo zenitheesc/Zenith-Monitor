@@ -22,12 +22,8 @@ class PagQualquer extends StatelessWidget {
   User user = User(
       "leon8**ardo ba+_-ptIs,\Tela",
       //null,
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2O-oloCyx1l_-eeEaj4Irgt9WsIBbzwli5A&usqp=CAU",
+      "https://encrypted-tbn0.gstatic.estragocom/images?q=tbn:ANd9GcT2O-oloCyx1l_-eeEaj4Irgt9WsIBbzwli5A&usqp=CAUestragando",
       "meMb0ro7 zenIT67%%H");
-
-  //User user = User("Leonardo Baptistela", null, "Membro Zenith");
-
-  //user.setName("leonardo");
 
   @override
   Widget build(BuildContext context) {
