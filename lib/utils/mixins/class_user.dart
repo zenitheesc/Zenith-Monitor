@@ -6,12 +6,14 @@ class User {
   User(String name, String? imageLink, String accessLevel) {
     this.name = _stringToPattern(name);
     this.imageLink = imageLink;
-    this.accessLevel = accessLevel;
+    this.accessLevel = _stringToPattern(accessLevel);
   }
 
   User.empty();
 
   String _stringToPattern(String str) {
+    str = str.replaceAll(new RegExp(r'[^a-zA-Z\ ]'), '');
+
     var list = <String>[];
     list = str.split(" ");
 
