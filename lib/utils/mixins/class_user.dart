@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 class User {
   late String _name; //não pode ser null
   String? _imageLink; //pode ser null
@@ -24,11 +26,22 @@ class User {
     return list.join();
   }
 
+  Future<String?> _linkValidity(String? link) async {
+    if (link == null) return null;
+
+    final response = await http.get(Uri.parse(link));
+
+    if (response.statusCode == 200) return link;
+
+    return null;
+  }
+
   String getName() {
     return this._name;
   }
 
-  String? getImageLink() {
+  Future<String?> getImageLink() async {
+    this._imageLink = await _linkValidity(this._imageLink);
     return this._imageLink;
   }
 

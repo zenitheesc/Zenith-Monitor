@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/utils/mixins/class_user.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
@@ -10,8 +12,9 @@ class UserProfile extends StatelessWidget {
   Widget profileChild() {
     double radius = 80.0;
     Color color = eerieBlack;
+    /*String? imageLink = await user.getImageLink();
 
-    if (user.getImageLink() == null) {
+    if (imageLink == null) {
       return CircleAvatar(
         child: Text(
           user.getName()[0].toUpperCase(),
@@ -27,11 +30,41 @@ class UserProfile extends StatelessWidget {
 
     return CircleAvatar(
       backgroundImage: NetworkImage(
-        user.getImageLink()!,
+        imageLink,
       ),
       backgroundColor: color,
       radius: radius,
-    );
+    );*/
+
+    return FutureBuilder(
+        future: user.getImageLink(),
+        builder: (context, AsyncSnapshot<String?> snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+
+          if (snapshot.data == null) {
+            return CircleAvatar(
+              child: Text(
+                user.getName()[0].toUpperCase(),
+                style: TextStyle(
+                  fontSize: 60.0,
+                  color: white,
+                ),
+              ),
+              backgroundColor: color,
+              radius: radius,
+            );
+          }
+
+          return CircleAvatar(
+            backgroundImage: NetworkImage(
+              snapshot.data!,
+            ),
+            backgroundColor: color,
+            radius: radius,
+          );
+        });
   }
 
   @override
