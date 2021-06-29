@@ -16,7 +16,7 @@ class UserProfile extends StatelessWidget {
     if (user.imageLink == null) {
       return CircleAvatar(
         child: Text(
-          user.name[0],
+          user.name[0].toUpperCase(),
           style: TextStyle(
             fontSize: 60.0,
             color: white,
@@ -50,11 +50,10 @@ class UserProfile extends StatelessWidget {
             Text(
               user.name,
               style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: white,
-                fontFamily: 'DMSans',
-		fontSize: 24.0
-              ),
+                  fontWeight: FontWeight.bold,
+                  color: white,
+                  fontFamily: 'DMSans',
+                  fontSize: 24.0),
             ),
             SizedBox(height: 10),
             Container(
