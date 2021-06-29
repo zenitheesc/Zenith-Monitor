@@ -11,10 +11,10 @@ class UserProfile extends StatelessWidget {
     double radius = 80.0;
     Color color = eerieBlack;
 
-    if (user.imageLink == null) {
+    if (user.getImageLink() == null) {
       return CircleAvatar(
         child: Text(
-          user.name[0].toUpperCase(),
+          user.getName()[0].toUpperCase(),
           style: TextStyle(
             fontSize: 60.0,
             color: white,
@@ -27,7 +27,7 @@ class UserProfile extends StatelessWidget {
 
     return CircleAvatar(
       backgroundImage: NetworkImage(
-        user.imageLink!,
+        user.getImageLink()!,
       ),
       backgroundColor: color,
       radius: radius,
@@ -45,7 +45,7 @@ class UserProfile extends StatelessWidget {
               child: profileChild(),
             ),
             Text(
-              user.name,
+              user.getName(),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: white,
@@ -61,7 +61,7 @@ class UserProfile extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(30)),
               ),
               child: Text(
-                user.accessLevel,
+                user.getAccessLevel(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: white,

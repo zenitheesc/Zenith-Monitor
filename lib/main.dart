@@ -32,13 +32,14 @@ class PagQualquer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              UserProfile(user: user),
-            ],
-          ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            UserProfile(user: user),
+          ],
         ),
-        backgroundColor: raisingBlack);
+      ),
+      backgroundColor: raisingBlack,
+    );
   }
 }

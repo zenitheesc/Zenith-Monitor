@@ -1,15 +1,13 @@
 class User {
-  late String name; //não pode ser null
-  String? imageLink; //pode ser null
-  late String accessLevel; //não pode ser null
+  late String _name; //não pode ser null
+  String? _imageLink; //pode ser null
+  late String _accessLevel; //não pode ser null
 
   User(String name, String? imageLink, String accessLevel) {
-    this.name = _stringToPattern(name);
-    this.imageLink = imageLink;
-    this.accessLevel = _stringToPattern(accessLevel);
+    this._name = _stringToPattern(name);
+    this._imageLink = imageLink;
+    this._accessLevel = _stringToPattern(accessLevel);
   }
-
-  User.empty();
 
   String _stringToPattern(String str) {
     str = str.replaceAll(new RegExp(r'[^a-zA-Z\ ]'), '');
@@ -22,11 +20,19 @@ class User {
       list[i] =
           " " + list[i][0].toUpperCase() + list[i].substring(1).toLowerCase();
     }
-    print(list.join());
+
     return list.join();
   }
 
-  void setName(String name) {
-    this.name = _stringToPattern(name);
+  String getName() {
+    return this._name;
+  }
+
+  String? getImageLink() {
+    return this._imageLink;
+  }
+
+  String getAccessLevel() {
+    return this._accessLevel;
   }
 }
