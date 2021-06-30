@@ -1,44 +1,22 @@
 import 'package:flutter/painting.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:zenith_monitor/utils/helpers/calc_text_size.dart';
+import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
+import 'package:zenith_monitor/utils/helpers/link_validity.dart';
+
+/// Until now, this class is being used by:
+///   -user_profile.dart
+/// If you change something, make sure that these parts are still working.
 
 class User {
-  late String _name; //não pode ser null
-  String? _imageLink; //pode ser null
-  late String _accessLevel; //não pode ser null
+  late String _name;
+  String? _imageLink;
+  late String _accessLevel;
 
   User(String name, String? imageLink, String accessLevel) {
-    this._name = _stringToPattern(name);
+    this._name = stringToPattern(name);
     this._imageLink = imageLink;
-    this._accessLevel = _stringToPattern(accessLevel);
-  }
-
-  String _stringToPattern(String str) {
-    str = str.replaceAll(new RegExp(r'[^a-zA-Z\ ]'), '');
-
-    var list = <String>[];
-    list = str.split(" ");
-
-    for (int i = 0; i < list.length; i++) {
-      list[i] = list[i][0].toUpperCase() + list[i].substring(1).toLowerCase();
-    }
-
-    return list.join(" ");
-  }
-
-  Future<String?> _linkValidity(String? link) async {
-    if (link == null) return null;
-
-    try {
-      final response = await http.get(Uri.parse(link));
-      if (response.statusCode == 200)
-        return link;
-      else
-        return null;
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+    this._accessLevel = stringToPattern(accessLevel);
   }
 
   String getName() {
@@ -46,12 +24,18 @@ class User {
   }
 
   Future<String?> getImageLink() async {
-    return await _linkValidity(this._imageLink);
+    return await linkValidity(this._imageLink);
   }
 
   String getAccessLevel() {
     return this._accessLevel;
   }
+
+  /// The getNameForUI method takes the font size that will be used
+  /// in a widget and the window width. Based on this, the method will
+  /// shorten the username until the space occupied is less than 80% of
+  /// the screen width. The abbreviation will be from the last surname
+  /// to the third name. Then the short name will be returned.
 
   String getNameForUI(double screenWidth, double fontSize) {
     String finalName = this._name;
@@ -62,11 +46,19 @@ class User {
     list = finalName.split(" ");
     int i = list.length - 1;
 
-    while (size.width > screenWidth * 0.8 && i > 2) {
-      list[i] = list[i][0] + ".";
+    while (size.width > screenWidth * 0.8) {
+      if (i > 0) {
+        list[i] = list[i][0] + ".";
+        i--;
+      } else if (list.length > 2) {
+        /// If the method hits the second name, the last names will be removed. Feel free to implement a better approach
+        list.removeLast();
+      } else {
+        break;
+      }
+
       finalName = list.join(" ");
       size = calcTextSize(finalName, TextStyle(fontSize: fontSize));
-      i--;
     }
 
     return finalName;
