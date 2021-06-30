@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/utils/mixins/class_user.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
@@ -42,6 +40,7 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Center(
         child: Column(
@@ -51,7 +50,7 @@ class UserProfile extends StatelessWidget {
               child: profileChild(),
             ),
             Text(
-              user.getName(),
+              user.getNameForUI(screenWidth, 24.0),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: white,

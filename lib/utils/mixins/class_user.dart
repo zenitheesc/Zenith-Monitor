@@ -1,4 +1,6 @@
+import 'package:flutter/painting.dart';
 import 'package:http/http.dart' as http;
+import 'package:zenith_monitor/utils/helpers/calc_text_size.dart';
 
 class User {
   late String _name; //não pode ser null
@@ -17,13 +19,11 @@ class User {
     var list = <String>[];
     list = str.split(" ");
 
-    list[0] = list[0][0].toUpperCase() + list[0].substring(1).toLowerCase();
-    for (int i = 1; i < list.length; i++) {
-      list[i] =
-          " " + list[i][0].toUpperCase() + list[i].substring(1).toLowerCase();
+    for (int i = 0; i < list.length; i++) {
+      list[i] = list[i][0].toUpperCase() + list[i].substring(1).toLowerCase();
     }
 
-    return list.join();
+    return list.join(" ");
   }
 
   Future<String?> _linkValidity(String? link) async {
@@ -52,5 +52,24 @@ class User {
 
   String getAccessLevel() {
     return this._accessLevel;
+  }
+
+  String getNameForUI(double screenWidth, double fontSize) {
+    String finalName = this._name;
+
+    Size size = calcTextSize(finalName, TextStyle(fontSize: fontSize));
+
+    var list = <String>[];
+    list = finalName.split(" ");
+    int i = list.length - 1;
+
+    while (size.width > screenWidth * 0.8 && i > 2) {
+      list[i] = list[i][0] + ".";
+      finalName = list.join(" ");
+      size = calcTextSize(finalName, TextStyle(fontSize: fontSize));
+      i--;	
+    }
+
+    return finalName;
   }
 }

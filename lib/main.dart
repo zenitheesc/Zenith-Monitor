@@ -20,9 +20,10 @@ class ZenithMonitor extends StatelessWidget {
 
 class PagQualquer extends StatelessWidget {
   User user = User(
-      "leon8**ardo ba+_-ptIs,\Tela",
+      "Vitor favrin Carrera miguel outro83nome yung",
+      //"leon8**ardo ba+_-ptIs,\Tela sobrenome sobrenome sobrenome sobrenome sobrenome",
       //null,
-      "https://encrypted-tbn0.gstatic.estragocom/images?q=tbn:ANd9GcT2O-oloCyx1l_-eeEaj4Irgt9WsIBbzwli5A&usqp=CAUestragando",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2O-oloCyx1l_-eeEaj4Irgt9WsIBbzwli5A&usqp=CAUestragando",
       "meMb0ro7 zenIT67%%H");
 
   @override
