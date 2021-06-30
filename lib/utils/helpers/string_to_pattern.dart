@@ -9,6 +9,7 @@ String stringToPattern(String str) {
 
   /// The words are determinated by the space character.
   list = str.split(" ");
+  list.removeWhere((element) => element == "");
 
   for (int i = 0; i < list.length; i++) {
     list[i] = list[i][0].toUpperCase() + list[i].substring(1).toLowerCase();
