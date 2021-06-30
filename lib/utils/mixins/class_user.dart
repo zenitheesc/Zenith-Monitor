@@ -46,8 +46,7 @@ class User {
   }
 
   Future<String?> getImageLink() async {
-    this._imageLink = await _linkValidity(this._imageLink);
-    return this._imageLink;
+    return await _linkValidity(this._imageLink);
   }
 
   String getAccessLevel() {
@@ -67,7 +66,7 @@ class User {
       list[i] = list[i][0] + ".";
       finalName = list.join(" ");
       size = calcTextSize(finalName, TextStyle(fontSize: fontSize));
-      i--;	
+      i--;
     }
 
     return finalName;

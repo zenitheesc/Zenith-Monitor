@@ -7,35 +7,32 @@ class UserProfile extends StatelessWidget {
 
   final User user;
 
-  Widget profileChild() {
+  Future<Widget> profileChild() async {
     double radius = 80.0;
     Color color = eerieBlack;
+    String? link = await user.getImageLink();
 
-    return FutureBuilder(
-        future: user.getImageLink(),
-        builder: (context, AsyncSnapshot<String?> snapshot) {
-          if (snapshot.data == null) {
-            return CircleAvatar(
-              child: Text(
-                user.getName()[0].toUpperCase(),
-                style: TextStyle(
-                  fontSize: 60.0,
-                  color: white,
-                ),
-              ),
-              backgroundColor: color,
-              radius: radius,
-            );
-          }
+    if (link == null) {
+      return CircleAvatar(
+        child: Text(
+          user.getName()[0].toUpperCase(),
+          style: TextStyle(
+            fontSize: 60.0,
+            color: white,
+          ),
+        ),
+        backgroundColor: color,
+        radius: radius,
+      );
+    }
 
-          return CircleAvatar(
-            backgroundImage: NetworkImage(
-              snapshot.data!,
-            ),
-            backgroundColor: color,
-            radius: radius,
-          );
-        });
+    return CircleAvatar(
+      backgroundImage: NetworkImage(
+        link,
+      ),
+      backgroundColor: color,
+      radius: radius,
+    );
   }
 
   @override
@@ -47,7 +44,13 @@ class UserProfile extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 80.0, 0, 20.0),
-              child: profileChild(),
+              child: FutureBuilder(
+                future: profileChild(),
+                builder: (context, AsyncSnapshot<Widget> snapshot) {
+                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  return snapshot.data!;
+                },
+              ),
             ),
             Text(
               user.getNameForUI(screenWidth, 24.0),
