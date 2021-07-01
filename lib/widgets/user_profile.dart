@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/utils/helpers/name_abbreviation.dart';
 import 'package:zenith_monitor/utils/mixins/class_user.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
@@ -53,7 +54,7 @@ class UserProfile extends StatelessWidget {
               ),
             ),
             Text(
-              user.getNameForUI(screenWidth, 24.0),
+              nameAbbreviation(user.getName(), screenWidth, 24.0),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: white,
