@@ -33,7 +33,8 @@ class NossosValores extends StatelessWidget {
                 ),
                 Text(
                   nomeImg,
-                  style: TextStyle(color: white, fontSize: 11),
+                  style: TextStyle(
+                      color: white, fontSize: 11, fontFamily: 'DMSans'),
                 ),
               ],
             ),
@@ -47,7 +48,7 @@ class NossosValores extends StatelessWidget {
             child: Text(
               text,
               textAlign: TextAlign.center,
-              style: TextStyle(color: white),
+              style: TextStyle(color: white, fontFamily: 'DMSans'),
             ),
           ),
         ],
