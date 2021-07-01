@@ -8,10 +8,8 @@ Future<String?> linkValidity(String? link) async {
 
   try {
     final response = await http.get(Uri.parse(link));
-    if (response.statusCode == 200)
-      return link;
-    else
-      return null;
+    if (response.statusCode == 200) return link;
+    return null;
   } catch (e) {
     print(e.toString());
     return null;
