@@ -18,41 +18,37 @@ class NossosValores extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(8),
+          Expanded(
+            flex: 1,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  child: Image.asset(
-                    pathToImg,
-                    color: null,
-                    fit: BoxFit.cover,
-                    width: 37.0,
-                    height: 38.11,
-                    colorBlendMode: BlendMode.dstATop,
-                  ),
+                Image.asset(
+                  pathToImg,
+                  color: null,
+                  fit: BoxFit.cover,
+                  width: 37.0,
+                  height: 38.11,
+                  colorBlendMode: BlendMode.dstATop,
                 ),
-                Container(
-                  child: Text(
-                    nomeImg,
-                    style: TextStyle(color: white, fontSize: 11),
-                  ),
+                Text(
+                  nomeImg,
+                  style: TextStyle(color: white, fontSize: 11),
                 ),
               ],
             ),
           ),
           Container(
-            height: 49,
             child: VerticalDivider(color: white),
+            height: 49,
           ),
-          Container(
+          Expanded(
+            flex: 4,
             child: Text(
               text,
               textAlign: TextAlign.center,
               style: TextStyle(color: white),
             ),
-            padding: EdgeInsets.all(2),
           ),
         ],
       ),
@@ -69,24 +65,26 @@ class NossosValores extends StatelessWidget {
 
   Center buildMainBody() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: GridView.count(
+        crossAxisCount: 1,
+        primary: false,
+        childAspectRatio: 4,
+        padding: EdgeInsets.all(10),
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
         children: <Widget>[
           nossosValoresContainer(
-              "Incentivar a produção científica nacional\n e facilitar o acesso à ciência no\n ambiente universitário",
+              "Incentivar a produção científica nacional e facilitar o acesso à ciência no ambiente universitário.",
               "assets/images/figScientist.png",
               "Ciência"),
-          Spacer(flex: 1),
           nossosValoresContainer(
-              "O zenith possui uma hierarquia\n horizontal, onde todos os integrantes\n possuem voz, mas responsabilidades\n distintas",
+              "O zenith possui uma hierarquia horizontal, onde todos os integrantes possuem voz, mas responsabilidades distintas.",
               "assets/images/figGroup.png",
               "Pessoas"),
-          Spacer(flex: 1),
           nossosValoresContainer(
-              "Os integrantes tem oportunidades de\n desenvolver capacitações técnicas\n em grupo, praticando suas soft skills.",
+              "Os integrantes tem oportunidades de desenvolver capacitações técnicas em grupo, praticando suas soft skills.",
               "assets/images/figProfessional.png",
               "Habilidade"),
-          Spacer(flex: 12),
         ],
       ),
     );
