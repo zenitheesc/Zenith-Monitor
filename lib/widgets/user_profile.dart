@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/utils/helpers/name_abbreviation.dart';
 import 'package:zenith_monitor/utils/mixins/class_user.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
 class UserProfile extends StatelessWidget {
   UserProfile({Key? key, required this.user});
@@ -48,7 +49,11 @@ class UserProfile extends StatelessWidget {
               child: FutureBuilder(
                 future: profileChild(),
                 builder: (context, AsyncSnapshot<Widget> snapshot) {
-                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  if (!snapshot.hasData)
+                    return ZenithProgressIndicator(
+                      size: 160.0,
+                      fileName: "z_icon_white.png",
+                    );
                   return snapshot.data!;
                 },
               ),
