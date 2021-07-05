@@ -26,9 +26,8 @@ class AboutUsZenithMonitor extends StatelessWidget {
             child: Center(
               child: Text(
                 "O app conta com todo nosso acervo de projetos, com o acompanhamento em tempo real de todos nossos lançamentos e suas informações técnicas.",
-                style: TextStyle(
-                  color: white, fontSize: 11, fontFamily: 'DMSans'
-                ),
+                style:
+                    TextStyle(color: white, fontSize: 11, fontFamily: 'DMSans'),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -40,7 +39,7 @@ class AboutUsZenithMonitor extends StatelessWidget {
 
   AppBar buildAppBar() {
     return AppBar(
-        toolbarHeight: 120,
+        toolbarHeight: 80,
         backgroundColor: raisingBlack,
         elevation: 0.0,
         title: Text("O Zenith Monitor",

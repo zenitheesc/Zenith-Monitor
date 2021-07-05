@@ -93,7 +93,7 @@ class NossosValores extends StatelessWidget {
 
   AppBar buildAppBar() {
     return AppBar(
-        toolbarHeight: 120,
+        toolbarHeight: 80,
         backgroundColor: raisingBlack,
         elevation: 0.0,
         title: Text("Nossos Valores",
