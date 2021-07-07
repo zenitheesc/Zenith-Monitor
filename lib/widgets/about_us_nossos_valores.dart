@@ -1,6 +1,3 @@
-// To-Do:
-//        Fix Alignment of everything
-
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 

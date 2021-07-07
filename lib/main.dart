@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zenith_monitor/widgets/aboutUs-zenithmonitor.dart';
-import 'package:zenith_monitor/widgets/nossosValores.dart';
+import 'package:zenith_monitor/widgets/about_us_zenith_monitor.dart';
+import 'package:zenith_monitor/widgets/about_us_nossos_valores.dart';
 
 void main() {
   runApp(const ZenithMonitor());
