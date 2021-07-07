@@ -28,6 +28,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,10 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+
+  assets:
+    - assets/images/z_icon_grey.png
+    - assets/images/z_icon_white.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -71,6 +76,14 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DM_Sans/DMSans-Bold.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-BoldItalic.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Italic.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Medium.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-MediumItalic.ttf
+        - asset: assets/fonts/DM_Sans/DMSans-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
