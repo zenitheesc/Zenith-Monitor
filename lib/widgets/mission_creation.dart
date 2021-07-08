@@ -10,6 +10,12 @@ class MissionCreation extends StatefulWidget {
 class _MissionCreationState extends State<MissionCreation> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return TextField(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'Insira algo novo'
+        ),
+      obscureText: true,
+    );
   }
 }
