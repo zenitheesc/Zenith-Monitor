@@ -19,10 +19,10 @@ class ZenithMonitor extends StatelessWidget {
 }
 
 class Application extends StatelessWidget {
-  Connection usb = Connection("USB", false);
-  Connection blue = Connection("Bluetooth", false);
-  Connection fire = Connection("Firebase", false);
-  Connection batata = Connection("batata", true);
+  Connection usb = Connection("Conexão USB", false);
+  Connection blue = Connection("Conexão Bluetooth", false);
+  Connection fire = Connection("Conexão Firebase", false);
+  Connection batata = Connection("Conexão Batata", true);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
