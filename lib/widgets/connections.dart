@@ -12,7 +12,7 @@ class ConnectionDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(15),
-      width: 320,
+      width: MediaQuery.of(context).size.width * 0.83,
         decoration: const BoxDecoration(
           color: raisingBlack,
           borderRadius: BorderRadius.all(Radius.circular(10)),
