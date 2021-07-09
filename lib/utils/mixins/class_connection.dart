@@ -5,7 +5,7 @@ class Connection {
   late bool state;
 
   Connection(String type, bool state ){
-    this.type = stringToPattern(type);
+    this.type = type;
     this.state = state;
   }
 
