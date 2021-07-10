@@ -11,7 +11,7 @@ class ConnectionDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.fromLTRB(15,7.5,15,7.5),
       width: MediaQuery.of(context).size.width * 0.83,
         decoration: const BoxDecoration(
           color: raisingBlack,
@@ -24,13 +24,13 @@ class ConnectionDisplay extends StatelessWidget {
         },
           children:[
               for (var connection in connections) 
-                Func(connection)
+                func(connection)
           ]
       ),
     );
   }
 
-  TableRow Func(Connection connection) {
+  TableRow func(Connection connection) {
     return TableRow(children: [
       Expanded(child:
         Text(
@@ -42,7 +42,9 @@ class ConnectionDisplay extends StatelessWidget {
         ),
         ),
       ),
-      Text(
+      Padding(
+        padding: EdgeInsets.fromLTRB(7.5, 0, 0, 7.5),
+        child: Text(
         connection.getstate() ? 'Ativado' : 'Desativado',
         style: TextStyle(
           fontWeight: FontWeight.normal,
@@ -50,7 +52,8 @@ class ConnectionDisplay extends StatelessWidget {
           fontFamily: 'DMSans',
         ),
         textAlign: TextAlign.center,
-      ),
+        ),
+      )
       ]);
 }
 }
