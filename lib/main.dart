@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/widgets/login.dart';
 
 void main() {
   runApp(const ZenithMonitor());
@@ -18,6 +19,6 @@ class ZenithMonitor extends StatelessWidget {
 class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return LoginZenithMonitor();
   }
 }
