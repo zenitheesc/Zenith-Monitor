@@ -11,7 +11,7 @@ class ConnectionDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(15,7.5,15,7.5),
+      padding: const EdgeInsets.fromLTRB(15,15,15,7.5),
       width: MediaQuery.of(context).size.width * 0.83,
         decoration: const BoxDecoration(
           color: raisingBlack,
@@ -19,19 +19,20 @@ class ConnectionDisplay extends StatelessWidget {
         ),
       child: Table(
         columnWidths: {
-              0: FractionColumnWidth(2/3),
-              1: FractionColumnWidth(1/3),
+          0: FractionColumnWidth(2/3),
+          1: FractionColumnWidth(1/3),
         },
-          children:[
-              for (var connection in connections) 
-                func(connection)
-          ]
+        children:[
+           for (var connection in connections) 
+            func(connection)
+        ]
       ),
     );
   }
 
   TableRow func(Connection connection) {
-    return TableRow(children: [
+    return TableRow(
+      children: [
       Expanded(child:
         Text(
         connection.getType(),
@@ -54,6 +55,7 @@ class ConnectionDisplay extends StatelessWidget {
         textAlign: TextAlign.center,
         ),
       )
-      ]);
-}
+      ]
+    );
+  }
 }

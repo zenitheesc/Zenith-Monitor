@@ -38,10 +38,13 @@ class _ApplicationState extends State<Application> {
     return Scaffold(
       backgroundColor: eerieBlack,
       appBar: StandardAppBar(title: "Conexões",),
-      body: Row(
+      body: Padding (
+        padding: EdgeInsets.fromLTRB(0, 20, 0, 20,),
+        child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children:[ConnectionDisplay(connections: [usb,blue,fire,batata]),
         ]
+        )
       )
     );
   }
