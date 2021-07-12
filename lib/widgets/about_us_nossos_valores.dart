@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
 class NossosValores extends StatelessWidget {
   NossosValores({Key? key});
@@ -56,7 +57,7 @@ class NossosValores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildAppBar(),
+        appBar: StandardAppBar(title: "Nossos Valores"),
         body: buildMainBody(),
         backgroundColor: raisingBlack);
   }
@@ -86,16 +87,5 @@ class NossosValores extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-        toolbarHeight: 80,
-        backgroundColor: raisingBlack,
-        elevation: 0.0,
-        title: Text("Nossos Valores",
-            style: TextStyle(color: white, fontSize: 20)),
-        leading: IconButton(
-            onPressed: () {}, icon: Icon(Icons.arrow_back_ios_new_rounded)));
   }
 }

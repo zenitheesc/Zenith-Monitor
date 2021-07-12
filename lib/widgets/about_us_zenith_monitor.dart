@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
 class AboutUsZenithMonitor extends StatelessWidget {
   AboutUsZenithMonitor({Key? key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: StandardAppBar(title: "O Zenith Monitor"),
       body: aboutUsZenithMonitorContainer(),
       backgroundColor: raisingBlack,
     );
@@ -35,16 +36,5 @@ class AboutUsZenithMonitor extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-        toolbarHeight: 80,
-        backgroundColor: raisingBlack,
-        elevation: 0.0,
-        title: Text("O Zenith Monitor",
-            style: TextStyle(color: white, fontSize: 20)),
-        leading: IconButton(
-            onPressed: () {}, icon: Icon(Icons.arrow_back_ios_new_rounded)));
   }
 }
