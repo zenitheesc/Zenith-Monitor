@@ -6,7 +6,7 @@ class LoginZenithMonitor extends StatelessWidget {
 
   Widget loginContainersName(String texto) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.5,vertical: 2.5),
+      padding: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 2.5),
       child: Container(
         width: 167,
         height: 62,
@@ -82,16 +82,40 @@ class LoginZenithMonitor extends StatelessWidget {
         height: 39,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-            color: Color(textColor),
+          color: Color(textColor),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(text,
-          textAlign: TextAlign.center,
-          style: TextStyle(color: white, fontSize: 18, fontFamily: 'DMSans'),
-      ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: white, fontSize: 18, fontFamily: 'DMSans'),
+          ),
         ),
-    ),);
+      ),
+    );
+  }
+
+  Widget imageCircle() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: 120,
+          width: 120,
+          color: Colors.purple,
+        ),
+        Positioned(
+          bottom: -20,
+          right: -20,
+          child: Container(
+            height: 50,
+            width: 50,
+            color: Colors.red,
+          ),
+        ),
+      ],
+      clipBehavior: Clip.none,
+    );
   }
 
   Widget buildMainBody() {
@@ -100,39 +124,48 @@ class LoginZenithMonitor extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Center(
-            child: Container(
-              width: 395,
-              height: 434,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(60),
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.5, 1],
-                    colors: [raisingBlack, Colors.black]),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
+            child: Stack(
+              children: [
+                Container(
+                  width: 395,
+                  height: 434,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(60),
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0.5, 1],
+                        colors: [raisingBlack, Colors.black]),
+                  ),
+                  child: Center(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        loginContainersName('Nome'),
-                        loginContainersName('Sobrenome')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            loginContainersName('Nome'),
+                            loginContainersName('Sobrenome')
+                          ],
+                        ),
+                        loginContainersGeneral('Email'),
+                        loginContainersGeneral('Senha'),
+                        loginContainersGeneral('Confirmar senha')
                       ],
                     ),
-                    loginContainersGeneral('Email'),
-                    loginContainersGeneral('Senha'),
-                    loginContainersGeneral('Confirmar senha')
-                  ],
+                  ),
                 ),
-              ),
+                Positioned(top: -80, left: 20, child: imageCircle())
+              ],
+              clipBehavior: Clip.none,
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [smallContainer('Voltar',0XFFE57373),smallContainer('Submeter',0XFF8BC34A)],
+            children: [
+              smallContainer('Voltar', 0XFFE57373),
+              smallContainer('Submeter', 0XFF8BC34A)
+            ],
           )
         ],
       ),
