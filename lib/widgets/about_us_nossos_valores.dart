@@ -5,6 +5,18 @@ import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 class NossosValores extends StatelessWidget {
   NossosValores({Key? key});
 
+  final List<String> textosPrincipais = [
+    "Incentivar a produção científica nacional e facilitar o acesso à ciência no ambiente universitário.",
+    "O zenith possui uma hierarquia horizontal, onde todos os integrantes possuem voz, mas responsabilidades distintas.",
+    "Os integrantes tem oportunidades de desenvolver capacitações técnicas em grupo, praticando suas soft skills."
+  ];
+  final List<String> caminhoImagens = [
+    "assets/images/figScientist.png",
+    "assets/images/figGroup.png",
+    "assets/images/figProfessional.png"
+  ];
+  final List<String> nomeImagem = ["Ciência", "Pessoas", "Habilidade"];
+
   Widget nossosValoresContainer(String text, String pathToImg, String nomeImg) {
     return Container(
       width: 340,
@@ -72,18 +84,9 @@ class NossosValores extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         children: <Widget>[
-          nossosValoresContainer(
-              "Incentivar a produção científica nacional e facilitar o acesso à ciência no ambiente universitário.",
-              "assets/images/figScientist.png",
-              "Ciência"),
-          nossosValoresContainer(
-              "O zenith possui uma hierarquia horizontal, onde todos os integrantes possuem voz, mas responsabilidades distintas.",
-              "assets/images/figGroup.png",
-              "Pessoas"),
-          nossosValoresContainer(
-              "Os integrantes tem oportunidades de desenvolver capacitações técnicas em grupo, praticando suas soft skills.",
-              "assets/images/figProfessional.png",
-              "Habilidade"),
+          for (var i = 0; i < nomeImagem.length; i++)
+            nossosValoresContainer(
+                textosPrincipais[i], caminhoImagens[i], nomeImagem[i])
         ],
       ),
     );
