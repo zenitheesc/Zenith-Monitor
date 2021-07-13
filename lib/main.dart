@@ -29,7 +29,7 @@ class _ApplicationState extends State<Application> {
 
   Connection blue = Connection("Conexão Bluetooth", false);
 
-  Connection fire = Connection("Conexão Firebase", false);
+  Connection fire = Connection("Conexão Firebase", true);
 
   Connection batata = Connection("Conexão Batata", true);
 
@@ -41,9 +41,9 @@ class _ApplicationState extends State<Application> {
       body: Padding (
         padding: EdgeInsets.fromLTRB(0, 20, 0, 20,),
         child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children:[ConnectionDisplay(connections: [usb,blue,fire,batata]),
-        ]
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:[ConnectionDisplay(connections: [usb,blue,fire]),
+          ]
         )
       )
     );

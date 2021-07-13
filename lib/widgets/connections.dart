@@ -11,7 +11,7 @@ class ConnectionDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(15,15,15,7.5),
+      padding: const EdgeInsets.fromLTRB(7.5,7.5,7.5,7.5),
       width: MediaQuery.of(context).size.width * 0.83,
         decoration: const BoxDecoration(
           color: raisingBlack,
@@ -33,28 +33,29 @@ class ConnectionDisplay extends StatelessWidget {
   TableRow func(Connection connection) {
     return TableRow(
       children: [
-      Expanded(child:
-        Text(
-        connection.getType(),
-        style: const TextStyle(
-          fontWeight: FontWeight.normal,
-          color: white,
-          fontFamily: 'DMSans',
+        Padding(
+          padding: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 7.5),
+          child: Text(
+            connection.getType(),
+            style: const TextStyle(
+            fontWeight: FontWeight.normal,
+            color: white,
+            fontFamily: 'DMSans',
+            ),
+          ),
         ),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(7.5, 0, 0, 7.5),
-        child: Text(
-        connection.getstate() ? 'Ativado' : 'Desativado',
-        style: TextStyle(
-          fontWeight: FontWeight.normal,
-          color: connection.getstate() ? mantisGreen : lightCoral,
-          fontFamily: 'DMSans',
-        ),
-        textAlign: TextAlign.center,
-        ),
-      )
+        Padding(
+          padding: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 7.5),
+          child: Text(
+          connection.getstate() ? 'Ativado' : 'Desativado',
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+            color: connection.getstate() ? mantisGreen : lightCoral,
+            fontFamily: 'DMSans',
+          ),
+          textAlign: TextAlign.center,
+          ),
+        )
       ]
     );
   }
