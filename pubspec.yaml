@@ -52,8 +52,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/z_icon_grey.png
-    - assets/images/z_icon_white.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
