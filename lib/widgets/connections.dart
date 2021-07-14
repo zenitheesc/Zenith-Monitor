@@ -50,7 +50,7 @@ class ConnectionDisplay extends StatelessWidget {
           connection.getState() ? 'Ativado' : 'Desativado',
           style: TextStyle(
             fontWeight: FontWeight.normal,
-            color: connection.getstate() ? mantisGreen : lightCoral,
+            color: connection.getState() ? mantisGreen : lightCoral,
             fontFamily: 'DMSans',
           ),
           textAlign: TextAlign.center,
