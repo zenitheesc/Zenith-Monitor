@@ -47,7 +47,7 @@ class ConnectionDisplay extends StatelessWidget {
         Padding(
           padding: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 7.5),
           child: Text(
-          connection.getstate() ? 'Ativado' : 'Desativado',
+          connection.getState() ? 'Ativado' : 'Desativado',
           style: TextStyle(
             fontWeight: FontWeight.normal,
             color: connection.getstate() ? mantisGreen : lightCoral,
