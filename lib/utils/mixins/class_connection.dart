@@ -11,7 +11,7 @@ class Connection {
     return this.type;
   }
 
-  bool getstate(){
+  bool getState(){
     return this.state;
   }
 }
