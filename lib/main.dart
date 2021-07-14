@@ -20,6 +20,6 @@ class ZenithMonitor extends StatelessWidget {
 class Pagina extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return esqueciSenha();
+    return EsqueciSenha();
   }
 }

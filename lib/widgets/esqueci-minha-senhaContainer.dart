@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
-class esqueciSenha extends StatelessWidget {
-  esqueciSenha({Key? key});
+class EsqueciSenha extends StatelessWidget {
+  EsqueciSenha({Key? key});
 
   Widget buildButton(double height, double width, Color buttoncolor,
       double borderradius, String text, Color textColor) {
@@ -14,8 +14,11 @@ class esqueciSenha extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             primary: buttoncolor,
             onPrimary: textColor,
-            textStyle:
-                TextStyle(color: textColor, fontSize: 18, fontFamily: 'DMSans'),
+            textStyle: TextStyle(
+              color: textColor,
+              fontSize: 18,
+              fontFamily: 'DMSans-Regular',
+            ),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(borderradius))),
             fixedSize: Size(width, height)),
@@ -28,9 +31,16 @@ class esqueciSenha extends StatelessWidget {
       toolbarHeight: 200,
       elevation: 0.0,
       backgroundColor: eerieBlack,
-      title: Text('Esqueci minha \nsenha',
-          style: TextStyle(color: white, fontSize: 36, fontFamily: 'DMSans'),
-          textAlign: TextAlign.start),
+      title: Padding(
+        padding: EdgeInsets.all(28.0),
+        child: Text('Esqueci minha \nsenha',
+            style: TextStyle(
+                color: white,
+                fontSize: 36,
+                fontFamily: 'DMSans-Bold',
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start),
+      ),
     );
   }
 
@@ -40,7 +50,13 @@ class esqueciSenha extends StatelessWidget {
       child: Container(
         height: 405.0,
         decoration: BoxDecoration(
-            color: raisingBlack,
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  raisingBlack,
+                  Colors.black,
+                ]),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(45.0),
                 topRight: Radius.circular(45.0))),
@@ -55,10 +71,22 @@ class esqueciSenha extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(
+                      color: gray, fontSize: 16, fontFamily: 'DMSans-Regular'),
                   decoration: InputDecoration(
-                      hintText: '  Email cadastrado',
-                      hintStyle: TextStyle(
-                          color: gray, fontSize: 16, fontFamily: 'DMSans')),
+                    hintText: '  Email cadastrado',
+                    hintStyle: TextStyle(
+                        color: gray,
+                        fontSize: 16,
+                        fontFamily: 'DMSans-Regular'),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                  ),
                 ),
               ),
             ),
