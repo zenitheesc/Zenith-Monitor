@@ -1,5 +1,3 @@
-//import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
-
 class Connection {
   late String type;
   late bool state;
