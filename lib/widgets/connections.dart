@@ -23,13 +23,13 @@ class ConnectionDisplay extends StatelessWidget {
         },
         children:[
            for (var connection in connections) 
-            func(connection)
+            createTableRow(connection)
         ]
       ),
     );
   }
 
-  TableRow func(Connection connection) {
+  TableRow createTableRow(Connection connection) {
     return TableRow(
       children: [
         Padding(
