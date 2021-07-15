@@ -7,7 +7,6 @@ class ConnectionDisplay extends StatelessWidget {
 
   final List<Connection> connections;
 
-  
   @override
   Widget build(BuildContext context) {
     return Container(
