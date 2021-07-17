@@ -13,14 +13,25 @@ class _MissionCreationState extends State<MissionCreation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 1080.0,
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              style: TextStyle(color: white,),
+      width: MediaQuery.of(context).size.width*0.83,
+      child: Table(
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        columnWidths: {
+          1: FractionColumnWidth(0.03),
+          2: FractionColumnWidth(0.25),
+          3: FractionColumnWidth (0.15)
+        }, 
+        children: [
+          TableRow(children: [
+            TextField(
+              style: TextStyle(
+                color: white,
+                fontWeight: FontWeight.normal
+                ),
               decoration: InputDecoration(
-                labelStyle: TextStyle(color: gray),
+                contentPadding: const EdgeInsets.all(7.5),
+                isDense: true,
+                hintStyle: TextStyle(color: gray),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: gray),
                   borderRadius: BorderRadius.all(Radius.circular(10))
@@ -29,41 +40,43 @@ class _MissionCreationState extends State<MissionCreation> {
                   borderSide: BorderSide(color: gray),
                   borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
-                labelText: 'Inserir novo campo',
+                hintText: 'Inserir novo campo'
               ),
             ),
-          ),  
-          SizedBox(width: 20,),
-          Expanded(
-            child: TextField(
-              style: TextStyle(color: white),
+            SizedBox(width: 10),
+            TextField(
+              style: TextStyle(
+                color: white,
+                fontWeight: FontWeight.normal
+                ),
               decoration: InputDecoration(
-                labelStyle: TextStyle(color: gray),
+                contentPadding: const EdgeInsets.all(7.5),
+                isDense: true,
+                hintStyle: TextStyle(color: gray),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: gray),
                   borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: gray),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
-                labelText: 'Tipo',
+                hintText: 'Tipo',
               ),
             ),
-          ),
-          SizedBox(width: 20),
-          Expanded(
-            child: Row(
-              children: <Widget>[FloatingActionButton(
-                  onPressed: (){
-                    // onPressed code
-                  },
-                  child: const Icon(Icons.add, color: eerieBlack,),
-                  backgroundColor: gray,
+            SizedBox(
+              height: 30,
+              width: 30,
+              child:
+                FloatingActionButton(
+                    onPressed: (){
+                      // onPressed code
+                    },
+                    child: const Icon(Icons.add, color: eerieBlack,),
+                    backgroundColor: gray,
                 )
-              ],
-            ),
-          )
+            ) 
+          ]),
         ]
       ),
     );

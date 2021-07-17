@@ -22,15 +22,22 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text('Criação de Missão'),
-          backgroundColor: eerieBlack,
-          textTheme: Theme.of(context).textTheme.apply(bodyColor: gray)),
       body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width*0.83,
+              child: 
+                Text('Criação de Missão',
+                  style: const TextStyle(
+                    color: gray,
+                    fontSize: 12.0
+                  ),
+                )
+            ),
+            SizedBox(height: 20,),
             MissionCreation(),
           ],
         ),
