@@ -9,15 +9,17 @@ class ZenithMonitor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Application(),
     );
   }
 }
 
 class Application extends StatelessWidget {
+  const Application({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }

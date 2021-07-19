@@ -11,20 +11,20 @@ class User {
   late String _accessLevel;
 
   User(String name, String? imageLink, String accessLevel) {
-    this._name = stringToPattern(name);
-    this._imageLink = imageLink;
-    this._accessLevel = stringToPattern(accessLevel);
+    _name = stringToPattern(name);
+    _imageLink = imageLink;
+    _accessLevel = stringToPattern(accessLevel);
   }
 
   String getName() {
-    return this._name;
+    return _name;
   }
 
   Future<String?> getImageLink() async {
-    return await linkValidity(this._imageLink);
+    return await linkValidity(_imageLink);
   }
 
   String getAccessLevel() {
-    return this._accessLevel;
+    return _accessLevel;
   }
 }

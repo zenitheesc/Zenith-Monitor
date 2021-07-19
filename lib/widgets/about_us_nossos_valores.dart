@@ -43,14 +43,14 @@ class NossosValores extends StatelessWidget {
                 ),
                 Text(
                   nomeImg,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: white, fontSize: 11, fontFamily: 'DMSans'),
                 ),
               ],
             ),
           ),
           Container(
-            child: VerticalDivider(color: white),
+            child: const VerticalDivider(color: white),
             height: 49,
           ),
           Expanded(
@@ -58,7 +58,7 @@ class NossosValores extends StatelessWidget {
             child: Text(
               text,
               textAlign: TextAlign.center,
-              style: TextStyle(color: white, fontFamily: 'DMSans'),
+              style: const TextStyle(color: white, fontFamily: 'DMSans'),
             ),
           ),
         ],
@@ -80,7 +80,7 @@ class NossosValores extends StatelessWidget {
         crossAxisCount: 1,
         primary: false,
         childAspectRatio: 4,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         children: <Widget>[
