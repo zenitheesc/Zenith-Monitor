@@ -55,7 +55,7 @@ class ForgotMyPassword extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   raisingBlack,
-                  Colors.black,
+                  black,
                 ]),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(45.0),
@@ -75,7 +75,7 @@ class ForgotMyPassword extends StatelessWidget {
                   style: TextStyle(
                       color: gray, fontSize: 16, fontFamily: 'DMSans-Regular'),
                   decoration: InputDecoration(
-                    hintText: '  Email cadastrado',
+                    hintText: 'Email cadastrado',
                     hintStyle: TextStyle(
                         color: gray,
                         fontSize: 16,
