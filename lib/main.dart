@@ -22,22 +22,10 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      body: Center( /// retirei o "criação de missão" daqui porque ele deve fazer parte do nosso componente
+        child: Column( /// retirei os alinhamentos da column pq isso será responsabilidade de quem criar a pagina inteira
           children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width*0.83,
-              child: 
-                Text('Criação de Missão',
-                  style: const TextStyle(
-                    color: gray,
-                    fontSize: 12.0
-                  ),
-                )
-            ),
-            SizedBox(height: 20,),
+	    SizedBox(height: 20,),
             MissionCreation(),
           ],
         ),
