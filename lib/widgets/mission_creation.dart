@@ -1,6 +1,10 @@
 //import 'dart:html';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
+import 'package:zenith_monitor/modules/mission_detail/bloc/mission_variables/variables_bloc.dart';
+import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
 
 class MissionCreation extends StatefulWidget {
   const MissionCreation({Key? key}) : super(key: key);
@@ -9,17 +13,13 @@ class MissionCreation extends StatefulWidget {
   _MissionCreationState createState() => _MissionCreationState();
 }
 
-/// aqui eu mudei umas coisinhas. Primeiro eu mudei o metodo build pra ele retornar uma column.
-/// Assim, eu consigo colocar a minha tabela mais facilmente e o codigo fica mais claro.
-/// Depois eu peguei todo o codigo da que voce tinha desenvolvido e coloquei um metodo proprio pra ele chamado "textInputs()"
-/// Dentro dele eu reparei que um grande pedaço de codigo estava sendo repetido, a parte do TextField,
-/// então eu peguei essa parte e coloquei em outro metodo chamado "textField()" só pra ele. 
-/// Ai o texto que ele vai mostrar eu to passando por parametro la no "textInputs()".
-/// Depois eu mudei os paddings e a fonte dos textos, achei q ficou mais proximo do figma
-/// mas se vc achar q não ficou bom eu volto para o que estava 
 class _MissionCreationState extends State<MissionCreation> {
-  TextField textField(String hintText) {
+  TextEditingController variableNameController = new TextEditingController();
+  TextEditingController variableTypeController = new TextEditingController();
+
+  TextField textField(String hintText, TextEditingController controller) {
     return TextField(
+      controller: controller,
       style: TextStyle(
           color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
       cursorColor: white,
@@ -47,15 +47,18 @@ class _MissionCreationState extends State<MissionCreation> {
         },
         children: [
           TableRow(children: [
-            textField('Inserir novo campo'),
+            textField('Inserir novo campo', variableNameController),
             SizedBox(width: 10),
-            textField('Tipo'),
+            textField('Tipo', variableTypeController),
             SizedBox(
                 height: 30,
                 width: 30,
                 child: FloatingActionButton(
                   onPressed: () {
-                    // onPressed code
+                    BlocProvider.of<VariablesBloc>(context).add(
+                        AddStandardVariableEvent(
+                            variableName: this.variableNameController.text,
+                            variableType: this.variableTypeController.text));
                   },
                   child: const Icon(
                     Icons.add,
@@ -67,12 +70,61 @@ class _MissionCreationState extends State<MissionCreation> {
         ]);
   }
 
+  TableRow createTableRow(MissionVariable variable) {
+    return TableRow(children: [
+      Padding(
+        padding: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 7.5),
+        child: Text(
+          variable.getVariableName(),
+          style: const TextStyle(
+            fontWeight: FontWeight.normal,
+            color: white,
+            fontFamily: 'DMSans',
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 7.5),
+        child: Text(
+          variable.getVariableType(),
+          style: const TextStyle(
+            fontWeight: FontWeight.normal,
+            color: white,
+            fontFamily: 'DMSans',
+          ),
+        ),
+      ),
+    ]);
+  }
+
+  BlocBuilder variablesTable() {
+    return BlocBuilder<VariablesBloc, VariablesState>(
+        builder: (context, state) {
+      if (state is VariablesAdded) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: raisingBlack,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Table(columnWidths: {
+            0: FractionColumnWidth(2 / 3),
+            1: FractionColumnWidth(1 / 3),
+          }, children: [
+            for (var variable in state.variablesList.getVariablesList())
+              createTableRow(variable)
+          ]),
+        );
+      }
+      return Text("Nada");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SizedBox(
-            width: MediaQuery.of(context).size.width * 0.90, /// eu coloquei ele aqui pois ele tem um deslocamento com as caixas de texto
+            width: MediaQuery.of(context).size.width * 0.90,
             child: Text(
               'Criação de Missão',
               style: const TextStyle(color: gray, fontSize: 12.0),
@@ -85,6 +137,7 @@ class _MissionCreationState extends State<MissionCreation> {
                 height: 20,
               ),
               textInputs(),
+              variablesTable(),
             ],
           ),
         ),

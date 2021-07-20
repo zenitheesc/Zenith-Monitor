@@ -27,7 +27,11 @@ class MissionVariable<T> {
 }
 
 class MissionVariablesList {
-  List<MissionVariable> _list = [];
+  late List<MissionVariable> _list;
+
+  MissionVariablesList() {
+    this._list = [];
+  }
 
   bool addStandardVariable(String name, String type) {
     if (this.contains(name)) return false;
@@ -58,5 +62,9 @@ class MissionVariablesList {
       if (this._list[i].getVariableName() == name) return true;
     }
     return false;
+  }
+
+  List getVariablesList() {
+    return this._list;
   }
 }
