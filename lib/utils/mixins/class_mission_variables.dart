@@ -8,7 +8,7 @@ class MissionVariable<T> {
   late List<T> _variableList;
 
   MissionVariable(String variableName, String variableType) {
-    this._variableName = stringToPattern(variableName);
+    this._variableName = variableName;
     this._variableType = stringToPattern(variableType);
     this._variableList = [];
   }
@@ -34,6 +34,8 @@ class MissionVariablesList {
   }
 
   bool addStandardVariable(String name, String type) {
+    type = stringToPattern(type);
+
     if (this.contains(name)) return false;
 
     if (integerNames.contains(type)) {
