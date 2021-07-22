@@ -24,7 +24,7 @@ class _MissionCreationState extends State<MissionCreation> {
           color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
       cursorColor: white,
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(20, 12, 12, 12),
+          contentPadding: const EdgeInsets.fromLTRB(20, 8.5, 12, 8.5),
           isDense: true,
           hintStyle: TextStyle(color: gray),
           focusedBorder: OutlineInputBorder(
@@ -70,52 +70,88 @@ class _MissionCreationState extends State<MissionCreation> {
         ]);
   }
 
-  TableRow createTableRow(MissionVariable variable) {
-    return TableRow(children: [
-      Padding(
-        padding: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 7.5),
-        child: Text(
-          variable.getVariableName(),
-          style: const TextStyle(
-            fontWeight: FontWeight.normal,
-            color: white,
-            fontFamily: 'DMSans',
-          ),
+  TableRow createTableRow(String name, String type,
+      {Color color = raisingBlack, bool isTop = false, bool isBottom = false}) {
+    TextStyle textStyle = TextStyle(
+      fontWeight: FontWeight.normal,
+      color: white,
+      fontFamily: 'DMSans',
+    );
+
+    return TableRow(
+        decoration: BoxDecoration(
+          borderRadius: isTop
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10))
+              : isBottom
+                  ? BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10))
+                  : null,
+          color: color,
         ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 7.5),
-        child: Text(
-          variable.getVariableType(),
-          style: const TextStyle(
-            fontWeight: FontWeight.normal,
-            color: white,
-            fontFamily: 'DMSans',
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 7.5, 12, 7.5),
+            child: Text(
+              name,
+              style: textStyle,
+            ),
           ),
-        ),
-      ),
-    ]);
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(7.5),
+              child: Text(
+                type,
+                style: textStyle,
+              ),
+            ),
+          ),
+        ]);
   }
 
   BlocBuilder variablesTable() {
+    Table table = Table(
+      border: TableBorder(
+          verticalInside:
+              BorderSide(width: 1.5, color: gray, style: BorderStyle.solid),
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      columnWidths: {
+        0: FractionColumnWidth(2 / 3),
+        1: FractionColumnWidth(1 / 3),
+      },
+      children: [
+        createTableRow("Nome", "Tipo", color: gray, isTop: true),
+        createTableRow("", "", isBottom: true),
+      ],
+    );
+
     return BlocBuilder<VariablesBloc, VariablesState>(
         builder: (context, state) {
       if (state is VariablesAdded) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: raisingBlack,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Table(columnWidths: {
+        return Table(
+          border: TableBorder(
+              verticalInside:
+                  BorderSide(width: 1, color: gray, style: BorderStyle.solid),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          columnWidths: {
             0: FractionColumnWidth(2 / 3),
             1: FractionColumnWidth(1 / 3),
-          }, children: [
+          },
+          children: [
+            createTableRow("Nome", "Tipo", color: gray, isTop: true),
             for (var variable in state.variablesList.getVariablesList())
-              createTableRow(variable)
-          ]),
+              if (variable == state.variablesList.getVariablesList().last)
+                createTableRow(
+                    variable.getVariableName(), variable.getVariableType(),
+                    isBottom: true)
+              else
+                createTableRow(
+                    variable.getVariableName(), variable.getVariableType())
+          ],
         );
       }
-      return Text("Nada");
+      return table;
     });
   }
 
@@ -133,10 +169,9 @@ class _MissionCreationState extends State<MissionCreation> {
           width: MediaQuery.of(context).size.width * 0.83,
           child: Column(
             children: [
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
               textInputs(),
+              SizedBox(height: 20),
               variablesTable(),
             ],
           ),
