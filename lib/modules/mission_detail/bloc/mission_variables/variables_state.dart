@@ -1,19 +1,21 @@
 part of 'variables_bloc.dart';
 
-abstract class VariablesState {}
+abstract class VariablesState {
+  late MissionVariablesList variablesList;
+
+  void setVariablesList(MissionVariablesList variablesList) {
+    this.variablesList = variablesList;
+  }
+}
 
 class VariablesInitial extends VariablesState {
-  MissionVariablesList variablesList;
-
-  VariablesInitial({
-    required this.variablesList,
-  });
+  VariablesInitial(MissionVariablesList variablesList) {
+    setVariablesList(variablesList);
+  }
 }
 
 class VariablesAdded extends VariablesState {
-  MissionVariablesList variablesList;
-
-  VariablesAdded({
-    required this.variablesList,
-  });
+  VariablesAdded(MissionVariablesList variablesList) {
+    setVariablesList(variablesList);
+  }
 }
