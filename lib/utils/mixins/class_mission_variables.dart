@@ -26,7 +26,7 @@ class MissionVariable<T> {
   }
 }
 
-class MissionVariablesList {
+class MissionVariablesList implements Exception {
   late List<MissionVariable> _list;
 
   MissionVariablesList() {
@@ -36,7 +36,8 @@ class MissionVariablesList {
   bool addStandardVariable(String name, String type) {
     type = stringToPattern(type);
 
-    if (this.contains(name)) return false;
+    if (this.contains(name)) throw new VariableAlreadyExistsException();
+    ;
 
     if (integerNames.contains(type)) {
       this._list.add(MissionVariable<int>(name, "Inteiro"));
@@ -53,7 +54,8 @@ class MissionVariablesList {
   }
 
   bool addAbstractVariable(MissionVariable m) {
-    if (this.contains(m.getVariableName())) return false;
+    if (this.contains(m.getVariableName()))
+      throw new VariableAlreadyExistsException();
 
     this._list.add(m);
     return true;
@@ -68,5 +70,18 @@ class MissionVariablesList {
 
   List getVariablesList() {
     return this._list;
+  }
+
+  void deleteVariable(int index) {
+    if (index < 0 || index >= this._list.length) return;
+
+    this._list.removeAt(index);
+  }
+}
+
+class VariableAlreadyExistsException implements Exception {
+  @override
+  String toString() {
+    return "Variable already exists";
   }
 }

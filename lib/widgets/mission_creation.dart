@@ -71,7 +71,10 @@ class _MissionCreationState extends State<MissionCreation> {
   }
 
   TableRow createTableRow(String name, String type,
-      {Color color = raisingBlack, bool isTop = false, bool isBottom = false}) {
+      {Color color = raisingBlack,
+      bool isTop = false,
+      bool isBottom = false,
+      int rowIndice = -1}) {
     return TableRow(
         decoration: BoxDecoration(
           borderRadius: isTop
@@ -87,12 +90,19 @@ class _MissionCreationState extends State<MissionCreation> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 7.5, 12, 7.5),
-            child: Text(
-              name,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: white,
-                fontFamily: 'DMSans',
+            child: GestureDetector(
+              onDoubleTap: () {
+                if (rowIndice != -1)
+                  BlocProvider.of<VariablesBloc>(context)
+                      .add(DeleteVariable(variableIndex: rowIndice));
+              },
+              child: Text(
+                name,
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: white,
+                  fontFamily: 'DMSans',
+                ),
               ),
             ),
           ),
@@ -116,22 +126,35 @@ class _MissionCreationState extends State<MissionCreation> {
     return BlocBuilder<VariablesBloc, VariablesState>(
         builder: (context, state) {
       List list = state.variablesList.getVariablesList();
-      return Table(
-        border: TableBorder(
-            verticalInside:
-                BorderSide(width: 1, color: gray, style: BorderStyle.solid),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        columnWidths: {
-          0: FractionColumnWidth(2 / 3),
-          1: FractionColumnWidth(1 / 3),
-        },
+      return Column(
         children: [
-          createTableRow("Nome", "Tipo", color: gray, isTop: true),
-          for (var variable in list)
-            createTableRow(
-                variable.getVariableName(), variable.getVariableType(),
-                isBottom: variable == list.last ? true : false),
-          if (state is VariablesInitial) createTableRow("", "", isBottom: true)
+          Table(
+            border: TableBorder(
+                verticalInside:
+                    BorderSide(width: 1, color: gray, style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            columnWidths: {
+              0: FractionColumnWidth(2 / 3),
+              1: FractionColumnWidth(1 / 3),
+            },
+            children: [
+              createTableRow("Nome", "Tipo", color: gray, isTop: true),
+              for (var variable in list)
+                createTableRow(
+                    variable.getVariableName(), variable.getVariableType(),
+                    rowIndice: list.indexOf(variable),
+                    isBottom: variable == list.last ? true : false),
+              if (list.isEmpty) createTableRow("", "", isBottom: true)
+            ],
+          ),
+          if (state is VariableInteractionError)
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Text(
+                state.errorMessage,
+                style: TextStyle(color: lightCoral),
+              ),
+            )
         ],
       );
     });

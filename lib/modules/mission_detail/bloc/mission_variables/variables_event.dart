@@ -9,3 +9,9 @@ class AddStandardVariableEvent extends VariablesEvent {
   AddStandardVariableEvent(
       {required this.variableName, required this.variableType});
 }
+
+class DeleteVariable extends VariablesEvent {
+  int variableIndex;
+
+  DeleteVariable({required this.variableIndex});
+}

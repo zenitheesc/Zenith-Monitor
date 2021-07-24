@@ -11,10 +11,18 @@ class VariablesBloc extends Bloc<VariablesEvent, VariablesState> {
   @override
   Stream<VariablesState> mapEventToState(VariablesEvent event) async* {
     if (event is AddStandardVariableEvent) {
-      this
-          .variablesList
-          .addStandardVariable(event.variableName, event.variableType);
-      yield VariablesAdded(this.variablesList);
+      try {
+        this
+            .variablesList
+            .addStandardVariable(event.variableName, event.variableType);
+        yield VariablesChanged(this.variablesList);
+      } on VariableAlreadyExistsException {
+        yield VariableInteractionError(
+            this.variablesList, "Variável já existe");
+      }
+    } else if (event is DeleteVariable) {
+      this.variablesList.deleteVariable(event.variableIndex);
+      yield VariablesChanged(this.variablesList);
     }
     //throw UnimplementedError();
   }

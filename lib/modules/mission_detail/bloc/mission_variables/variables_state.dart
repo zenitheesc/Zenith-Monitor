@@ -14,8 +14,18 @@ class VariablesInitial extends VariablesState {
   }
 }
 
-class VariablesAdded extends VariablesState {
-  VariablesAdded(MissionVariablesList variablesList) {
+class VariablesChanged extends VariablesState {
+  VariablesChanged(MissionVariablesList variablesList) {
+    setVariablesList(variablesList);
+  }
+}
+
+class VariableInteractionError extends VariablesState {
+  late String errorMessage;
+
+  VariableInteractionError(
+      MissionVariablesList variablesList, String errorMessage) {
+    this.errorMessage = errorMessage;
     setVariablesList(variablesList);
   }
 }
