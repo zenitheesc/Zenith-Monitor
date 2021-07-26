@@ -7,7 +7,7 @@ class AboutUsZenithMonitor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: StandardAppBar(title: "O Zenith Monitor"),
+      appBar: const StandardAppBar(title: "O Zenith Monitor"),
       body: aboutUsZenithMonitorContainer(),
       backgroundColor: raisingBlack,
     );

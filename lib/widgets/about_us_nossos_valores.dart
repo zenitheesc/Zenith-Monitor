@@ -69,7 +69,7 @@ class NossosValores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: StandardAppBar(title: "Nossos Valores"),
+        appBar: const StandardAppBar(title: "Nossos Valores"),
         body: buildMainBody(),
         backgroundColor: raisingBlack);
   }
