@@ -33,32 +33,31 @@ class MissionVariablesList implements Exception {
     this._list = [];
   }
 
-  bool addStandardVariable(String name, String type) {
+  void addStandardVariable(String name, String type) {
+    //name = name.replaceAll(new RegExp('r^\s*'), '');
+
+    if (name.isEmpty || type.isEmpty) throw new EmptyVariablesException();
+
     type = stringToPattern(type);
 
     if (this.contains(name)) throw new VariableAlreadyExistsException();
-    ;
 
     if (integerNames.contains(type)) {
       this._list.add(MissionVariable<int>(name, "Inteiro"));
-      return true;
     } else if (floatNames.contains(type)) {
       this._list.add(MissionVariable<Float>(name, "Float"));
-      return true;
     } else if (stringNames.contains(type)) {
       this._list.add(MissionVariable<String>(name, "String"));
-      return true;
+    } else {
+      throw new VariableTypeUnknownException();
     }
-
-    return false;
   }
 
-  bool addAbstractVariable(MissionVariable m) {
+  void addAbstractVariable(MissionVariable m) {
     if (this.contains(m.getVariableName()))
       throw new VariableAlreadyExistsException();
 
     this._list.add(m);
-    return true;
   }
 
   bool contains(String name) {
@@ -83,5 +82,19 @@ class VariableAlreadyExistsException implements Exception {
   @override
   String toString() {
     return "Variable already exists";
+  }
+}
+
+class VariableTypeUnknownException implements Exception {
+  @override
+  String toString() {
+    return "The variable type does not match any of the record";
+  }
+}
+
+class EmptyVariablesException implements Exception {
+  @override
+  String toString() {
+    return "Variable's name or type is empty";
   }
 }

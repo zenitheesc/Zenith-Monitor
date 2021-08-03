@@ -39,35 +39,36 @@ class _MissionCreationState extends State<MissionCreation> {
 
   Widget textInputs() {
     return Table(
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: {
           1: FractionColumnWidth(0.03),
           2: FractionColumnWidth(0.25),
           3: FractionColumnWidth(0.15)
-        },
-        children: [
-          TableRow(children: [
-            textField('Inserir novo campo', variableNameController),
-            SizedBox(width: 10),
-            textField('Tipo', variableTypeController),
-            SizedBox(
-                height: 30,
-                width: 30,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    BlocProvider.of<VariablesBloc>(context).add(
-                        AddStandardVariableEvent(
-                            variableName: this.variableNameController.text,
-                            variableType: this.variableTypeController.text));
-                  },
-                  child: const Icon(
-                    Icons.add,
-                    color: eerieBlack,
-                  ),
-                  backgroundColor: gray,
-                ))
-          ]),
-        ]);
+        }, children: [
+      TableRow(children: [
+        textField('Inserir novo campo', variableNameController),
+        SizedBox(width: 10),
+        textField('Tipo', variableTypeController),
+        SizedBox(
+            height: 30,
+            width: 30,
+            child: FloatingActionButton(
+              onPressed: () {
+                BlocProvider.of<VariablesBloc>(context).add(
+                    AddStandardVariableEvent(
+                        variableName: this.variableNameController.text,
+                        variableType: this.variableTypeController.text));
+                variableNameController.clear();
+                variableTypeController.clear();
+              },
+              child: const Icon(
+                Icons.add,
+                color: eerieBlack,
+              ),
+              backgroundColor: gray,
+            ))
+      ]),
+    ]);
   }
 
   TableRow createTableRow(String name, String type,
@@ -88,14 +89,14 @@ class _MissionCreationState extends State<MissionCreation> {
           color: color,
         ),
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 7.5, 12, 7.5),
-            child: GestureDetector(
-              onDoubleTap: () {
-                if (rowIndice != -1)
-                  BlocProvider.of<VariablesBloc>(context)
-                      .add(DeleteVariable(variableIndex: rowIndice));
-              },
+          GestureDetector(
+            onDoubleTap: () {
+              if (rowIndice != -1)
+                BlocProvider.of<VariablesBloc>(context)
+                    .add(DeleteVariable(variableIndex: rowIndice));
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 7.5, 12, 7.5),
               child: Text(
                 name,
                 style: TextStyle(
@@ -106,15 +107,22 @@ class _MissionCreationState extends State<MissionCreation> {
               ),
             ),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(7.5),
-              child: Text(
-                type,
-                style: TextStyle(
-                  fontWeight: FontWeight.w200,
-                  color: white,
-                  fontFamily: 'DMSans',
+          GestureDetector(
+            onDoubleTap: () {
+              if (rowIndice != -1)
+                BlocProvider.of<VariablesBloc>(context)
+                    .add(DeleteVariable(variableIndex: rowIndice));
+            },
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(7.5),
+                child: Text(
+                  type,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w200,
+                    color: white,
+                    fontFamily: 'DMSans',
+                  ),
                 ),
               ),
             ),
@@ -149,9 +157,10 @@ class _MissionCreationState extends State<MissionCreation> {
           ),
           if (state is VariableInteractionError)
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              padding: EdgeInsets.only(top: 10),
               child: Text(
                 state.errorMessage,
+                textAlign: TextAlign.center,
                 style: TextStyle(color: lightCoral),
               ),
             )
