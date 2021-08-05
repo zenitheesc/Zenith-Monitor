@@ -49,24 +49,27 @@ class _MissionCreationState extends State<MissionCreation> {
         textField('Inserir novo campo', variableNameController),
         SizedBox(width: 10),
         textField('Tipo', variableTypeController),
-        SizedBox(
-            height: 30,
-            width: 30,
-            child: FloatingActionButton(
-              onPressed: () {
-                BlocProvider.of<VariablesBloc>(context).add(
-                    AddStandardVariableEvent(
-                        variableName: this.variableNameController.text,
-                        variableType: this.variableTypeController.text));
-                variableNameController.clear();
-                variableTypeController.clear();
-              },
-              child: const Icon(
-                Icons.add,
-                color: eerieBlack,
-              ),
-              backgroundColor: gray,
-            ))
+        Align(
+          alignment: Alignment.bottomRight,
+          child: SizedBox(
+              height: 30,
+              width: 30,
+              child: FloatingActionButton(
+                onPressed: () {
+                  BlocProvider.of<VariablesBloc>(context).add(
+                      AddStandardVariableEvent(
+                          variableName: this.variableNameController.text,
+                          variableType: this.variableTypeController.text));
+                  variableNameController.clear();
+                  variableTypeController.clear();
+                },
+                child: const Icon(
+                  Icons.add,
+                  color: eerieBlack,
+                ),
+                backgroundColor: gray,
+              )),
+        )
       ]),
     ]);
   }
@@ -169,6 +172,34 @@ class _MissionCreationState extends State<MissionCreation> {
     });
   }
 
+  Widget StartMissionButton() {
+    return SizedBox(
+      height: 30,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.pressed)) return Colors.green;
+                return mantisGreen;
+              },
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ))),
+        onPressed: () {},
+        child: Text(
+          "Iniciar Missão",
+          style: TextStyle(
+            fontWeight: FontWeight.w200,
+            color: white,
+            fontFamily: 'DMSans',
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -187,6 +218,11 @@ class _MissionCreationState extends State<MissionCreation> {
               textInputs(),
               SizedBox(height: 20),
               variablesTable(),
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: StartMissionButton(),
+              ),
             ],
           ),
         ),
