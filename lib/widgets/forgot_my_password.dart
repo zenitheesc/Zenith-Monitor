@@ -67,11 +67,11 @@ class ForgotMyPassword extends StatelessWidget {
               height: 70,
               width: 340,
               decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(15)),
+                  color: black, borderRadius: BorderRadius.circular(15)),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  cursorColor: Colors.white,
+                  cursorColor: white,
                   style: TextStyle(
                       color: gray, fontSize: 16, fontFamily: 'DMSans-Regular'),
                   decoration: InputDecoration(
@@ -81,17 +81,17 @@ class ForgotMyPassword extends StatelessWidget {
                         fontSize: 16,
                         fontFamily: 'DMSans-Regular'),
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: BorderSide(color: black),
                     ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: BorderSide(color: black),
                     ),
                   ),
                 ),
               ),
             ),
             SizedBox(height: 60),
-            buildButton(56, 265, white, 12, 'Submeter', Colors.black),
+            buildButton(56, 265, white, 12, 'Submeter', black),
             SizedBox(height: 30),
             buildButton(40, 263, lightCoral, 20, 'Voltar', white),
           ],
