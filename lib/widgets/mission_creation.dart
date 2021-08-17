@@ -1,10 +1,9 @@
-//import 'dart:html';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
+//import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/variables_bloc.dart';
-import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
+//import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
 
 class MissionCreation extends StatefulWidget {
   const MissionCreation({Key? key}) : super(key: key);
@@ -14,8 +13,8 @@ class MissionCreation extends StatefulWidget {
 }
 
 class _MissionCreationState extends State<MissionCreation> {
-  TextEditingController variableNameController = new TextEditingController();
-  TextEditingController variableTypeController = new TextEditingController();
+  TextEditingController variableNameController = TextEditingController();
+  TextEditingController variableTypeController = TextEditingController();
 
   TextField textField(String hintText, TextEditingController controller) {
     return TextField(
@@ -58,8 +57,8 @@ class _MissionCreationState extends State<MissionCreation> {
                 onPressed: () {
                   BlocProvider.of<VariablesBloc>(context).add(
                       AddStandardVariableEvent(
-                          variableName: this.variableNameController.text,
-                          variableType: this.variableTypeController.text));
+                          variableName: variableNameController.text,
+                          variableType: variableTypeController.text));
                   variableNameController.clear();
                   variableTypeController.clear();
                 },
@@ -94,9 +93,10 @@ class _MissionCreationState extends State<MissionCreation> {
         children: [
           GestureDetector(
             onDoubleTap: () {
-              if (rowIndice != -1)
+              if (rowIndice != -1) {
                 BlocProvider.of<VariablesBloc>(context)
                     .add(DeleteVariable(variableIndex: rowIndice));
+              }
             },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 7.5, 12, 7.5),
@@ -112,9 +112,10 @@ class _MissionCreationState extends State<MissionCreation> {
           ),
           GestureDetector(
             onDoubleTap: () {
-              if (rowIndice != -1)
+              if (rowIndice != -1) {
                 BlocProvider.of<VariablesBloc>(context)
                     .add(DeleteVariable(variableIndex: rowIndice));
+              }
             },
             child: Center(
               child: Padding(

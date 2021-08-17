@@ -19,23 +19,22 @@ class VariablesBloc extends Bloc<VariablesEvent, VariablesState> {
   Stream<VariablesState> mapEventToState(VariablesEvent event) async* {
     if (event is AddStandardVariableEvent) {
       try {
-        this
-            .variablesList
+        variablesList
             .addStandardVariable(event.variableName, event.variableType);
-        yield VariablesChanged(this.variablesList);
+        yield VariablesChanged(variablesList);
       } on VariableAlreadyExistsException {
         yield VariableInteractionError(
-            this.variablesList, "Variável já existe");
+            variablesList, "Variável já existe");
       } on VariableTypeUnknownException {
-        yield VariableInteractionError(this.variablesList,
+        yield VariableInteractionError(variablesList,
             "O tipo da variável é desconhecido, tente algo como string, int ou float");
       } on EmptyVariablesException {
-        yield VariableInteractionError(this.variablesList,
+        yield VariableInteractionError(variablesList,
             "É necessário fornecer um nome e um tipo para a variável");
       }
     } else if (event is DeleteVariable) {
-      this.variablesList.deleteVariable(event.variableIndex);
-      yield VariablesChanged(this.variablesList);
+      variablesList.deleteVariable(event.variableIndex);
+      yield VariablesChanged(variablesList);
     } else if (event is StartMissionEvent) {
       missionBloc.add(SetVariablesListEvent(variablesList: variablesList));
     } else {

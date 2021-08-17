@@ -12,7 +12,7 @@ class MissionBloc extends Bloc<MissionEvent, MissionState> {
   @override
   Stream<MissionState> mapEventToState(MissionEvent event) async* {
     if (event is SetVariablesListEvent) {
-      this.variablesList = event.variablesList;
+      variablesList = event.variablesList;
     } else {
       print("Unknown event in Mission Bloc");
     }

@@ -8,21 +8,21 @@ class MissionVariable<T> {
   late List<T> _variableList;
 
   MissionVariable(String variableName, String variableType) {
-    this._variableName = variableName;
-    this._variableType = stringToPattern(variableType);
-    this._variableList = [];
+    _variableName = variableName;
+    _variableType = stringToPattern(variableType);
+    _variableList = [];
   }
 
   String getVariableName() {
-    return this._variableName;
+    return _variableName;
   }
 
   String getVariableType() {
-    return this._variableType;
+    return _variableType;
   }
 
   void addValue(T value) {
-    this._variableList.add(value);
+    _variableList.add(value);
   }
 }
 
@@ -30,49 +30,50 @@ class MissionVariablesList {
   late List<MissionVariable> _list;
 
   MissionVariablesList() {
-    this._list = [];
+    _list = [];
   }
 
   void addStandardVariable(String name, String type) {
-    if (name.isEmpty || type.isEmpty) throw new EmptyVariablesException();
+    if (name.isEmpty || type.isEmpty) throw EmptyVariablesException();
 
     type = stringToPattern(type);
 
-    if (this.contains(name)) throw new VariableAlreadyExistsException();
+    if (contains(name)) throw VariableAlreadyExistsException();
 
     if (integerNames.contains(type)) {
-      this._list.add(MissionVariable<int>(name, "Integer"));
+      _list.add(MissionVariable<int>(name, "Integer"));
     } else if (floatNames.contains(type)) {
-      this._list.add(MissionVariable<Float>(name, "Float"));
+      _list.add(MissionVariable<Float>(name, "Float"));
     } else if (stringNames.contains(type)) {
-      this._list.add(MissionVariable<String>(name, "String"));
+      _list.add(MissionVariable<String>(name, "String"));
     } else {
-      throw new VariableTypeUnknownException();
+      throw VariableTypeUnknownException();
     }
   }
 
   void addAbstractVariable(MissionVariable m) {
-    if (this.contains(m.getVariableName()))
-      throw new VariableAlreadyExistsException();
+    if (contains(m.getVariableName())) {
+      throw VariableAlreadyExistsException();
+    }
 
-    this._list.add(m);
+    _list.add(m);
   }
 
   bool contains(String name) {
-    for (var i = 0; i < this._list.length; i++) {
-      if (this._list[i].getVariableName() == name) return true;
+    for (var i = 0; i < _list.length; i++) {
+      if (_list[i].getVariableName() == name) return true;
     }
     return false;
   }
 
   List getVariablesList() {
-    return this._list;
+    return _list;
   }
 
   void deleteVariable(int index) {
-    if (index < 0 || index >= this._list.length) return;
+    if (index < 0 || index >= _list.length) return;
 
-    this._list.removeAt(index);
+    _list.removeAt(index);
   }
 }
 
