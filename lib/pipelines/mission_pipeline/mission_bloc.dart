@@ -18,3 +18,7 @@ class MissionBloc extends Bloc<MissionEvent, MissionState> {
     }
   }
 }
+
+/// This pipeline is still incomplete. So far, its is only being used
+/// to get the variable list from mission_creation widget. Delete these
+/// comments if you are adding more content to this bloc. 
