@@ -26,7 +26,7 @@ class MissionVariable<T> {
   }
 }
 
-class MissionVariablesList implements Exception {
+class MissionVariablesList {
   late List<MissionVariable> _list;
 
   MissionVariablesList() {
@@ -34,8 +34,6 @@ class MissionVariablesList implements Exception {
   }
 
   void addStandardVariable(String name, String type) {
-    //name = name.replaceAll(new RegExp('r^\s*'), '');
-
     if (name.isEmpty || type.isEmpty) throw new EmptyVariablesException();
 
     type = stringToPattern(type);
@@ -43,7 +41,7 @@ class MissionVariablesList implements Exception {
     if (this.contains(name)) throw new VariableAlreadyExistsException();
 
     if (integerNames.contains(type)) {
-      this._list.add(MissionVariable<int>(name, "Inteiro"));
+      this._list.add(MissionVariable<int>(name, "Integer"));
     } else if (floatNames.contains(type)) {
       this._list.add(MissionVariable<Float>(name, "Float"));
     } else if (stringNames.contains(type)) {

@@ -1,12 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
+import 'package:zenith_monitor/pipelines/mission_pipeline/mission_bloc.dart';
 
 part 'variables_state.dart';
 part 'variables_event.dart';
 
+/// This bloc has to do with the creation of current misson variables.
+/// So, it deals with user interation in mission_creation.dart widget
+/// and update the MissionVariableList object in mission pipeline.
+
 class VariablesBloc extends Bloc<VariablesEvent, VariablesState> {
   MissionVariablesList variablesList;
-  VariablesBloc(this.variablesList) : super(VariablesInitial(variablesList));
+  MissionBloc missionBloc;
+  VariablesBloc(this.variablesList, this.missionBloc)
+      : super(VariablesInitial(variablesList));
 
   @override
   Stream<VariablesState> mapEventToState(VariablesEvent event) async* {
@@ -29,6 +36,10 @@ class VariablesBloc extends Bloc<VariablesEvent, VariablesState> {
     } else if (event is DeleteVariable) {
       this.variablesList.deleteVariable(event.variableIndex);
       yield VariablesChanged(this.variablesList);
+    } else if (event is StartMissionEvent) {
+      missionBloc.add(SetVariablesListEvent(variablesList: variablesList));
+    } else {
+      print("Unknown event in Variables Bloc");
     }
   }
 }

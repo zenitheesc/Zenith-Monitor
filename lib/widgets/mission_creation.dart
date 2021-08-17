@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
-import 'package:zenith_monitor/modules/mission_detail/bloc/mission_variables/variables_bloc.dart';
+import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/variables_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
 
 class MissionCreation extends StatefulWidget {
@@ -187,7 +187,9 @@ class _MissionCreationState extends State<MissionCreation> {
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ))),
-        onPressed: () {},
+        onPressed: () {
+          BlocProvider.of<VariablesBloc>(context).add(StartMissionEvent());
+        },
         child: Text(
           "Iniciar Missão",
           style: TextStyle(
