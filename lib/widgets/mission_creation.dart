@@ -1,9 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
-//import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/variables_bloc.dart';
-//import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
 
 class MissionCreation extends StatefulWidget {
   const MissionCreation({Key? key}) : super(key: key);
@@ -19,17 +17,17 @@ class _MissionCreationState extends State<MissionCreation> {
   TextField textField(String hintText, TextEditingController controller) {
     return TextField(
       controller: controller,
-      style: TextStyle(
+      style: const TextStyle(
           color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
       cursorColor: white,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.fromLTRB(20, 8.5, 12, 8.5),
           isDense: true,
-          hintStyle: TextStyle(color: gray),
-          focusedBorder: OutlineInputBorder(
+          hintStyle: const TextStyle(color: gray),
+          focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: gray),
               borderRadius: BorderRadius.all(Radius.circular(10))),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: gray),
               borderRadius: BorderRadius.all(Radius.circular(10))),
           hintText: hintText),
@@ -39,14 +37,14 @@ class _MissionCreationState extends State<MissionCreation> {
   Widget textInputs() {
     return Table(
         //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        columnWidths: {
+        columnWidths: const {
           1: FractionColumnWidth(0.03),
           2: FractionColumnWidth(0.25),
           3: FractionColumnWidth(0.15)
         }, children: [
       TableRow(children: [
         textField('Inserir novo campo', variableNameController),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         textField('Tipo', variableTypeController),
         Align(
           alignment: Alignment.bottomRight,
@@ -81,10 +79,10 @@ class _MissionCreationState extends State<MissionCreation> {
     return TableRow(
         decoration: BoxDecoration(
           borderRadius: isTop
-              ? BorderRadius.only(
+              ? const BorderRadius.only(
                   topLeft: Radius.circular(10), topRight: Radius.circular(10))
               : isBottom
-                  ? BorderRadius.only(
+                  ? const BorderRadius.only(
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10))
                   : null,
@@ -102,7 +100,7 @@ class _MissionCreationState extends State<MissionCreation> {
               padding: const EdgeInsets.fromLTRB(20, 7.5, 12, 7.5),
               child: Text(
                 name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.normal,
                   color: white,
                   fontFamily: 'DMSans',
@@ -122,7 +120,7 @@ class _MissionCreationState extends State<MissionCreation> {
                 padding: const EdgeInsets.all(7.5),
                 child: Text(
                   type,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.w200,
                     color: white,
                     fontFamily: 'DMSans',
@@ -141,11 +139,11 @@ class _MissionCreationState extends State<MissionCreation> {
       return Column(
         children: [
           Table(
-            border: TableBorder(
+            border: const TableBorder(
                 verticalInside:
                     BorderSide(width: 1, color: gray, style: BorderStyle.solid),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
-            columnWidths: {
+            columnWidths: const {
               0: FractionColumnWidth(2 / 3),
               1: FractionColumnWidth(1 / 3),
             },
@@ -161,11 +159,11 @@ class _MissionCreationState extends State<MissionCreation> {
           ),
           if (state is VariableInteractionError)
             Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10),
               child: Text(
                 state.errorMessage,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: lightCoral),
+                style: const TextStyle(color: lightCoral),
               ),
             )
         ],
@@ -173,7 +171,7 @@ class _MissionCreationState extends State<MissionCreation> {
     });
   }
 
-  Widget StartMissionButton() {
+  Widget startMissionButton() {
     return SizedBox(
       height: 30,
       child: ElevatedButton(
@@ -191,7 +189,7 @@ class _MissionCreationState extends State<MissionCreation> {
         onPressed: () {
           BlocProvider.of<VariablesBloc>(context).add(StartMissionEvent());
         },
-        child: Text(
+        child: const Text(
           "Iniciar Missão",
           style: TextStyle(
             fontWeight: FontWeight.w200,
@@ -209,22 +207,22 @@ class _MissionCreationState extends State<MissionCreation> {
       children: [
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.90,
-            child: Text(
+            child: const Text(
               'Criação de Missão',
-              style: const TextStyle(color: gray, fontSize: 12.0),
+              style: TextStyle(color: gray, fontSize: 12.0),
             )),
         Container(
           width: MediaQuery.of(context).size.width * 0.83,
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               textInputs(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               variablesTable(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Align(
                 alignment: Alignment.bottomRight,
-                child: StartMissionButton(),
+                child: startMissionButton(),
               ),
             ],
           ),

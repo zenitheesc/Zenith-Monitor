@@ -22,14 +22,14 @@ class Configuration extends StatelessWidget {
       ],
       child: Scaffold(
         backgroundColor: raisingBlack,
-        appBar: StandardAppBar(title: "Configurações"),
+        appBar: const StandardAppBar(title: "Configurações"),
         body: CustomScrollView(
           slivers: [
             SliverFillRemaining(
               hasScrollBody: false,
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: eerieBlack,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(40),
@@ -37,7 +37,7 @@ class Configuration extends StatelessWidget {
                   ),
                 ),
                 child: Column(
-                  children: <Widget>[
+                  children: const <Widget>[
                     SizedBox(
                       height: 60,
                     ),

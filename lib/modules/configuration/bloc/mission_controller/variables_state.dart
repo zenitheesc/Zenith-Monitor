@@ -24,8 +24,7 @@ class VariableInteractionError extends VariablesState {
   late String errorMessage;
 
   VariableInteractionError(
-      MissionVariablesList variablesList, String errorMessage) {
-    this.errorMessage = errorMessage;
+      MissionVariablesList variablesList, this.errorMessage) {
     setVariablesList(variablesList);
   }
 }
