@@ -5,12 +5,12 @@ import 'package:zenith_monitor/constants/variables_types.dart';
 class MissionVariable<T> {
   late String _variableName;
   late String _variableType;
-  late List<T> _variableList;
+  T? _variableValue;
 
   MissionVariable(String variableName, String variableType) {
     _variableName = variableName;
     _variableType = stringToPattern(variableType);
-    _variableList = [];
+    _variableValue = null;
   }
 
   String getVariableName() {
@@ -21,8 +21,12 @@ class MissionVariable<T> {
     return _variableType;
   }
 
+  T? getVariableValue() {
+    return _variableValue;
+  }
+
   void addValue(T value) {
-    _variableList.add(value);
+    _variableValue = value;
   }
 }
 
