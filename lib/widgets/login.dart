@@ -1,116 +1,159 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
+// import 'package:auto_size_text/auto_size_text.dart';
 class LoginZenithMonitor extends StatelessWidget {
   LoginZenithMonitor({Key? key});
-
-  Widget loginContainersName(String texto) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 2.5),
-      child: Container(
-        width: 167,
-        height: 62,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.black,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Text(
-            texto,
-            textAlign: TextAlign.left,
-            style: TextStyle(color: gray, fontSize: 18, fontFamily: 'DMSans'),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget loginContainersGeneral(String texto) {
-    return Padding(
-      padding: const EdgeInsets.all(2.5),
-      child: Container(
-        width: 339,
-        height: 62,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.black,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Text(
-            texto,
-            textAlign: TextAlign.left,
-            style: TextStyle(color: gray, fontSize: 18, fontFamily: 'DMSans'),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Widget fundoContainers() {
-  //   return Container(
-  //     width: 395,
-  //     height: 434,
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(59),
-  //       color: Colors.black,
-  //     ),
-  //     child: Text("ok",),
-  //   );
-  // }
-  // AppBar appBarlogin(){
-  //   return AppBar();
-  // }
-
-  // Body bodyLogin(){
-  //   return  ;
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         // appBar: appBarLogin(),
-        body: buildMainBody(),
+        body: buildMainBody(context),
         backgroundColor: eerieBlack);
   }
 
-  Widget smallContainer(String text, int textColor) {
-    return Center(
-      child: Container(
-        width: 173,
-        height: 39,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Color(textColor),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: white, fontSize: 18, fontFamily: 'DMSans'),
+  double screenSize(BuildContext context, String type, double size) {
+    if (type == "height")
+      return MediaQuery.of(context).size.height * size;
+    else
+      return MediaQuery.of(context).size.width * size;
+  }
+
+  Widget buildMainBody(BuildContext context) {
+    return GridTile(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(),
+              Positioned(
+                  top: screenSize(context, "height", -0.437),
+                  left: screenSize(context, "width", 0.0834),
+                  child: imageCircle(context)),
+              Positioned(
+                top: MediaQuery.of(context).size.height * -0.195,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          loginContainersName(context, 'Nome'),
+                          loginContainersName(context, 'Sobrenome ')
+                        ],
+                      ),
+                      loginContainersGeneral(context, 'Email '),
+                      loginContainersGeneral(context, 'Senha '),
+                      loginContainersGeneral(context, 'Confirmar senha ')
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: screenSize(context, "height", 0.312),
+                child: Container(
+                  width: screenSize(context, "width", 1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      smallContainer(context, 'Voltar', 0XFFE57373),
+                      smallContainer(context, 'Submeter', 0XFF8BC34A)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            clipBehavior: Clip.none,
           ),
-        ),
+        ],
       ),
     );
   }
 
-  Widget imageCircle() {
+  Widget insertText(BuildContext context, String text) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextField(
+          decoration: InputDecoration(
+            labelText: "  " + text,
+            labelStyle: TextStyle(
+                color: gray,
+                fontSize: screenSize(context, "width", 0.048),
+                fontFamily: 'DMSans'),
+            filled: true,
+            fillColor: Colors.black,
+            border: OutlineInputBorder()
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget loginContainersName(BuildContext context, String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: screenSize(context, "width", 0.012),
+          vertical: screenSize(context, "height", 0.003)),
+      child: Container(
+        width: screenSize(context, "width", 0.44),
+        height: screenSize(context, "height", 0.1),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(
+        //       screenSize(context, "height", 0.0929) * 0.242),
+        //   color: Colors.black,
+        // ),
+        child: insertText(context, text),
+      ),
+    );
+  }
+
+  Widget loginContainersGeneral(BuildContext context, String text) {
+    return Padding(
+      padding: EdgeInsets.all(screenSize(context, "height", 0.003)),
+      child: Container(
+        width: screenSize(context, "width", 0.9),
+        height: screenSize(context, "height", 0.1),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(
+        //       screenSize(context, "height", 0.0929) * 0.242),
+        //   color: Colors.black,
+        // ),
+        child: insertText(context, text),
+      ),
+    );
+  }
+
+  Widget imageCircle(BuildContext context) {
+    double userRadius = screenSize(context, "height", 0.179);
+    double imageRadius = screenSize(context, "height", 0.0704);
+
     return Stack(
       children: <Widget>[
         Container(
-          height: 120,
-          width: 120,
-          color: Colors.purple,
-        ),
+            height: userRadius,
+            width: userRadius,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(userRadius), color: white),
+            child: Center(
+                child:
+                    Image(image: AssetImage('assets/images/user_figure.png')))),
         Positioned(
-          bottom: -20,
-          right: -20,
+          bottom: screenSize(context, "width", -0.025),
+          right: screenSize(context, "width", -0.03),
           child: Container(
-            height: 50,
-            width: 50,
-            color: Colors.red,
+            height: imageRadius,
+            width: imageRadius,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(200), color: white),
+            child: Center(
+                child:
+                    Image(image: AssetImage('assets/images/images_solid.png'))),
           ),
         ),
       ],
@@ -118,56 +161,27 @@ class LoginZenithMonitor extends StatelessWidget {
     );
   }
 
-  Widget buildMainBody() {
-    return GridTile(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Center(
-            child: Stack(
-              children: [
-                Container(
-                  width: 395,
-                  height: 434,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(60),
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0.5, 1],
-                        colors: [raisingBlack, Colors.black]),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            loginContainersName('Nome'),
-                            loginContainersName('Sobrenome')
-                          ],
-                        ),
-                        loginContainersGeneral('Email'),
-                        loginContainersGeneral('Senha'),
-                        loginContainersGeneral('Confirmar senha')
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(top: -80, left: 20, child: imageCircle())
-              ],
-              clipBehavior: Clip.none,
-            ),
+  Widget smallContainer(BuildContext context, String text, int textColor) {
+    return Center(
+      child: Container(
+        width: screenSize(context, "width", 0.4),
+        height: screenSize(context, "height", 0.05847),
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(screenSize(context, "height", 0.03125)),
+          color: Color(textColor),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: white,
+                fontSize: screenSize(context, "width", 0.048),
+                fontFamily: 'DMSans'),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              smallContainer('Voltar', 0XFFE57373),
-              smallContainer('Submeter', 0XFF8BC34A)
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
