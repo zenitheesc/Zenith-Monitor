@@ -35,13 +35,11 @@ class _MissionCreationState extends State<MissionCreation> {
   }
 
   Widget textInputs() {
-    return Table(
-        //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        columnWidths: const {
-          1: FractionColumnWidth(0.03),
-          2: FractionColumnWidth(0.25),
-          3: FractionColumnWidth(0.15)
-        }, children: [
+    return Table(columnWidths: const {
+      1: FractionColumnWidth(0.03),
+      2: FractionColumnWidth(0.25),
+      3: FractionColumnWidth(0.15)
+    }, children: [
       TableRow(children: [
         textField('Inserir novo campo', variableNameController),
         const SizedBox(width: 10),
