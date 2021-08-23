@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zenith_monitor/utils/services/authentication.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
 void main() {
@@ -34,6 +35,8 @@ class Application extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
+          Authentication a = Authentication();
+          a.signIn("bap@gmail.com", "bapSafadinho");
           return const Scaffold(backgroundColor: Colors.green);
         }
 
