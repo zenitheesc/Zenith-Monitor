@@ -140,9 +140,8 @@ class _MissionCreationState extends State<MissionCreation> {
         children: [
           Table(
             border: const TableBorder(
-                verticalInside:
-                    BorderSide(width: 1, color: gray, style: BorderStyle.solid),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
+                verticalInside: BorderSide(
+                    width: 1, color: gray, style: BorderStyle.solid)),
             columnWidths: const {
               0: FractionColumnWidth(2 / 3),
               1: FractionColumnWidth(1 / 3),
