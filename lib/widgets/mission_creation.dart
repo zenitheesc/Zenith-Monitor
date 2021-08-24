@@ -131,8 +131,10 @@ class _MissionCreationState extends State<MissionCreation> {
   }
 
   BlocBuilder variablesTable() {
+    late String message;
     return BlocBuilder<VariablesBloc, VariablesState>(
         builder: (context, state) {
+      message = (state is VariableInteractionError) ? state.errorMessage : "";
       List list = state.variablesList.getVariablesList();
       return Column(
         children: [
@@ -154,15 +156,17 @@ class _MissionCreationState extends State<MissionCreation> {
               if (list.isEmpty) createTableRow("", "", isBottom: true)
             ],
           ),
-          if (state is VariableInteractionError)
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Container(
+              height: 32,
               child: Text(
-                state.errorMessage,
+                message,
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: lightCoral),
               ),
-            )
+            ),
+          )
         ],
       );
     });
@@ -216,7 +220,7 @@ class _MissionCreationState extends State<MissionCreation> {
               textInputs(),
               const SizedBox(height: 20),
               variablesTable(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               Align(
                 alignment: Alignment.bottomRight,
                 child: startMissionButton(),
