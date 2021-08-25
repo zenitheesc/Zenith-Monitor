@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/utils/services/location.dart';
 import 'package:zenith_monitor/widgets/login.dart';
 
 void main() {
@@ -17,8 +18,16 @@ class ZenithMonitor extends StatelessWidget {
 }
 
 class Application extends StatelessWidget {
+  LocationManager a = LocationManager();
+
   @override
   Widget build(BuildContext context) {
+    a.init();
+    a.check();
+    print(a.receive());
+    print(a.status());
+    a.dispose();
+
     return LoginZenithMonitor();
   }
 }

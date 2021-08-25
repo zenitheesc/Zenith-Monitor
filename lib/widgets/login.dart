@@ -3,8 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
 // import 'package:auto_size_text/auto_size_text.dart';
-class LoginZenithMonitor extends StatelessWidget {
-  LoginZenithMonitor({Key? key});
+
+class LoginZenithMonitor extends StatefulWidget {
+  const LoginZenithMonitor({Key? key}) : super(key: key);
+
+  @override
+  _LoginZenithMonitorState createState() => _LoginZenithMonitorState();
+}
+
+class _LoginZenithMonitorState extends State<LoginZenithMonitor> {
+  // Define the focus node. To manage the lifecycle, create the FocusNode in
+  // the initState method, and clean it up in the dispose method.
+  late FocusNode myFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+
+    super.dispose();
+  }
+
+  TextEditingController variableNameController = TextEditingController();
+  TextEditingController variableSurnameController = TextEditingController();
+  TextEditingController variableEmailController = TextEditingController();
+  TextEditingController variablePasswordController = TextEditingController();
+  TextEditingController variableConfirmedPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +75,18 @@ class LoginZenithMonitor extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          loginContainersName(context, 'Nome'),
-                          loginContainersName(context, 'Sobrenome ')
+                          loginContainersName(
+                              context, 'Nome', variableNameController, true),
+                          loginContainersName(context, 'Sobrenome ',
+                              variableSurnameController, false)
                         ],
                       ),
-                      loginContainersGeneral(context, 'Email '),
-                      loginContainersGeneral(context, 'Senha '),
-                      loginContainersGeneral(context, 'Confirmar senha ')
+                      loginContainersGeneral(
+                          context, 'Email ', variableEmailController, false),
+                      loginContainersGeneral(
+                          context, 'Senha ', variablePasswordController, false),
+                      loginContainersGeneral(context, 'Confirmar senha ',
+                          variableConfirmedPasswordController, false)
                     ],
                   ),
                 ),
@@ -75,27 +112,32 @@ class LoginZenithMonitor extends StatelessWidget {
     );
   }
 
-  Widget insertText(BuildContext context, String text) {
+  Widget insertText(BuildContext context, String text,
+      TextEditingController controller, bool bool) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextField(
+          autofocus: bool,
+          focusNode: myFocusNode,
+          controller: controller,
+          cursorColor: white,
           decoration: InputDecoration(
-            labelText: "  " + text,
-            labelStyle: TextStyle(
-                color: gray,
-                fontSize: screenSize(context, "width", 0.048),
-                fontFamily: 'DMSans'),
-            filled: true,
-            fillColor: Colors.black,
-            border: OutlineInputBorder()
-          ),
+              labelText: "  " + text,
+              labelStyle: TextStyle(
+                  color: gray,
+                  fontSize: screenSize(context, "width", 0.048),
+                  fontFamily: 'DMSans'),
+              filled: true,
+              fillColor: Colors.black,
+              border: OutlineInputBorder()),
         )
       ],
     );
   }
 
-  Widget loginContainersName(BuildContext context, String text) {
+  Widget loginContainersName(BuildContext context, String text,
+      TextEditingController controller, bool bool) {
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: screenSize(context, "width", 0.012),
@@ -103,17 +145,13 @@ class LoginZenithMonitor extends StatelessWidget {
       child: Container(
         width: screenSize(context, "width", 0.44),
         height: screenSize(context, "height", 0.1),
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(
-        //       screenSize(context, "height", 0.0929) * 0.242),
-        //   color: Colors.black,
-        // ),
-        child: insertText(context, text),
+        child: insertText(context, text, controller, bool),
       ),
     );
   }
 
-  Widget loginContainersGeneral(BuildContext context, String text) {
+  Widget loginContainersGeneral(BuildContext context, String text,
+      TextEditingController controller, bool bool) {
     return Padding(
       padding: EdgeInsets.all(screenSize(context, "height", 0.003)),
       child: Container(
@@ -124,7 +162,7 @@ class LoginZenithMonitor extends StatelessWidget {
         //       screenSize(context, "height", 0.0929) * 0.242),
         //   color: Colors.black,
         // ),
-        child: insertText(context, text),
+        child: insertText(context, text, controller, bool),
       ),
     );
   }
