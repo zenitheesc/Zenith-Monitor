@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:zenith_monitor/utils/services/firestore_related.dart';
+import 'package:zenith_monitor/utils/services/firestore_downloader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
