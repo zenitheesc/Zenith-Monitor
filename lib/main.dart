@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'package:zenith_monitor/utils/services/firestore_related.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const ZenithMonitor());
 }
 
@@ -20,6 +25,7 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    // return const Scaffold();
+    return MissionInformation();
   }
 }
