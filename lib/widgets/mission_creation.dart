@@ -13,6 +13,7 @@ class MissionCreation extends StatefulWidget {
 class _MissionCreationState extends State<MissionCreation> {
   TextEditingController variableNameController = TextEditingController();
   TextEditingController variableTypeController = TextEditingController();
+  TextEditingController missionNameController = TextEditingController();
 
   TextField textField(String hintText, TextEditingController controller) {
     return TextField(
@@ -157,7 +158,7 @@ class _MissionCreationState extends State<MissionCreation> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 7),
             child: Container(
               height: 32,
               child: Text(
@@ -188,7 +189,8 @@ class _MissionCreationState extends State<MissionCreation> {
               borderRadius: BorderRadius.circular(8.0),
             ))),
         onPressed: () {
-          BlocProvider.of<VariablesBloc>(context).add(StartMissionEvent());
+          BlocProvider.of<VariablesBloc>(context)
+              .add(StartMissionEvent(missionName: missionNameController.text));
         },
         child: const Text(
           "Iniciar Missão",
@@ -199,6 +201,31 @@ class _MissionCreationState extends State<MissionCreation> {
           ),
         ),
       ),
+    );
+  }
+
+  Column missionNameInput() {
+    String message = "";
+    return Column(
+      children: [
+        textField("Nome da Missão", missionNameController),
+        //BlocListener<VariablesBloc, VariablesState>(listener: (context, state) {
+        //  /*message =
+        //      (state is VariableInteractionError) ? state.errorMessage : "";*/
+        //  print("NOIS");
+        //}),
+        Padding(
+          padding: const EdgeInsets.only(top: 7),
+          child: Container(
+            height: 32,
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: lightCoral),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -220,6 +247,8 @@ class _MissionCreationState extends State<MissionCreation> {
               textInputs(),
               const SizedBox(height: 20),
               variablesTable(),
+              const SizedBox(height: 5),
+              missionNameInput(),
               const SizedBox(height: 15),
               Align(
                 alignment: Alignment.bottomRight,

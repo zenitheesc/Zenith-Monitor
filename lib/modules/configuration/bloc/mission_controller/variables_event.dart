@@ -16,4 +16,8 @@ class DeleteVariable extends VariablesEvent {
   DeleteVariable({required this.variableIndex});
 }
 
-class StartMissionEvent extends VariablesEvent {}
+class StartMissionEvent extends VariablesEvent {
+  String missionName;
+
+  StartMissionEvent({required this.missionName});
+}

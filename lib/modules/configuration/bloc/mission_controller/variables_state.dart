@@ -28,3 +28,9 @@ class VariableInteractionError extends VariablesState {
     setVariablesList(variablesList);
   }
 }
+
+class MissionNameError extends VariablesState {
+  String errorMessage;
+
+  MissionNameError({required this.errorMessage});
+}
