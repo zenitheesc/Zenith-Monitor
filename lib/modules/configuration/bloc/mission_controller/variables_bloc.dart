@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/pipelines/mission_pipeline/mission_bloc.dart';
 
 part 'variables_state.dart';

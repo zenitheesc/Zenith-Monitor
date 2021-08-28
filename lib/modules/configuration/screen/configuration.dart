@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/variables_bloc.dart';
 import 'package:zenith_monitor/pipelines/mission_pipeline/mission_bloc.dart';
-import 'package:zenith_monitor/utils/mixins/class_mission_variables.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/widgets/mission_creation.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 

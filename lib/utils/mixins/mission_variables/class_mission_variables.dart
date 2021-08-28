@@ -1,34 +1,8 @@
 //import 'dart:ffi';
 import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
 import 'package:zenith_monitor/constants/variables_types.dart';
-
-class MissionVariable<T> {
-  late String _variableName;
-  late String _variableType;
-  T? _variableValue;
-
-  MissionVariable(String variableName, String variableType) {
-    _variableName = variableName;
-    _variableType = stringToPattern(variableType);
-    _variableValue = null;
-  }
-
-  String getVariableName() {
-    return _variableName;
-  }
-
-  String getVariableType() {
-    return _variableType;
-  }
-
-  T? getVariableValue() {
-    return _variableValue;
-  }
-
-  void addValue(T value) {
-    _variableValue = value;
-  }
-}
+import 'class_mission_variable.dart';
+import 'mission_variables_exceptions.dart';
 
 class MissionVariablesList {
   late List<MissionVariable> _list;
@@ -78,26 +52,5 @@ class MissionVariablesList {
     if (index < 0 || index >= _list.length) return;
 
     _list.removeAt(index);
-  }
-}
-
-class VariableAlreadyExistsException implements Exception {
-  @override
-  String toString() {
-    return "Variable already exists";
-  }
-}
-
-class VariableTypeUnknownException implements Exception {
-  @override
-  String toString() {
-    return "The variable type does not match any of the record";
-  }
-}
-
-class EmptyVariablesException implements Exception {
-  @override
-  String toString() {
-    return "Variable's name or type is empty";
   }
 }
