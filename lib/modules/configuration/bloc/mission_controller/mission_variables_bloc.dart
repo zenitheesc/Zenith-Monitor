@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/mission_variables_exceptions.dart';
-import 'package:zenith_monitor/pipelines/mission_pipeline/mission_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 
 part 'mission_variables_state.dart';
 part 'mission_variables_event.dart';
