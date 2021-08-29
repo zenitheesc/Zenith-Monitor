@@ -1,4 +1,4 @@
-part of 'variables_bloc.dart';
+part of 'mission_variables_bloc.dart';
 
 abstract class VariablesEvent {}
 

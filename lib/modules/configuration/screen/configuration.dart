@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
-import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/variables_bloc.dart';
+import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/mission_variables_bloc.dart';
 import 'package:zenith_monitor/pipelines/mission_pipeline/mission_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/widgets/mission_creation.dart';
@@ -15,7 +15,7 @@ class Configuration extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => VariablesBloc(
+            create: (context) => MissionVariablesBloc(
                   MissionVariablesList(),
                   BlocProvider.of<MissionBloc>(context),
                 ))

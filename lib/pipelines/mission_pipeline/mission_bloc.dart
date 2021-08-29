@@ -13,6 +13,8 @@ class MissionBloc extends Bloc<MissionEvent, MissionState> {
   Stream<MissionState> mapEventToState(MissionEvent event) async* {
     if (event is SetVariablesListEvent) {
       variablesList = event.variablesList;
+      print("hei hei");
+      print(variablesList.getMissionName());
     } else {
       print("Unknown event in Mission Bloc");
     }
