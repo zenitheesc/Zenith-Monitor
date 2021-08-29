@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/mission_variables_bloc.dart';
 
 class MissionCreation extends StatefulWidget {

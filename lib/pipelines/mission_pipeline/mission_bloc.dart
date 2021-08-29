@@ -13,8 +13,6 @@ class MissionBloc extends Bloc<MissionEvent, MissionState> {
   Stream<MissionState> mapEventToState(MissionEvent event) async* {
     if (event is SetVariablesListEvent) {
       variablesList = event.variablesList;
-      print("hei hei");
-      print(variablesList.getMissionName());
     } else {
       print("Unknown event in Mission Bloc");
     }
@@ -23,4 +21,5 @@ class MissionBloc extends Bloc<MissionEvent, MissionState> {
 
 /// This pipeline is still incomplete. So far, its is only being used
 /// to get the variable list from mission_creation widget. Delete these
-/// comments if you are adding more content to this bloc. 
+/// comments if you are adding more content to this bloc.
+ 
