@@ -4,8 +4,6 @@ abstract class MissionEvent {}
 
 class SetVariablesListEvent extends MissionEvent {
   MissionVariablesList variablesList;
-  String missionName;
 
-  SetVariablesListEvent(
-      {required this.variablesList, required this.missionName});
+  SetVariablesListEvent({required this.variablesList});
 }

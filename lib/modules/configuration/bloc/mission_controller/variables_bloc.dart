@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/mission_variables_exceptions.dart';
 import 'package:zenith_monitor/pipelines/mission_pipeline/mission_bloc.dart';
 
 part 'variables_state.dart';
@@ -10,7 +11,7 @@ part 'variables_event.dart';
 /// and update the MissionVariableList object in mission pipeline.
 
 class VariablesBloc extends Bloc<VariablesEvent, VariablesState> {
-  MissionVariablesList variablesList;
+  MissionVariablesList variablesList = MissionVariablesList();
   MissionBloc missionBloc;
   VariablesBloc(this.variablesList, this.missionBloc)
       : super(VariablesInitial(variablesList));
@@ -35,12 +36,15 @@ class VariablesBloc extends Bloc<VariablesEvent, VariablesState> {
       variablesList.deleteVariable(event.variableIndex);
       yield VariablesChanged(variablesList);
     } else if (event is StartMissionEvent) {
-      if (event.missionName.isEmpty) {
+      try {
+        variablesList.addMissionName(event.missionName);
+        //missionBloc.add(SetVariablesListEvent(variablesList: variablesList));
+      } on EmptyMissionNameException {
         yield MissionNameError(
-            errorMessage: "É necessário fornecer um nome para a missão");
-      } else {
-        missionBloc.add(SetVariablesListEvent(
-            variablesList: variablesList, missionName: event.missionName));
+            variablesList, "É necessário fornecer um nome para a missão");
+      } on MissionNameAlreadyExistException {
+        yield MissionNameError(
+            variablesList, "Esse nome já foi utilizado em uma missão anterior");
       }
     } else {
       print("Unknown event in Variables Bloc");

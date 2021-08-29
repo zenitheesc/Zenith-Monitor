@@ -22,3 +22,17 @@ class EmptyVariablesException implements Exception {
     return "Variable's name or type is empty";
   }
 }
+
+class EmptyMissionNameException implements Exception {
+  @override
+  String toString() {
+    return "Mission's name variable is empty";
+  }
+}
+
+class MissionNameAlreadyExistException implements Exception {
+  @override
+  String toString() {
+    return "Mission's name already exist";
+  }
+}

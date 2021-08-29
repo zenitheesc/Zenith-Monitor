@@ -30,7 +30,9 @@ class VariableInteractionError extends VariablesState {
 }
 
 class MissionNameError extends VariablesState {
-  String errorMessage;
+  late String errorMessage;
 
-  MissionNameError({required this.errorMessage});
+  MissionNameError(MissionVariablesList variablesList, this.errorMessage) {
+    setVariablesList(variablesList);
+  }
 }

@@ -6,7 +6,6 @@ part 'mission_event.dart';
 
 class MissionBloc extends Bloc<MissionEvent, MissionState> {
   late MissionVariablesList variablesList;
-  late String missionName;
 
   MissionBloc() : super(MissionStateInitial());
 
@@ -14,8 +13,6 @@ class MissionBloc extends Bloc<MissionEvent, MissionState> {
   Stream<MissionState> mapEventToState(MissionEvent event) async* {
     if (event is SetVariablesListEvent) {
       variablesList = event.variablesList;
-      missionName = event.missionName;
-      print(missionName);
     } else {
       print("Unknown event in Mission Bloc");
     }

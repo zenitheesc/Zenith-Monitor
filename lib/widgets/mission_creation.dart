@@ -205,24 +205,23 @@ class _MissionCreationState extends State<MissionCreation> {
   }
 
   Column missionNameInput() {
-    String message = "";
+    late String message;
     return Column(
       children: [
         textField("Nome da Missão", missionNameController),
-        //BlocListener<VariablesBloc, VariablesState>(listener: (context, state) {
-        //  /*message =
-        //      (state is VariableInteractionError) ? state.errorMessage : "";*/
-        //  print("NOIS");
-        //}),
         Padding(
           padding: const EdgeInsets.only(top: 7),
           child: Container(
             height: 32,
-            child: Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: lightCoral),
-            ),
+            child: BlocBuilder<VariablesBloc, VariablesState>(
+                builder: (context, state) {
+              message = (state is MissionNameError) ? state.errorMessage : "";
+              return Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: lightCoral),
+              );
+            }),
           ),
         )
       ],
