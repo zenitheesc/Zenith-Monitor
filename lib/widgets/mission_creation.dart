@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/variables_bloc.dart';
+import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/mission_variables_bloc.dart';
 
 class MissionCreation extends StatefulWidget {
   const MissionCreation({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _MissionCreationState extends State<MissionCreation> {
               width: 30,
               child: FloatingActionButton(
                 onPressed: () {
-                  BlocProvider.of<VariablesBloc>(context).add(
+                  BlocProvider.of<MissionVariablesBloc>(context).add(
                       AddStandardVariableEvent(
                           variableName: variableNameController.text,
                           variableType: variableTypeController.text));
@@ -91,7 +91,7 @@ class _MissionCreationState extends State<MissionCreation> {
           GestureDetector(
             onDoubleTap: () {
               if (rowIndice != -1) {
-                BlocProvider.of<VariablesBloc>(context)
+                BlocProvider.of<MissionVariablesBloc>(context)
                     .add(DeleteVariable(variableIndex: rowIndice));
               }
             },
@@ -110,7 +110,7 @@ class _MissionCreationState extends State<MissionCreation> {
           GestureDetector(
             onDoubleTap: () {
               if (rowIndice != -1) {
-                BlocProvider.of<VariablesBloc>(context)
+                BlocProvider.of<MissionVariablesBloc>(context)
                     .add(DeleteVariable(variableIndex: rowIndice));
               }
             },
@@ -133,7 +133,7 @@ class _MissionCreationState extends State<MissionCreation> {
 
   BlocBuilder variablesTable() {
     late String message;
-    return BlocBuilder<VariablesBloc, VariablesState>(
+    return BlocBuilder<MissionVariablesBloc, MissionVariablesState>(
         builder: (context, state) {
       message = (state is VariableInteractionError) ? state.errorMessage : "";
       List list = state.variablesList.getVariablesList();
@@ -189,7 +189,7 @@ class _MissionCreationState extends State<MissionCreation> {
               borderRadius: BorderRadius.circular(8.0),
             ))),
         onPressed: () {
-          BlocProvider.of<VariablesBloc>(context)
+          BlocProvider.of<MissionVariablesBloc>(context)
               .add(StartMissionEvent(missionName: missionNameController.text));
         },
         child: const Text(
@@ -213,7 +213,7 @@ class _MissionCreationState extends State<MissionCreation> {
           padding: const EdgeInsets.only(top: 7),
           child: Container(
             height: 32,
-            child: BlocBuilder<VariablesBloc, VariablesState>(
+            child: BlocBuilder<MissionVariablesBloc, MissionVariablesState>(
                 builder: (context, state) {
               message = (state is MissionNameError) ? state.errorMessage : "";
               return Text(

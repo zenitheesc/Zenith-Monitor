@@ -7,8 +7,8 @@ import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_vari
 import 'package:zenith_monitor/widgets/mission_creation.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
-class Configuration extends StatelessWidget {
-  const Configuration({Key? key}) : super(key: key);
+class MissionConfiguration extends StatelessWidget {
+  const MissionConfiguration({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
 part of 'mission_variables_bloc.dart';
 
-abstract class VariablesEvent {}
+abstract class MissionVariablesEvent {}
 
-class AddStandardVariableEvent extends VariablesEvent {
+class AddStandardVariableEvent extends MissionVariablesEvent {
   String variableName;
   String variableType;
 
@@ -10,13 +10,13 @@ class AddStandardVariableEvent extends VariablesEvent {
       {required this.variableName, required this.variableType});
 }
 
-class DeleteVariable extends VariablesEvent {
+class DeleteVariable extends MissionVariablesEvent {
   int variableIndex;
 
   DeleteVariable({required this.variableIndex});
 }
 
-class StartMissionEvent extends VariablesEvent {
+class StartMissionEvent extends MissionVariablesEvent {
   String missionName;
 
   StartMissionEvent({required this.missionName});

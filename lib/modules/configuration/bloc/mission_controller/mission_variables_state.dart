@@ -1,6 +1,6 @@
-part of 'variables_bloc.dart';
+part of 'mission_variables_bloc.dart';
 
-abstract class VariablesState {
+abstract class MissionVariablesState {
   late MissionVariablesList variablesList;
 
   void setVariablesList(MissionVariablesList variablesList) {
@@ -8,19 +8,19 @@ abstract class VariablesState {
   }
 }
 
-class VariablesInitial extends VariablesState {
+class VariablesInitial extends MissionVariablesState {
   VariablesInitial(MissionVariablesList variablesList) {
     setVariablesList(variablesList);
   }
 }
 
-class VariablesChanged extends VariablesState {
+class VariablesChanged extends MissionVariablesState {
   VariablesChanged(MissionVariablesList variablesList) {
     setVariablesList(variablesList);
   }
 }
 
-class VariableInteractionError extends VariablesState {
+class VariableInteractionError extends MissionVariablesState {
   late String errorMessage;
 
   VariableInteractionError(
@@ -29,7 +29,7 @@ class VariableInteractionError extends VariablesState {
   }
 }
 
-class MissionNameError extends VariablesState {
+class MissionNameError extends MissionVariablesState {
   late String errorMessage;
 
   MissionNameError(MissionVariablesList variablesList, this.errorMessage) {

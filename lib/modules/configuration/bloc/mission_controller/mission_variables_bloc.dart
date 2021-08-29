@@ -10,14 +10,16 @@ part 'mission_variables_event.dart';
 /// So, it deals with user interation in mission_creation.dart widget
 /// and update the MissionVariableList object in mission pipeline.
 
-class MissionVariablesBloc extends Bloc<VariablesEvent, VariablesState> {
+class MissionVariablesBloc
+    extends Bloc<MissionVariablesEvent, MissionVariablesState> {
   MissionVariablesList variablesList;
   MissionBloc missionBloc;
   MissionVariablesBloc(this.variablesList, this.missionBloc)
       : super(VariablesInitial(variablesList));
 
   @override
-  Stream<VariablesState> mapEventToState(VariablesEvent event) async* {
+  Stream<MissionVariablesState> mapEventToState(
+      MissionVariablesEvent event) async* {
     if (event is AddStandardVariableEvent) {
       try {
         variablesList.addStandardVariable(
