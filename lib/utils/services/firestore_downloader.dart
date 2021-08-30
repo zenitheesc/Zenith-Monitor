@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'dart:async';
 
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
@@ -6,12 +7,7 @@ import 'package:zenith_monitor/constants/colors_constants.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MissionInformation extends StatefulWidget {
-  @override
-  _MissionInformationState createState() => _MissionInformationState();
-}
-
-class _MissionInformationState extends State<MissionInformation> {
+class MissionInformation extends StatelessWidget {
   final CollectionReference _subCollectionReference = FirebaseFirestore.instance
       .collection('missoes')
       .doc('test-launch')
@@ -28,10 +24,18 @@ class _MissionInformationState extends State<MissionInformation> {
           stream: _dataStream,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return const Text("Deu merda cara");
+              return const Center(
+                child: Text("Erro ao pegar o documento.",
+                    style: TextStyle(color: white)),
+              );
             }
 
-            if (!snapshot.hasData) return const Text('CARREGANDO CARALHO...');
+            if (!snapshot.hasData) {
+              return const Center(
+                child: ZenithProgressIndicator(
+                    size: 150, fileName: 'z_icon_white.png'),
+              );
+            }
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) =>
