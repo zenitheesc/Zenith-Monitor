@@ -5,15 +5,17 @@ import 'package:zenith_monitor/utils/helpers/link_validity.dart';
 ///   -user_profile.dart
 /// If you change something, make sure that these parts are still working.
 
-class User {
+class LocalUser {
   late String _name;
   String? _imageLink;
   late String _accessLevel;
+  late String _email;
 
-  User(String name, String? imageLink, String accessLevel) {
+  LocalUser(String name, String? imageLink, String accessLevel, String email) {
     _name = stringToPattern(name);
     _imageLink = imageLink;
     _accessLevel = stringToPattern(accessLevel);
+    _email = email.toLowerCase();
   }
 
   String getName() {
@@ -26,5 +28,9 @@ class User {
 
   String getAccessLevel() {
     return _accessLevel;
+  }
+
+  String getEmail() {
+    return _email;
   }
 }

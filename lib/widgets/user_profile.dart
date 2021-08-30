@@ -7,7 +7,7 @@ import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dar
 class UserProfile extends StatelessWidget {
   const UserProfile({Key? key, required this.user});
 
-  final User user;
+  final LocalUser user;
 
   Future<Widget> profileChild() async {
     double radius = 80.0;
