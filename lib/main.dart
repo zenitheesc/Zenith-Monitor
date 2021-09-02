@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/modules/configuration/screen/mission_configuration.dart';
+import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 
 import 'package:zenith_monitor/utils/services/firestore_downloader.dart';
 
@@ -25,7 +28,8 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return const Scaffold();
-    return MissionInformation();
+    return MultiBlocProvider(providers: [
+      BlocProvider(create: (context) => MissionBloc()),
+    ], child: const MissionConfiguration());
   }
 }
