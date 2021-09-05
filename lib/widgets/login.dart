@@ -8,10 +8,7 @@ class LoginZenithMonitor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // appBar: appBarLogin(),
-        body: buildMainBody(context),
-        backgroundColor: eerieBlack);
+    return Scaffold(body: buildMainBody(context), backgroundColor: eerieBlack);
   }
 
   double screenSize(BuildContext context, String type, double size) {
@@ -26,76 +23,78 @@ class LoginZenithMonitor extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Stack(
-            alignment: Alignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(),
-              Positioned(
-                  top: screenSize(context, "height", -0.437),
-                  left: screenSize(context, "width", 0.0834),
-                  child: imageCircle(context)),
-              Positioned(
-                top: MediaQuery.of(context).size.height * -0.195,
-                child: Center(
-                  child: Column(
+              Container(
+                width: MediaQuery.of(context).size.width * 0.07,
+              ),
+              Container(child: imageCircle(context)),
+            ],
+          ),
+          Container(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          loginContainersName(context, 'Nome'),
-                          loginContainersName(context, 'Sobrenome ')
-                        ],
-                      ),
-                      loginContainersGeneral(context, 'Email '),
-                      loginContainersGeneral(context, 'Senha '),
-                      loginContainersGeneral(context, 'Confirmar senha ')
+                      loginContainersName(context, 'Nome', 'General'),
+                      loginContainersName(context, 'Sobrenome ', 'General')
                     ],
                   ),
-                ),
+                  loginContainersGeneral(context, 'Email ', 'General'),
+                  loginContainersGeneral(context, 'Senha ', 'Password'),
+                  loginContainersGeneral(
+                      context, 'Confirmar senha ', 'Password'),
+                ],
               ),
-              Positioned(
-                top: screenSize(context, "height", 0.312),
-                child: Container(
-                  width: screenSize(context, "width", 1),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      smallContainer(context, 'Voltar', 0XFFE57373),
-                      smallContainer(context, 'Submeter', 0XFF8BC34A)
-                    ],
-                  ),
-                ),
+            ),
+          ),
+          Container(
+            child: Container(
+              width: screenSize(context, "width", 1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  smallContainer(context, 'Voltar', 0XFFE57373),
+                  smallContainer(context, 'Submeter', 0XFF8BC34A)
+                ],
               ),
-            ],
-            clipBehavior: Clip.none,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget insertText(BuildContext context, String text) {
+  Widget insertText(BuildContext context, String text, String typeContainer) {
+    bool key = false;
+
+    if (typeContainer == 'Password') key = true;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextField(
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            labelText: "  " + text,
-            labelStyle: TextStyle(
-                color: gray,
-                fontSize: screenSize(context, "width", 0.048),
-                fontFamily: 'DMSans'),
-            filled: true,
-            fillColor: Colors.black,
-            border: OutlineInputBorder()
-          ),
+              labelText: "  " + text,
+              labelStyle: TextStyle(
+                  color: white,
+                  fontSize: screenSize(context, "width", 0.048),
+                  fontFamily: 'DMSans'),
+              filled: true,
+              fillColor: Colors.black,
+              border: OutlineInputBorder()),
+          obscureText: key,
         )
       ],
     );
   }
 
-  Widget loginContainersName(BuildContext context, String text) {
+  Widget loginContainersName(
+      BuildContext context, String text, String typeContainer) {
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: screenSize(context, "width", 0.012),
@@ -103,28 +102,19 @@ class LoginZenithMonitor extends StatelessWidget {
       child: Container(
         width: screenSize(context, "width", 0.44),
         height: screenSize(context, "height", 0.1),
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(
-        //       screenSize(context, "height", 0.0929) * 0.242),
-        //   color: Colors.black,
-        // ),
-        child: insertText(context, text),
+        child: insertText(context, text, typeContainer),
       ),
     );
   }
 
-  Widget loginContainersGeneral(BuildContext context, String text) {
+  Widget loginContainersGeneral(
+      BuildContext context, String text, String typeContainer) {
     return Padding(
       padding: EdgeInsets.all(screenSize(context, "height", 0.003)),
       child: Container(
         width: screenSize(context, "width", 0.9),
         height: screenSize(context, "height", 0.1),
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(
-        //       screenSize(context, "height", 0.0929) * 0.242),
-        //   color: Colors.black,
-        // ),
-        child: insertText(context, text),
+        child: insertText(context, text, typeContainer),
       ),
     );
   }
@@ -152,8 +142,9 @@ class LoginZenithMonitor extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(200), color: white),
             child: Center(
-                child:
-                    Image(image: AssetImage('assets/images/images_solid.png'))),
+                child: Image(
+              image: AssetImage('assets/images/images_solid.png'),
+            )),
           ),
         ),
       ],
@@ -163,16 +154,9 @@ class LoginZenithMonitor extends StatelessWidget {
 
   Widget smallContainer(BuildContext context, String text, int textColor) {
     return Center(
-      child: Container(
-        width: screenSize(context, "width", 0.4),
-        height: screenSize(context, "height", 0.05847),
-        decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.circular(screenSize(context, "height", 0.03125)),
-          color: Color(textColor),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
           child: Text(
             text,
             textAlign: TextAlign.center,
@@ -181,6 +165,22 @@ class LoginZenithMonitor extends StatelessWidget {
                 fontSize: screenSize(context, "width", 0.048),
                 fontFamily: 'DMSans'),
           ),
+          onPressed: () {
+            print(text + ' Pressed!');
+          },
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          screenSize(context, "height", 0.03125)),
+                      side: BorderSide(color: Color(textColor)))),
+              fixedSize: MaterialStateProperty.all(Size(
+                screenSize(context, "width", 0.4),
+                screenSize(context, "height", 0.05847),
+              )),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                Color(textColor),
+              )),
         ),
       ),
     );
