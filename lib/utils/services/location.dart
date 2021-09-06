@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:zenith_monitor/constants/colors_constants.dart';
 
 class LocationManager {
   late final Location _location = new Location();
@@ -33,7 +30,7 @@ class LocationManager {
     _location.onLocationChanged.listen((event) {
       printVariables(event);
     });
-    // receive();
+    receive();
     return data;
   }
 
@@ -99,13 +96,5 @@ class LocationManager {
 
   void dispose() {
     _statusCtrl.close();
-  }
-
-  Widget build(BuildContext context) {
-    late LocationManager data = LocationManager();
-    data.init();
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        color: eerieBlack);
   }
 }

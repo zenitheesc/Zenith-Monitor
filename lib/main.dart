@@ -20,13 +20,7 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
-    
-    // print(a.check());
-    // print(a.receive());
 
-    // print(a.status());
-    // print("ok");
     return ExampleLocation();
   }
 }
