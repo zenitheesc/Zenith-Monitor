@@ -8,14 +8,17 @@ import 'package:zenith_monitor/utils/helpers/link_validity.dart';
 class LocalUser {
   late String _name;
   String? _imageLink;
-  late String _accessLevel;
+  String? _accessLevel;
   late String _email;
 
-  LocalUser(String name, String? imageLink, String accessLevel, String email) {
+  LocalUser(String name, String? imageLink, String email) {
     _name = stringToPattern(name);
     _imageLink = imageLink;
-    _accessLevel = stringToPattern(accessLevel);
     _email = email.toLowerCase();
+  }
+
+  void setAccessLevel(String accessLevel) {
+    _accessLevel = stringToPattern(accessLevel);
   }
 
   String getName() {
@@ -27,7 +30,8 @@ class LocalUser {
   }
 
   String getAccessLevel() {
-    return _accessLevel;
+    if (_accessLevel == null) return "";
+    return _accessLevel!;
   }
 
   String getEmail() {
