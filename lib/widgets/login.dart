@@ -203,7 +203,13 @@ class LoginZenithMonitor extends StatelessWidget {
                 borderRadius: BorderRadius.circular(200), color: white),
             child: Center(
                 child: Image(
-              image: AssetImage('assets/images/images_solid.png'),
+             IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.photo_library_outlined,
+                  size: imageRadius * 0.5,
+                ),
+              ),
             )),
           ),
         ),
