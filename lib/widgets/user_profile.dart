@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/utils/helpers/name_abbreviation.dart';
-import 'package:zenith_monitor/utils/mixins/class_user.dart';
+import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
@@ -17,7 +17,7 @@ class UserProfile extends StatelessWidget {
     if (link == null) {
       return CircleAvatar(
         child: Text(
-          user.getName()[0].toUpperCase(),
+          user.getFirstName()[0].toUpperCase(),
           style: const TextStyle(
             fontSize: 60.0,
             color: white,
@@ -60,7 +60,7 @@ class UserProfile extends StatelessWidget {
               ),
             ),
             Text(
-              nameAbbreviation(user.getName(), screenWidth, 24.0),
+              nameAbbreviation(user.getCompleteName(), screenWidth, 24.0),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: white,

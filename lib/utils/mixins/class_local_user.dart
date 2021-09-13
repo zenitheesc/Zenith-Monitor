@@ -6,13 +6,16 @@ import 'package:zenith_monitor/utils/helpers/link_validity.dart';
 /// If you change something, make sure that these parts are still working.
 
 class LocalUser {
-  late String _name;
+  late String _firstName;
+  late String _lastName;
   String? _imageLink;
   String? _accessLevel;
   late String _email;
 
-  LocalUser(String name, String? imageLink, String email) {
-    _name = stringToPattern(name);
+  LocalUser(
+      String firstName, String lastName, String? imageLink, String email) {
+    _firstName = stringToPattern(firstName);
+    _lastName = stringToPattern(lastName);
     _imageLink = imageLink;
     _email = email.toLowerCase();
   }
@@ -21,8 +24,16 @@ class LocalUser {
     _accessLevel = stringToPattern(accessLevel);
   }
 
-  String getName() {
-    return _name;
+  String getFirstName() {
+    return _firstName;
+  }
+
+  String getLastName() {
+    return _lastName;
+  }
+
+  String getCompleteName() {
+    return _firstName + _lastName;
   }
 
   Future<String?> getImageLink() async {
