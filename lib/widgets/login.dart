@@ -19,7 +19,64 @@ class LoginZenithMonitor extends StatelessWidget {
   }
 
   Widget buildMainBody(BuildContext context) {
+    Widget buildMainBody(BuildContext context) {
     return GridTile(
+      child: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.07,
+                    ),
+                    Container(child: imageCircle(context)),
+                  ],
+                ),
+                Container(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            loginContainersName(context, 'Nome', 'General'),
+                            loginContainersName(
+                                context, 'Sobrenome ', 'General')
+                          ],
+                        ),
+                        loginContainersGeneral(context, 'Email ', 'General'),
+                        loginContainersGeneral(context, 'Senha ', 'Password'),
+                        loginContainersGeneral(
+                            context, 'Confirmar senha ', 'Password'),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Container(
+                    width: screenSize(context, "width", 1),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        smallContainer(context, 'Voltar', 0XFFE57373),
+                        smallContainer(context, 'Submeter', 0XFF8BC34A)
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
