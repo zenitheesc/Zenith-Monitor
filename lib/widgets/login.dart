@@ -189,7 +189,10 @@ class LoginZenithMonitor extends StatelessWidget {
                 borderRadius: BorderRadius.circular(userRadius), color: white),
             child: Center(
                 child:
-                    Image(image: AssetImage('assets/images/user_figure.png')))),
+                    Icon(
+                Icons.person_outlined,
+                size: userRadius * 0.65,
+              ),
         Positioned(
           bottom: screenSize(context, "width", -0.025),
           right: screenSize(context, "width", -0.03),
