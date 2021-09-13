@@ -1,4 +1,6 @@
 import 'dart:ffi';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
 import 'package:zenith_monitor/constants/variables_types.dart';
 import 'class_mission_variable.dart';
@@ -55,17 +57,25 @@ class MissionVariablesList {
     _list.removeAt(index);
   }
 
-  void addMissionName(String? missionName) {
-    /// Posteriormente podemos deixar esse método
-    /// assincrono e fazer uma checagem no firebase
-    /// para verificar se o nome dessa missão já existe.
-    /// Acho melhor esperar o serviço dos documentos do
-    /// firebase ser finalizado. Já há uma exception para
-    /// esse erro, chamada MissionNameAlreadyExistException
-
+  Future<void> addMissionName(String? missionName) async {
     if (missionName == null || missionName == "") {
       throw EmptyMissionNameException();
     }
+
+    /// Implementacao da checagem no firebase se o nome da missao
+    /// ja existe. Pega a colecao de missoes e verifica os nome dos
+    /// documentos (id) com o nome da missao (missionName);
+    /// Se o nome existe ele joga a excecao `MissionNameAlreadyExistException`
+    Future<QuerySnapshot<Map<String, dynamic>>> _mainColReference =
+        FirebaseFirestore.instance.collection('missoes').get();
+
+    await _mainColReference.then((documents) async {
+      for (DocumentSnapshot eachDocument in documents.docs) {
+        if (eachDocument.id == missionName) {
+          throw MissionNameAlreadyExistException();
+        }
+      }
+    });
 
     _missionName = missionName;
   }

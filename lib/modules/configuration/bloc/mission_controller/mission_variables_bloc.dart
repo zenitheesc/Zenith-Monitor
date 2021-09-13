@@ -39,7 +39,7 @@ class MissionVariablesBloc
       yield VariablesChanged(variablesList);
     } else if (event is StartMissionEvent) {
       try {
-        variablesList.addMissionName(event.missionName);
+        await variablesList.addMissionName(event.missionName);
         missionBloc.add(SetVariablesListEvent(variablesList: variablesList));
       } on EmptyMissionNameException {
         yield MissionNameError(
