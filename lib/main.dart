@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/services/authentication.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
@@ -24,6 +25,11 @@ class Application extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
+    LocalUser newUser1 =
+        LocalUser("Torresmo", "dos Santos", null, "torresmo@gmail.com");
+    LocalUser newUser2 =
+        LocalUser("Bap", "Lindo", null, "bab.email2@gmail.com");
+
     return FutureBuilder(
       // Initialize FlutterFire:
       future: _initialization,
@@ -36,7 +42,9 @@ class Application extends StatelessWidget {
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           Authentication a = Authentication();
-          a.signIn("bap@gmail.com", "bapSafadinho");
+          a.signOut();
+          a.register(newUser2, "bapSafadinho");
+          //a.signIn(newUser2, "bapSafadinho2");
           return const Scaffold(backgroundColor: Colors.green);
         }
 

@@ -20,6 +20,19 @@ class LocalUser {
     _email = email.toLowerCase();
   }
 
+  LocalUser.fromJson(Map<String, dynamic> json)
+      : _firstName = json['First Name'],
+        _lastName = json['Last Name'],
+        _imageLink = json['Image Link'],
+        _email = json['Email'];
+
+  Map<String, dynamic> toJson() => {
+        'First Name': _firstName,
+        'Last Name': _lastName,
+        'Image Link': _imageLink,
+        'Email': _email,
+      };
+
   void setAccessLevel(String accessLevel) {
     _accessLevel = stringToPattern(accessLevel);
   }
@@ -33,7 +46,7 @@ class LocalUser {
   }
 
   String getCompleteName() {
-    return _firstName + _lastName;
+    return _firstName + " " + _lastName;
   }
 
   Future<String?> getImageLink() async {
