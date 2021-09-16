@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zenith_monitor/widgets/login.dart';
+import 'package:zenith_monitor/widgets/signup.dart';
 
 void main() {
   runApp(const ZenithMonitor());
