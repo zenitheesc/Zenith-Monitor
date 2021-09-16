@@ -19,7 +19,6 @@ class LoginZenithMonitor extends StatelessWidget {
   }
 
   Widget buildMainBody(BuildContext context) {
-    Widget buildMainBody(BuildContext context) {
     return GridTile(
       child: CustomScrollView(
         slivers: [
@@ -71,54 +70,6 @@ class LoginZenithMonitor extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.07,
-              ),
-              Container(child: imageCircle(context)),
-            ],
-          ),
-          Container(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      loginContainersName(context, 'Nome', 'General'),
-                      loginContainersName(context, 'Sobrenome ', 'General')
-                    ],
-                  ),
-                  loginContainersGeneral(context, 'Email ', 'General'),
-                  loginContainersGeneral(context, 'Senha ', 'Password'),
-                  loginContainersGeneral(
-                      context, 'Confirmar senha ', 'Password'),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            child: Container(
-              width: screenSize(context, "width", 1),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  smallContainer(context, 'Voltar', 0XFFE57373),
-                  smallContainer(context, 'Submeter', 0XFF8BC34A)
-                ],
-              ),
             ),
           ),
         ],
@@ -188,11 +139,10 @@ class LoginZenithMonitor extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(userRadius), color: white),
             child: Center(
-                child:
-                    Icon(
-                Icons.person_outlined,
-                size: userRadius * 0.65,
-              ),
+                child: Icon(
+              Icons.person_outlined,
+              size: userRadius * 0.80,
+            ))),
         Positioned(
           bottom: screenSize(context, "width", -0.025),
           right: screenSize(context, "width", -0.03),
@@ -202,15 +152,14 @@ class LoginZenithMonitor extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(200), color: white),
             child: Center(
-                child: Image(
-             IconButton(
+              child: IconButton(
                 onPressed: () {},
                 icon: Icon(
                   Icons.photo_library_outlined,
                   size: imageRadius * 0.5,
                 ),
               ),
-            )),
+            ),
           ),
         ),
       ],
