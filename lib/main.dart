@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/screen/mission_configuration.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 
-import 'package:zenith_monitor/utils/services/firestore_downloader.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
