@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:zenith_monitor/widgets/exampleLocation.dart';
+import 'package:zenith_monitor/utils/services/location/location.dart';
 
 void main() {
-  runApp(const ZenithMonitor());
+  runApp(ZenithMonitor());
 }
 
 class ZenithMonitor extends StatelessWidget {
-  const ZenithMonitor({Key? key}) : super(key: key);
+  ZenithMonitor({Key? key}) : super(key: key);
 
+  final LocationManager data = LocationManager();
   @override
   Widget build(BuildContext context) {
+    data.init();
     return MaterialApp(
-      home: Application(),
+      home: Container(),
     );
-  }
-}
-
-class Application extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-
-    return ExampleLocation();
   }
 }

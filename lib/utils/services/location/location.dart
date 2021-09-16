@@ -25,11 +25,11 @@ class LocationManager {
         accuracy: LocationAccuracy.high, distanceFilter: 50);
 
     LocationData data = await _location.getLocation();
-    // printVariables(data);
 
     _location.onLocationChanged.listen((event) {
       printVariables(event);
     });
+
     receive();
     return data;
   }
@@ -37,13 +37,13 @@ class LocationManager {
   void printVariables(LocationData data) {
     print('latitude: ${data.latitude!}');
     print('longitude: ${data.longitude!}');
-    // print('accuracy: ${data.accuracy!}');
-    // print('altitude: ${data.altitude!}');
-    // print('speed: ${data.speed!}');
-    // print('speedAccuracy: ${data.speedAccuracy!}');
-    // print('heading: ${data.heading!}');
-    // print('time: ${data.time!}');
-    // print('isMock: ${data.isMock!}');
+    print('accuracy: ${data.accuracy!}');
+    print('altitude: ${data.altitude!}');
+    print('speed: ${data.speed!}');
+    print('speedAccuracy: ${data.speedAccuracy!}');
+    print('heading: ${data.heading!}');
+    print('time: ${data.time!}');
+    print('isMock: ${data.isMock!}');
   }
 
   bool check() {
@@ -59,7 +59,7 @@ class LocationManager {
         print('service error');
         _statusCtrl.add(-1);
       } else {
-        print("Location Service is Enabled!");
+        print("location service is Enabled!");
         _statusCtrl.add(1);
       }
     }
@@ -70,10 +70,10 @@ class LocationManager {
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await _location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        print('Erro na permissão!');
+        print('permission error!');
         _statusCtrl.add(-2);
       } else if (_permissionGranted == PermissionStatus.granted) {
-        print("Permissão concedida!");
+        print("permission granted!");
         _statusCtrl.add(2);
       }
     }
@@ -81,7 +81,7 @@ class LocationManager {
 
   Stream<LatLng> receive() {
     if (check()) {
-      print("tentando");
+      print("receiving...");
       return _location.onLocationChanged.asyncMap((LocationData event) {
         return LatLng(event.latitude!, event.longitude!);
       });
