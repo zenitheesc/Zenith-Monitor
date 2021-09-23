@@ -37,6 +37,7 @@ class UserFile {
       return newUser;
     } catch (e) {
       // If encountering an error, return null
+      print(e);
       return null;
     }
   }
