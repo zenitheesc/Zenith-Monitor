@@ -96,9 +96,16 @@ class FirestoreServices {
     Map<String, dynamic> mappedMissionVariables =
         _parseMissionVariables(missionVariablesList);
 
+    // Adds the variables names and types
     _missoes
         .doc(_missionVariablesObject.getMissionName())
         .set(mappedMissionVariables);
+
+    // Adds the 'logs' collection with an empty document inside
+    _missoes
+        .doc(_missionVariablesObject.getMissionName())
+        .collection('logs')
+        .add({});
   }
 
   /// Parse the mission variables into a Map of type
@@ -116,7 +123,7 @@ class FirestoreServices {
         case "Integer":
           valueToBeApplyed = 1;
           break;
-        case "Float":
+        case "Double":
           valueToBeApplyed = 1.001;
           break;
         case "String":
@@ -158,7 +165,7 @@ class FirestoreServices {
         // Gets every type from the values inside a `MissionStartDoc` document
         // and appends it to an auxilary array.
         for (var value in _mainDocReference.data()!.values) {
-          helper.add(value.runtimeType.toString());
+          helper.add(value['type']);
         }
 
         // Gets the variables names from a `MissionStartDoc`

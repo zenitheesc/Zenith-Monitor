@@ -4,22 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/screen/mission_configuration.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 
-import 'package:zenith_monitor/utils/services/firestore_services.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
-  final FirestoreServices _fireServ = FirestoreServices();
-  await _fireServ.init('test-launch');
-  _fireServ.recive().listen((packet) { 
-    List _variables = packet.getVariablesList();
-    for(var i=0; i<_variables.length; i++) 
-    {
-      print("Variavel: ${_variables[i].getVariableName()} Value: ${_variables[i].getVariableValue()} Type: ${_variables[i].getVariableType()}\n");
-    }
-  });
-
   runApp(const ZenithMonitor());
 }
 
