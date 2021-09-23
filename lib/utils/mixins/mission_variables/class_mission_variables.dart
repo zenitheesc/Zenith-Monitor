@@ -24,7 +24,7 @@ class MissionVariablesList {
     if (integerNames.contains(type)) {
       _list.add(MissionVariable<int>(name, "Integer"));
     } else if (floatNames.contains(type)) {
-      _list.add(MissionVariable<Float>(name, "Float"));
+      _list.add(MissionVariable<double>(name, "Float"));
     } else if (stringNames.contains(type)) {
       _list.add(MissionVariable<String>(name, "String"));
     } else {
