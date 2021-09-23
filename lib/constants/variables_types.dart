@@ -1,3 +1,3 @@
 List<String> integerNames = ["Inteiro", "Int", "Integer", "I"];
-List<String> floatNames = ["Real", "Reais", "Float", "F", "R"];
+List<String> floatNames = ["Real", "Reais", "Float", "F", "R", "Double", "D"];
 List<String> stringNames = ["String", "Strings", "Caracteres", "Str", "S"];

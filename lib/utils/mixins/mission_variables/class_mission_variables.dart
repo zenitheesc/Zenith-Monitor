@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
@@ -24,7 +23,7 @@ class MissionVariablesList {
     if (integerNames.contains(type)) {
       _list.add(MissionVariable<int>(name, "Integer"));
     } else if (floatNames.contains(type)) {
-      _list.add(MissionVariable<double>(name, "Float"));
+      _list.add(MissionVariable<double>(name, "Double"));
     } else if (stringNames.contains(type)) {
       _list.add(MissionVariable<String>(name, "String"));
     } else {

@@ -9,10 +9,16 @@ class FirestoreServices {
   late CollectionReference _subCollectionReference;
   final _dataStream = StreamController<MissionVariablesList>();
 
+  /// A stream to listen to changes in a mission data
   Stream<MissionVariablesList> recive() {
     return _dataStream.stream;
   }
 
+  /// Initialize the Firestore Services with a specific 
+  /// mission name. 
+  /// 
+  /// Initialize a stream to be able to listen for changes in documents
+  /// or new documents. To get the stream use the `recive()` method. 
   Future<void> init(String missionName) async {
     _statusStream.add(1);
     _subCollectionReference = FirebaseFirestore.instance
@@ -22,35 +28,42 @@ class FirestoreServices {
 
     _statusStream.add(1);
 
+    /// Listen to the chages on the mission's logs 
     _subCollectionReference
         .snapshots(includeMetadataChanges: false)
         .listen((event) async {
       for (var change in event.docChanges) {
+        //Parses the change into a missionVariablesList object
         MissionVariablesList packet =
-            await _documentParser(change.doc, missionName);
-        _dataStream.add(packet);
+            await _documentParser(change.doc, missionName); 
+        _dataStream.add(packet); // Adds the change (aka packet) to the data stream
       }
     });
     _statusStream.add(10);
   }
 
+  /// Parses a document from firestore into a `MissionVariablesList` object
+  /// 
+  /// Gets the variables names from firestore using the `_firestoreVariablesNames`
   Future<MissionVariablesList> _documentParser(
       DocumentSnapshot document, String missionName) async {
     MissionVariablesList missionVariables = MissionVariablesList();
+
+    // Get variables names and types
     Map<String, List<String>> _variables =
         await _firestoreVariablesNames(missionName);
 
+    // Creates the variables
     for (var i = 0; i < _variables['variables']!.length; i++) {
-      String _missionType = _variables['types']![i];
-      if (_missionType == "double") {
-        _missionType = "float";
-      }
-
       missionVariables.addStandardVariable(
-          _variables['variables']![i], _missionType);
+          _variables['variables']![i], _variables['types']![i]);
     }
 
+    // Get individual variables to be able to assign the document
+    // values to them
     List missionVariablesList = missionVariables.getVariablesList();
+
+    // Adds the values into the variables 
     for (var i = 0; i < missionVariablesList.length; i++) {
       missionVariablesList[i]
           .addValue(document.get(missionVariablesList[i].getVariableName()));
@@ -85,8 +98,6 @@ class FirestoreServices {
 
     _missoes
         .doc(_missionVariablesObject.getMissionName())
-        .collection('logs')
-        .doc('MissionStartDoc')
         .set(mappedMissionVariables);
   }
 
@@ -139,8 +150,6 @@ class FirestoreServices {
           await FirebaseFirestore.instance
               .collection('missoes')
               .doc(missionName)
-              .collection('logs')
-              .doc('MissionStartDoc')
               .get();
 
       if (_mainDocReference.exists) {
