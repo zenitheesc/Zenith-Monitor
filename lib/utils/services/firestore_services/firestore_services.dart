@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
-import 'package:zenith_monitor/utils/services/firestore_services_exceptions.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services_exceptions.dart';
 
 class FirestoreServices {
   final _statusStream = StreamController<int>();
