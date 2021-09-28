@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/bloc/data_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/screen/mission_configuration.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 
@@ -28,6 +29,7 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => MissionBloc()),
+      BlocProvider(create: (context) => DataBloc('test-launch')),
     ], child: const MissionConfiguration());
   }
 }
