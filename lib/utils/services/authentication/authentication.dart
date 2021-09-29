@@ -41,12 +41,21 @@ class Authentication {
     }
   }
 
-  void signIn(LocalUser user, String password) async {
+  Future<void> signIn(LocalUser user, String password) async {
     if (_auth.currentUser == null) {
       try {
-        _auth.signInWithEmailAndPassword(
+        await _auth.signInWithEmailAndPassword(
             email: user.getEmail(), password: password);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == "wrong-password") {
+          throw WrongPassword();
+        } else if (e.code == "user-not-found") {
+          throw UserNotFound();
+        }
+        print(e);
+        print(e.code);
       } catch (e) {
+        print("Entrou no catch errado");
         print(e);
       } finally {
         if (_auth.currentUser == null) {
