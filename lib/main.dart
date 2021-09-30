@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/bloc/data_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/screen/mission_configuration.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
+import 'package:zenith_monitor/widgets/data_bloc_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +31,7 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => MissionBloc()),
-      BlocProvider(create: (context) => DataBloc('test-launch')),
-    ], child: const MissionConfiguration());
+      BlocProvider(create: (context) => DataBloc()),
+    ], child: const MissionSelectorPage());
   }
 }
