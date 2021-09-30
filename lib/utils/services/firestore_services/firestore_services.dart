@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
@@ -54,12 +55,8 @@ class FirestoreServices {
     Map<String, List<String>> _variables =
         await _firestoreVariablesNames(missionName);
 
-    // print(_variables);
-
     // Creates the variables
     for (var i = 0; i < _variables['variables']!.length; i++) {
-      // print(_variables['variables']![i]);
-      // print(_variables['types']![i]);
       missionVariables.addStandardVariable(
           _variables['variables']![i], _variables['types']![i]);
     }
@@ -70,8 +67,8 @@ class FirestoreServices {
 
     // Adds the values into the variables
     for (var i = 0; i < missionVariablesList.length; i++) {
-      missionVariablesList[i].addValue(
-          document.get(missionVariablesList[i].getVariableName())['value']);
+      missionVariablesList[i]
+          .addValue(document.get(missionVariablesList[i].getVariableName()));
     }
 
     return missionVariables;
@@ -98,19 +95,19 @@ class FirestoreServices {
 
     List missionVariablesList = _missionVariablesObject.getVariablesList();
 
-    Map<String, dynamic> mappedMissionVariables =
+    List<Map<String, dynamic>> mappedMissionVariables =
         _parseMissionVariables(missionVariablesList);
 
     // Adds the variables names and types
     _missoes
         .doc(_missionVariablesObject.getMissionName())
-        .set(mappedMissionVariables);
+        .set(mappedMissionVariables[0]);
 
-    // Adds the 'logs' collection with an empty document inside
+    // Adds the 'logs' collection with an example document inside
     _missoes
         .doc(_missionVariablesObject.getMissionName())
         .collection('logs')
-        .add(mappedMissionVariables);
+        .add(mappedMissionVariables[1]);
   }
 
   /// Parse the mission variables into a Map of type
@@ -118,8 +115,8 @@ class FirestoreServices {
   /// creation of a new mission in firestore
   ///
   /// Returns -> `Map<String, dynamic>`
-  Map<String, dynamic> _parseMissionVariables(List missionVariables) {
-    Map<String, dynamic> mappedMissionVariables = {};
+  List<Map<String, dynamic>> _parseMissionVariables(List missionVariables) {
+    Map<String, dynamic> variablesTypesMap = {}, firstDocMap = {};
 
     dynamic valueToBeApplyed;
 
@@ -137,13 +134,20 @@ class FirestoreServices {
         default:
       }
 
-      mappedMissionVariables[missionVariables[i].getVariableName()] = {
+      variablesTypesMap[missionVariables[i].getVariableName()] = {
         "type": missionVariables[i].getVariableType().toString(),
         "value": valueToBeApplyed
       };
-    }
 
-    return mappedMissionVariables;
+      firstDocMap[missionVariables[i].getVariableName()] = valueToBeApplyed;
+    }
+    variablesTypesMap['timestamp'] = {
+      "type": "Timestamp",
+      "value": FieldValue.serverTimestamp()
+    };
+    firstDocMap['timestamp'] = FieldValue.serverTimestamp();
+
+    return [variablesTypesMap, firstDocMap];
   }
 
   /// `Async` method, use with `await`.
@@ -195,5 +199,57 @@ class FirestoreServices {
     }
 
     return _missionNames;
+  }
+
+  void createRandomDocs(String missionName, int ammtOfDocs) async {
+    CollectionReference<Map<String, dynamic>> _mainCol = FirebaseFirestore
+        .instance
+        .collection('missoes')
+        .doc(missionName)
+        .collection('logs');
+
+    QuerySnapshot<Map<String, dynamic>> _colToGetIntegerValue =
+        await _mainCol.orderBy('id').get();
+    int lastId = _colToGetIntegerValue.docs.last.data()['id'] + 1;
+
+    MissionVariablesList missionVariables = MissionVariablesList();
+
+    // Get variables names and types
+    Map<String, List<String>> _variables =
+        await _firestoreVariablesNames(missionName);
+
+    // Creates the variables
+    for (var i = 0; i < _variables['variables']!.length; i++) {
+      missionVariables.addStandardVariable(
+          _variables['variables']![i], _variables['types']![i]);
+    }
+
+    for (var i = lastId; i <= ammtOfDocs; i++) {
+      Map<String, dynamic> mappedVariables =
+          createTestLaunch2Variables(missionVariables, i);
+
+      _mainCol.add(mappedVariables);
+    }
+  }
+
+  Map<String, dynamic> createTestLaunch2Variables(
+      MissionVariablesList msl, int place) {
+    Map<String, dynamic> _mappedVariables = {};
+
+    List listOfVariables = msl.getVariablesList();
+
+    for (var i = 0; i < listOfVariables.length; i++) {
+      if (listOfVariables[i].getVariableType() == "Double") {
+        _mappedVariables[listOfVariables[i].getVariableName()] =
+            Random().nextDouble();
+      } else if (listOfVariables[i].getVariableType() == "Integer") {
+        _mappedVariables[listOfVariables[i].getVariableName()] = place;
+      } else if (listOfVariables[i].getVariableType() == "Timestamp") {
+        _mappedVariables[listOfVariables[i].getVariableName()] =
+            FieldValue.serverTimestamp();
+      }
+    }
+
+    return _mappedVariables;
   }
 }

@@ -26,6 +26,8 @@ class MissionVariablesList {
       _list.add(MissionVariable<double>(name, "Double"));
     } else if (stringNames.contains(type)) {
       _list.add(MissionVariable<String>(name, "String"));
+    } else if (timestampNames.contains(type)) {
+      _list.add(MissionVariable<Timestamp>(name, "Timestamp"));
     } else {
       throw VariableTypeUnknownException();
     }
