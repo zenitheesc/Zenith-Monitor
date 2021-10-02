@@ -11,7 +11,6 @@ class LocalUser {
   String? _imageLink;
   String? _accessLevel;
   late String _email;
-  DateTime? _creationDate;
 
   LocalUser(
       String firstName, String lastName, String? imageLink, String email) {
@@ -25,16 +24,13 @@ class LocalUser {
       : _firstName = json['First Name'],
         _lastName = json['Last Name'],
         _imageLink = json['Image Link'],
-        _email = json['Email'],
-        _creationDate = json['Creation Date'];
-
+        _email = json['Email'];
 
   Map<String, dynamic> toJson() => {
         'First Name': _firstName,
         'Last Name': _lastName,
         'Image Link': _imageLink,
         'Email': _email,
-        'Creation Date': DateTime.now().toString(),
       };
 
   void setAccessLevel(String accessLevel) {
@@ -64,9 +60,5 @@ class LocalUser {
 
   String getEmail() {
     return _email;
-  }
-
-  DateTime? getCreationDate(){
-    return _creationDate;
   }
 }
