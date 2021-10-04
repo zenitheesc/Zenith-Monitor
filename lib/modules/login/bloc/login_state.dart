@@ -9,3 +9,5 @@ class LoginError extends LoginState {
 
   LoginError({required this.errorMessage});
 }
+
+class LodingState extends LoginState {}

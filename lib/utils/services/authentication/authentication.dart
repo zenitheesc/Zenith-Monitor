@@ -51,22 +51,14 @@ class Authentication {
           throw WrongPassword();
         } else if (e.code == "user-not-found") {
           throw UserNotFound();
+        } else if (e.code == "invalid-email") {
+          throw EmailBadlyFormatted();
         }
-        print(e);
         print(e.code);
       } catch (e) {
-        print("Entrou no catch errado");
         print(e);
-      } finally {
-        if (_auth.currentUser == null) {
-          print("user é null");
-        } else {
-          print("user não é null");
-          print((_auth.currentUser!).emailVerified);
-        }
+        throw StandardAuthError(errorMessage: e.toString());
       }
-    } else {
-      print("Usuario já autenticado");
     }
   }
 

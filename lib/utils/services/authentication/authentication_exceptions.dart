@@ -1,27 +1,38 @@
-class WeakPassword implements Exception {
+class StandardAuthError implements Exception {
+  String errorMessage;
+
+  StandardAuthError({required this.errorMessage});
+
   @override
   String toString() {
-    return "The password provided is too weak";
+    return errorMessage;
   }
 }
 
-class EmailAlreadyInUse implements Exception {
-  @override
-  String toString() {
-    return "The account already exists for that email";
-  }
+class WeakPassword extends StandardAuthError {
+  WeakPassword() : super(errorMessage: "The password provided is too weak");
 }
 
-class WrongPassword implements Exception {
-  @override
-  String toString() {
-    return "The password is invalid or the user does not have a password";
-  }
+class EmailAlreadyInUse extends StandardAuthError {
+  EmailAlreadyInUse()
+      : super(errorMessage: "The account already exists for that email");
 }
 
-class UserNotFound implements Exception {
-  @override
-  String toString() {
-    return "There is no user record corresponding to this identifier. The user may have been deleted";
-  }
+class WrongPassword extends StandardAuthError {
+  WrongPassword()
+      : super(
+            errorMessage:
+                "The password is invalid or the user does not have a password");
+}
+
+class UserNotFound extends StandardAuthError {
+  UserNotFound()
+      : super(
+            errorMessage:
+                "There is no user record corresponding to this identifier. The user may have been deleted");
+}
+
+class EmailBadlyFormatted extends StandardAuthError {
+  EmailBadlyFormatted()
+      : super(errorMessage: "The email address is badly formatted");
 }
