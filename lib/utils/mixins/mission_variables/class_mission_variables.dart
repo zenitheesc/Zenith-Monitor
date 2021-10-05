@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
 import 'package:zenith_monitor/constants/variables_types.dart';
 import 'class_mission_variable.dart';
@@ -11,6 +10,8 @@ class MissionVariablesList {
 
   MissionVariablesList() {
     _list = [];
+    // Adding standard and required variables
+    _list.add(MissionVariable<Timestamp>("timestamp", "Timestamp"));
   }
 
   void addStandardVariable(String name, String type) {
@@ -26,8 +27,6 @@ class MissionVariablesList {
       _list.add(MissionVariable<double>(name, "Double"));
     } else if (stringNames.contains(type)) {
       _list.add(MissionVariable<String>(name, "String"));
-    } else if (timestampNames.contains(type)) {
-      _list.add(MissionVariable<Timestamp>(name, "Timestamp"));
     } else {
       throw VariableTypeUnknownException();
     }

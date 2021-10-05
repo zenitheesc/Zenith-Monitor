@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
@@ -10,6 +9,7 @@ class FirestoreServices {
   late CollectionReference _subCollectionReference;
   final _dataStream = StreamController<MissionVariablesList>();
 
+  /// ---------------------------------- This part may migrate to the Mission Pipeline ----------------------------------
   /// A stream to listen to changes in a mission data
   Stream<MissionVariablesList> recive() {
     return _dataStream.stream;
@@ -74,6 +74,9 @@ class FirestoreServices {
     return missionVariables;
   }
 
+  /// ---------------------------------- The part `above` may migrate to the Mission Pipeline ----------------------------------
+  /// --------------------------------------------------------------------------------------------------------------------------
+
   /// Creates a mission document on firestore. Receives a
   /// missionVariablesObject and proceeds to parse it's information
   /// creating a Map of type `Map<String, dynamic>`. The path of the new
@@ -120,6 +123,7 @@ class FirestoreServices {
 
     dynamic valueToBeApplyed;
 
+    // Default values for creation
     for (var i = 0; i < missionVariables.length; i++) {
       switch (missionVariables[i].getVariableType()) {
         case "Integer":
@@ -134,17 +138,30 @@ class FirestoreServices {
         default:
       }
 
+      /// Add each variable type and a default value
+      /// ```
+      /// varName {
+      ///   "type": varType
+      ///   "value": defaultValue
+      /// }
+      /// ```
       variablesTypesMap[missionVariables[i].getVariableName()] = {
         "type": missionVariables[i].getVariableType().toString(),
         "value": valueToBeApplyed
       };
 
+      /// Add the variables values directly to the variable name
+      /// `varName: 1.0`
       firstDocMap[missionVariables[i].getVariableName()] = valueToBeApplyed;
     }
+
+    // Adding the timestamp variable to the variable types
     variablesTypesMap['timestamp'] = {
       "type": "Timestamp",
       "value": FieldValue.serverTimestamp()
     };
+
+    // Adding the timestamp variable to the first document
     firstDocMap['timestamp'] = FieldValue.serverTimestamp();
 
     return [variablesTypesMap, firstDocMap];
@@ -188,6 +205,9 @@ class FirestoreServices {
     return variables;
   }
 
+  /// Get all the mission names
+  /// 
+  /// Returns a List containing the mission names
   Future<List<String>> getMissionNames() async {
     List<String> _missionNames = [];
 
@@ -199,57 +219,5 @@ class FirestoreServices {
     }
 
     return _missionNames;
-  }
-
-  void createRandomDocs(String missionName, int ammtOfDocs) async {
-    CollectionReference<Map<String, dynamic>> _mainCol = FirebaseFirestore
-        .instance
-        .collection('missoes')
-        .doc(missionName)
-        .collection('logs');
-
-    QuerySnapshot<Map<String, dynamic>> _colToGetIntegerValue =
-        await _mainCol.orderBy('id').get();
-    int lastId = _colToGetIntegerValue.docs.last.data()['id'] + 1;
-
-    MissionVariablesList missionVariables = MissionVariablesList();
-
-    // Get variables names and types
-    Map<String, List<String>> _variables =
-        await _firestoreVariablesNames(missionName);
-
-    // Creates the variables
-    for (var i = 0; i < _variables['variables']!.length; i++) {
-      missionVariables.addStandardVariable(
-          _variables['variables']![i], _variables['types']![i]);
-    }
-
-    for (var i = lastId; i <= ammtOfDocs; i++) {
-      Map<String, dynamic> mappedVariables =
-          createTestLaunch2Variables(missionVariables, i);
-
-      _mainCol.add(mappedVariables);
-    }
-  }
-
-  Map<String, dynamic> createTestLaunch2Variables(
-      MissionVariablesList msl, int place) {
-    Map<String, dynamic> _mappedVariables = {};
-
-    List listOfVariables = msl.getVariablesList();
-
-    for (var i = 0; i < listOfVariables.length; i++) {
-      if (listOfVariables[i].getVariableType() == "Double") {
-        _mappedVariables[listOfVariables[i].getVariableName()] =
-            Random().nextDouble();
-      } else if (listOfVariables[i].getVariableType() == "Integer") {
-        _mappedVariables[listOfVariables[i].getVariableName()] = place;
-      } else if (listOfVariables[i].getVariableType() == "Timestamp") {
-        _mappedVariables[listOfVariables[i].getVariableName()] =
-            FieldValue.serverTimestamp();
-      }
-    }
-
-    return _mappedVariables;
   }
 }
