@@ -3,8 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class LocationManager {
-  late final Location _location = new Location();
-  late StreamController<int> _statusCtrl = StreamController();
+  late final Location _location = Location();
+  late final StreamController<int> _statusCtrl = StreamController();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
 
@@ -86,7 +86,7 @@ class LocationManager {
         return LatLng(event.latitude!, event.longitude!);
       });
     } else {
-      return Stream.empty();
+      return const Stream.empty();
     }
   }
 

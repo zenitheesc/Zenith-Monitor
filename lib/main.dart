@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
-import 'package:zenith_monitor/modules/configuration/screen/mission_configuration.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 
 void main() {
@@ -28,6 +27,6 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => MissionBloc()),
-    ], child: Scaffold());
+    ], child: const Scaffold());
   }
 }

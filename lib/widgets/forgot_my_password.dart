@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
 class ForgotMyPassword extends StatelessWidget {
-  ForgotMyPassword({Key? key});
+  const ForgotMyPassword({Key? key});
 
   Widget buildButton(double height, double width, Color buttoncolor,
       double borderradius, String text, Color textColor) {
@@ -31,7 +31,7 @@ class ForgotMyPassword extends StatelessWidget {
       toolbarHeight: 200,
       elevation: 0.0,
       backgroundColor: eerieBlack,
-      title: Padding(
+      title: const Padding(
         padding: EdgeInsets.all(28.0),
         child: Text('Esqueci minha \nsenha',
             style: TextStyle(
@@ -49,7 +49,7 @@ class ForgotMyPassword extends StatelessWidget {
       alignment: FractionalOffset.bottomCenter,
       child: Container(
         height: 405.0,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -68,8 +68,8 @@ class ForgotMyPassword extends StatelessWidget {
               width: 340,
               decoration: BoxDecoration(
                   color: black, borderRadius: BorderRadius.circular(15)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: TextField(
                   cursorColor: white,
                   style: TextStyle(
@@ -90,9 +90,9 @@ class ForgotMyPassword extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 60),
+            const SizedBox(height: 60),
             buildButton(56, 265, white, 12, 'Submeter', black),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             buildButton(40, 263, lightCoral, 20, 'Voltar', white),
           ],
         ),
