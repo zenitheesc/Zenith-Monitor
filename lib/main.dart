@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zenith_monitor/modules/configuration/screen/mission_configuration.dart';
+import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 
 void main() async {
@@ -11,10 +11,12 @@ void main() async {
 }
 
 class ZenithMonitor extends StatelessWidget {
-  const ZenithMonitor({Key? key}) : super(key: key);
+  ZenithMonitor({Key? key}) : super(key: key);
 
+  final LocationManager data = LocationManager();
   @override
   Widget build(BuildContext context) {
+    data.init();
     return const MaterialApp(
       home: Application(),
     );
@@ -28,6 +30,6 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => MissionBloc()),
-    ], child: const MissionConfiguration());
+    ], child: const Scaffold());
   }
 }
