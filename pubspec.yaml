@@ -31,8 +31,8 @@ dependencies:
   http: ^0.13.3
   http_parser: ^4.0.0
   # Firebase related
-  firebase_core: "^1.5.0"
-  cloud_firestore: "^2.5.0"
+  firebase_core: "^1.7.0"
+  cloud_firestore: ^2.5.3
 
   location: ^4.3.0
   google_maps_flutter: ^2.0.6
