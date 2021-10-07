@@ -7,3 +7,16 @@ class SetVariablesListEvent extends MissionEvent {
 
   SetVariablesListEvent({required this.variablesList});
 }
+
+class FirestoreUploaderEvent extends MissionEvent {
+  MissionVariablesList variablesList;
+
+  FirestoreUploaderEvent({required this.variablesList});
+}
+
+
+class FirestoreDownloadEvent extends MissionEvent {
+  final String missionName;
+
+  FirestoreDownloadEvent({required this.missionName});
+}
