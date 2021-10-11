@@ -22,3 +22,17 @@ class UserFileNotFound extends StandardUserDocError {
   UserFileNotFound()
       : super(errorMessage: "User information not found in local storage");
 }
+
+class FirebaseProblem extends StandardUserDocError {
+  bool isFirebaseException;
+  String errorMsg;
+
+  FirebaseProblem({required this.isFirebaseException, required this.errorMsg})
+      : super(errorMessage: "An error occurred during firebase interaction");
+
+  String errorType() {
+    return isFirebaseException
+        ? "The error was a FirebaseException and it's message is: " + errorMsg
+        : "Wasn't a FirebaseException, the error is: " + errorMsg;
+  }
+}
