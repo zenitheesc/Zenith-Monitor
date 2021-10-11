@@ -9,6 +9,7 @@ class FirestoreServices {
   late CollectionReference _subCollectionReference;
   final _dataStream = StreamController<MissionVariablesList>();
 
+  /// ---------------------------------- This part may migrate to the Mission Pipeline ----------------------------------
   /// A stream to listen to changes in a mission data
   Stream<MissionVariablesList> recive() {
     return _dataStream.stream;
@@ -54,12 +55,8 @@ class FirestoreServices {
     Map<String, List<String>> _variables =
         await _firestoreVariablesNames(missionName);
 
-    // print(_variables);
-
     // Creates the variables
     for (var i = 0; i < _variables['variables']!.length; i++) {
-      // print(_variables['variables']![i]);
-      // print(_variables['types']![i]);
       missionVariables.addStandardVariable(
           _variables['variables']![i], _variables['types']![i]);
     }
@@ -70,12 +67,15 @@ class FirestoreServices {
 
     // Adds the values into the variables
     for (var i = 0; i < missionVariablesList.length; i++) {
-      missionVariablesList[i].addValue(
-          document.get(missionVariablesList[i].getVariableName())['value']);
+      missionVariablesList[i]
+          .addValue(document.get(missionVariablesList[i].getVariableName()));
     }
 
     return missionVariables;
   }
+
+  /// ---------------------------------- The part `above` may migrate to the Mission Pipeline ----------------------------------
+  /// --------------------------------------------------------------------------------------------------------------------------
 
   /// Creates a mission document on firestore. Receives a
   /// missionVariablesObject and proceeds to parse it's information
@@ -98,19 +98,19 @@ class FirestoreServices {
 
     List missionVariablesList = _missionVariablesObject.getVariablesList();
 
-    Map<String, dynamic> mappedMissionVariables =
+    List<Map<String, dynamic>> mappedMissionVariables =
         _parseMissionVariables(missionVariablesList);
 
     // Adds the variables names and types
     _missoes
         .doc(_missionVariablesObject.getMissionName())
-        .set(mappedMissionVariables);
+        .set(mappedMissionVariables[0]);
 
-    // Adds the 'logs' collection with an empty document inside
+    // Adds the 'logs' collection with an example document inside
     _missoes
         .doc(_missionVariablesObject.getMissionName())
         .collection('logs')
-        .add(mappedMissionVariables);
+        .add(mappedMissionVariables[1]);
   }
 
   /// Parse the mission variables into a Map of type
@@ -118,11 +118,12 @@ class FirestoreServices {
   /// creation of a new mission in firestore
   ///
   /// Returns -> `Map<String, dynamic>`
-  Map<String, dynamic> _parseMissionVariables(List missionVariables) {
-    Map<String, dynamic> mappedMissionVariables = {};
+  List<Map<String, dynamic>> _parseMissionVariables(List missionVariables) {
+    Map<String, dynamic> variablesTypesMap = {}, firstDocMap = {};
 
     dynamic valueToBeApplyed;
 
+    // Default values for creation
     for (var i = 0; i < missionVariables.length; i++) {
       switch (missionVariables[i].getVariableType()) {
         case "Integer":
@@ -137,13 +138,33 @@ class FirestoreServices {
         default:
       }
 
-      mappedMissionVariables[missionVariables[i].getVariableName()] = {
+      /// Add each variable type and a default value
+      /// ```
+      /// varName {
+      ///   "type": varType
+      ///   "value": defaultValue
+      /// }
+      /// ```
+      variablesTypesMap[missionVariables[i].getVariableName()] = {
         "type": missionVariables[i].getVariableType().toString(),
         "value": valueToBeApplyed
       };
+
+      /// Add the variables values directly to the variable name
+      /// `varName: 1.0`
+      firstDocMap[missionVariables[i].getVariableName()] = valueToBeApplyed;
     }
 
-    return mappedMissionVariables;
+    // Adding the timestamp variable to the variable types
+    variablesTypesMap['timestamp'] = {
+      "type": "Timestamp",
+      "value": FieldValue.serverTimestamp()
+    };
+
+    // Adding the timestamp variable to the first document
+    firstDocMap['timestamp'] = FieldValue.serverTimestamp();
+
+    return [variablesTypesMap, firstDocMap];
   }
 
   /// `Async` method, use with `await`.
@@ -184,6 +205,9 @@ class FirestoreServices {
     return variables;
   }
 
+  /// Get all the mission names
+  /// 
+  /// Returns a List containing the mission names
   Future<List<String>> getMissionNames() async {
     List<String> _missionNames = [];
 
