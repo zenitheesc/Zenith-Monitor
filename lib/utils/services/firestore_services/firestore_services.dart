@@ -1,17 +1,22 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/bloc/data_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services_exceptions.dart';
 
 class FirestoreServices {
-  final _statusStream = StreamController<int>();
   late CollectionReference _subCollectionReference;
   final _dataStream = StreamController<MissionVariablesList>();
 
+  FirestoreServices();
+
   /// ---------------------------------- This part may migrate to the Mission Pipeline ----------------------------------
-  /// A stream to listen to changes in a mission data
-  Stream<MissionVariablesList> recive() {
+
+
+  /// Receives the data stream
+  Stream<MissionVariablesList> receive() {
     return _dataStream.stream;
   }
 
@@ -21,13 +26,10 @@ class FirestoreServices {
   /// Initialize a stream to be able to listen for changes in documents
   /// or new documents. To get the stream use the `recive()` method.
   Future<void> init(String missionName) async {
-    _statusStream.add(1);
     _subCollectionReference = FirebaseFirestore.instance
         .collection("missoes")
         .doc(missionName)
         .collection('logs');
-
-    _statusStream.add(1);
 
     /// Listen to the chages on the mission's logs
     _subCollectionReference
@@ -37,11 +39,12 @@ class FirestoreServices {
         //Parses the change into a missionVariablesList object
         MissionVariablesList packet =
             await _documentParser(change.doc, missionName);
+
         _dataStream
             .add(packet); // Adds the change (aka packet) to the data stream
+
       }
     });
-    _statusStream.add(10);
   }
 
   /// Parses a document from firestore into a `MissionVariablesList` object
@@ -206,7 +209,7 @@ class FirestoreServices {
   }
 
   /// Get all the mission names
-  /// 
+  ///
   /// Returns a List containing the mission names
   Future<List<String>> getMissionNames() async {
     List<String> _missionNames = [];

@@ -30,11 +30,13 @@ class ZenithMonitor extends StatelessWidget {
 class Application extends StatelessWidget {
   const Application({Key? key}) : super(key: key);
 
+  
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => MissionBloc()),
-      BlocProvider(create: (context) => DataBloc()),
+      BlocProvider(create: (context) => DataBloc(FirestoreServices())),
     ], child: const MissionSelectorPage());
   }
 }

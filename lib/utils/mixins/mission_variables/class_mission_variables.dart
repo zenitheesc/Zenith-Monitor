@@ -19,7 +19,9 @@ class MissionVariablesList {
 
     type = stringToPattern(type);
 
-    if (contains(name)) throw VariableAlreadyExistsException();
+    if (contains(name) && name != "timestamp") {
+      throw VariableAlreadyExistsException();
+    }
 
     if (integerNames.contains(type)) {
       _list.add(MissionVariable<int>(name, "Integer"));
@@ -27,6 +29,8 @@ class MissionVariablesList {
       _list.add(MissionVariable<double>(name, "Double"));
     } else if (stringNames.contains(type)) {
       _list.add(MissionVariable<String>(name, "String"));
+    } else if (timestampNames.contains(type)) {
+      _list.add(MissionVariable<Timestamp>("timestamp", "Timestamp"));
     } else {
       throw VariableTypeUnknownException();
     }

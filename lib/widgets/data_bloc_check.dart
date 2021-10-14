@@ -31,12 +31,11 @@ class _MissionSelectorPageState extends State<MissionSelectorPage> {
   }
 
   Center mainBody(BuildContext context) {
-    final FirestoreServices _fireServ = FirestoreServices();
     return Center(
       child: Column(
         children: [
           dropDownAndButton(),
-          // expandedFunc(),
+          expandedFunc(),
         ],
       ),
     );
@@ -44,9 +43,30 @@ class _MissionSelectorPageState extends State<MissionSelectorPage> {
 
   Expanded expandedFunc() {
     return Expanded(
-        child: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
-      return const Text("Teste", style: TextStyle(color: white));
-    }));
+        child: Center(
+          child: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
+      if (state is DataUpdated) {
+          var msl = state.packet.getVariablesList();
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+            for (var i = 0; i < msl.length; i++)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(msl[i].getVariableName() + "     \n",
+                      style: const TextStyle(color: white)),
+                  if (msl[i].getVariableName() != "timestamp")
+                    Text(msl[i].getVariableValue().toString() + "\n",
+                        style: const TextStyle(color: white)),
+                ],
+              )
+          ]);
+      }
+      return const Text("Select a mission", style: TextStyle(color: white));
+    }),
+        ));
   }
 
   Padding dropDownAndButton() {
@@ -62,17 +82,10 @@ class _MissionSelectorPageState extends State<MissionSelectorPage> {
     );
   }
 
-  void getMissionData(String _missionName) {
-    print(_missionName);
-    final FirestoreServices _fireServ = FirestoreServices();
-    _fireServ.init(_missionName);
-    setState(() {
-      buildData = true;
-    });
-  }
-
   ElevatedButton elevatedButtonFunc() => ElevatedButton(
-      onPressed: () => getMissionData(_missionNameString),
+      onPressed: () {
+        BlocProvider.of<DataBloc>(context).add(DataStart(_missionNameString));
+      },
       child: const Text("Get data"));
 
   Future<List<String>> callAsyncFetch() async {
