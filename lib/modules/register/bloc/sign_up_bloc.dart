@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
-import 'package:zenith_monitor/utils/services/authentication/authentication.dart';
+import 'package:zenith_monitor/utils/services/authentication/email_password_auth.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
 
 part 'sign_up_state.dart';
@@ -9,7 +9,7 @@ part 'sign_up_event.dart';
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   SignUpBloc() : super(SignUpInitial());
 
-  Authentication auth = Authentication();
+  EmailAndPasswordAuth auth = EmailAndPasswordAuth();
 
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
