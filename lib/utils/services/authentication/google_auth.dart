@@ -9,7 +9,7 @@ class GoogleAuth extends Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<String?> signInwithGoogle() async {
+  Future<void> signInwithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
@@ -51,7 +51,8 @@ class GoogleAuth extends Authentication {
     return null;
   }
 
-  Future<void> signOutFromGoogle() async {
+  @override
+  Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
   }
