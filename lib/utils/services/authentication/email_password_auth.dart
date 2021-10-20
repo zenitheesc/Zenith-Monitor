@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/mixins/class_user_file.dart';
+import 'package:zenith_monitor/utils/services/authentication/authentication.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
 
-class EmailAndPasswordAuth {
+class EmailAndPasswordAuth extends Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserFile userFile = UserFile();
 
@@ -64,6 +65,7 @@ class EmailAndPasswordAuth {
     }
   }
 
+  @override
   Future<String?> userCreationConditions(
       DocumentSnapshot? userDoc, LocalUser user) async {
     if (userDoc == null ||

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
+import 'package:zenith_monitor/utils/services/authentication/authentication.dart';
 import 'package:zenith_monitor/utils/services/authentication/email_password_auth.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
 import 'package:zenith_monitor/utils/services/authentication/google_auth.dart';
@@ -18,17 +19,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   late LocalUser _user;
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is EmailLoginEvent || event is GoogleLoginEvent) {
+    if (event is AuthenticationEvent) {
+      yield LodingState();
       try {
-        yield LodingState();
         if (event is EmailLoginEvent) {
           await emailPasswordAuth.signIn(event.user, event.password);
-          _user =
-              await firestore.getUser(emailPasswordAuth.userCreationConditions);
         } else if (event is GoogleLoginEvent) {
           await googleAuth.signInwithGoogle();
-          _user = await firestore.getUser(googleAuth.userCreationConditions);
         }
+        _user = await firestore.getUser(event.auth.userCreationConditions);
         yield LoginSuccess(user: _user);
       } on WrongPassword {
         yield LoginError(errorMessage: "Senha errada");
@@ -55,8 +54,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             errorMessage:
                 "Um problema ocorreu durante a utilização do banco de dados");
       } catch (e) {
-        print(e);
-        yield LoginError(errorMessage: e.toString());
+        print(e.toString());
+        yield LoginError(errorMessage: "Erro desconhecido");
       }
     }
   }
