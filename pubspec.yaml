@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore: ^2.5.1
   path_provider: ^2.0.3
   flutter_bloc: ^7.3.0
+  google_sign_in: ^5.1.0
   
 
 dev_dependencies:
