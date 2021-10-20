@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
+import 'package:zenith_monitor/utils/services/authentication/email_password_auth.dart';
+import 'package:zenith_monitor/utils/services/authentication/google_auth.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
+import 'modules/login/screen/login_screen.dart';
 import 'modules/register/screen/sign_up_screen.dart';
 
 void main() {
@@ -26,7 +29,6 @@ class Application extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
       // Initialize FlutterFire:
       future: _initialization,
@@ -38,7 +40,12 @@ class Application extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return SignUpScreen();
+          EmailAndPasswordAuth a = EmailAndPasswordAuth();
+          a.signOut();
+          GoogleAuth g = GoogleAuth();
+          g.signOutFromGoogle();
+
+          return LoginScreen();
         }
 
         return const ZenithProgressIndicator(

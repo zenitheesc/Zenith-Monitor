@@ -4,6 +4,7 @@ import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
+import 'package:zenith_monitor/widgets/user_profile.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class Botao extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LocalUser newUser1 =
-        LocalUser("To11rresmo", "dos1 Santos", null, "torresmo@g34mail.com");
+        LocalUser("Vitor", "Carlos", null, "vitor.carreramiguel@gmail.com");
 
     return Scaffold(
       backgroundColor: raisingBlack,
@@ -34,6 +35,10 @@ class Botao extends StatelessWidget {
           BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
             if (state is LoginError) {
               return Text(state.errorMessage);
+            } else if (state is LodingState) {
+              return const CircularProgressIndicator();
+            } else if (state is LoginSuccess) {
+              return UserProfile(user: state.user);
             }
             return const Text("cachorro");
           }),
@@ -55,8 +60,11 @@ class Botao extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ))),
               onPressed: () {
-                BlocProvider.of<LoginBloc>(context)
-                    .add(UserLoginEvent(user: newUser1, password: "8123456"));
+                BlocProvider.of<LoginBloc>(context).add(
+                    /*EmailLoginEvent(
+                    user: newUser1,
+                    password: "123456") */
+                    GoogleLoginEvent());
               },
               child: const Text(
                 "Iniciar Missão",

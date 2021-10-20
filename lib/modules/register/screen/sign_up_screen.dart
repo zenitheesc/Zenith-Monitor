@@ -24,7 +24,7 @@ class Botao extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LocalUser newUser1 =
-        LocalUser("Torresmo", "dos Santos", null, "torresmo@gmail.com");
+        LocalUser("To11rresmo", "dos1 Santos", null, "torresmo@g34mail.com");
 
     return Scaffold(
       backgroundColor: raisingBlack,
@@ -55,8 +55,8 @@ class Botao extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ))),
               onPressed: () {
-                BlocProvider.of<SignUpBloc>(context)
-                    .add(RegisterEvent(newUser: newUser1, password: "123456"));
+                BlocProvider.of<SignUpBloc>(context).add(
+                    UserRegisterEvent(newUser: newUser1, password: "123456"));
               },
               child: const Text(
                 "Iniciar Missão",
