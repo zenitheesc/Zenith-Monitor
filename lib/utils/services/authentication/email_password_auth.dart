@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/mixins/class_user_file.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
+import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
 
-class Authentication {
+class EmailAndPasswordAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserFile userFile = UserFile();
 
@@ -62,7 +64,30 @@ class Authentication {
     }
   }
 
+  Future<String?> userCreationConditions(
+      DocumentSnapshot? userDoc, LocalUser user) async {
+    if (userDoc == null ||
+        !(userDoc.exists) ||
+        userDoc.get('created_with') != "Email and Password") {
+      LocalUser? newUser = await _getUserFromMemory();
+
+      if (newUser == null) throw UserFileNotFound();
+
+      user.copyUserFrom(newUser);
+
+      return "Email and Password";
+    }
+
+    return null;
+  }
+
   void signOut() async {
     await _auth.signOut();
+  }
+
+  Future<LocalUser?> _getUserFromMemory() async {
+    UserFile file = UserFile();
+    LocalUser? newUser = await file.readUser();
+    return newUser;
   }
 }
