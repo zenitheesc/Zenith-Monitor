@@ -1,4 +1,4 @@
-package com.example.zenith_monitor
+package com.zenithaerospace.monitor
 
 import io.flutter.embedding.android.FlutterActivity
 
