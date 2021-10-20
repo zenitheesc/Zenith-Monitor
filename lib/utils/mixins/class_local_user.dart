@@ -14,10 +14,10 @@ class LocalUser {
 
   LocalUser(
       String firstName, String lastName, String? imageLink, String email) {
-    _firstName = stringToPattern(firstName);
-    _lastName = stringToPattern(lastName);
-    _imageLink = imageLink;
-    _email = email.toLowerCase();
+    setFirstName(firstName);
+    setLastName(lastName);
+    setImageLink(imageLink);
+    setEmail(email);
   }
 
   LocalUser.fromJson(Map<String, dynamic> json)
@@ -37,6 +37,22 @@ class LocalUser {
     _accessLevel = stringToPattern(accessLevel);
   }
 
+  void setFirstName(String firstName) {
+    _firstName = stringToPattern(firstName);
+  }
+
+  void setLastName(String lastName) {
+    _lastName = stringToPattern(lastName);
+  }
+
+  void setImageLink(String? imageLink) {
+    _imageLink = imageLink;
+  }
+
+  void setEmail(String email) {
+    _email = email.toLowerCase();
+  }
+
   String getFirstName() {
     return _firstName;
   }
@@ -49,8 +65,8 @@ class LocalUser {
     return _firstName + " " + _lastName;
   }
 
-  Future<String?> getImageLink() async {
-    return await linkValidity(_imageLink);
+  String? getImageLink() {
+    return _imageLink;
   }
 
   String getAccessLevel() {
@@ -60,5 +76,13 @@ class LocalUser {
 
   String getEmail() {
     return _email;
+  }
+
+  void copyUserFrom(LocalUser origin) {
+    setFirstName(origin.getFirstName());
+    setLastName(origin.getLastName());
+    setEmail(origin.getEmail());
+    setImageLink(origin.getImageLink());
+    setAccessLevel(origin.getAccessLevel());
   }
 }
