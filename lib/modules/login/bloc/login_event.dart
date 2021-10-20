@@ -2,9 +2,11 @@ part of 'login_bloc.dart';
 
 abstract class LoginEvent {}
 
-class UserLoginEvent extends LoginEvent {
+class EmailLoginEvent extends LoginEvent {
   LocalUser user;
   String password;
 
-  UserLoginEvent({required this.user, required this.password});
+  EmailLoginEvent({required this.user, required this.password});
 }
+
+class GoogleLoginEvent extends LoginEvent {}

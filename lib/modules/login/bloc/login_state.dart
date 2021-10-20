@@ -11,3 +11,9 @@ class LoginError extends LoginState {
 }
 
 class LodingState extends LoginState {}
+
+class LoginSuccess extends LoginState {
+  LocalUser user;
+
+  LoginSuccess({required this.user});
+}
