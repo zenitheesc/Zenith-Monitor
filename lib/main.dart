@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/widgets/terminal.dart';
 
 void main() {
   runApp(const ZenithMonitor());
@@ -20,6 +21,6 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Terminal();
   }
 }
