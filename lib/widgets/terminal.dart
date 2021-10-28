@@ -49,13 +49,22 @@ class _TerminalState extends State<Terminal> {
     return Expanded(
       child: ListView.builder(
         itemCount: 30, //Ammount of data to be shown at the screen.
-        itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.all(15),
-          child: Text(
-            '$index. ', // Here will be showed the text appering in the terminal.
-            style: TextStyle(color: white),
-          ),
-        ),
+        itemBuilder: (context, index) => Table(
+          columnWidths: const {
+            0: FractionColumnWidth(1/10),
+            1: FractionColumnWidth(9/10),
+          },children:[
+            TableRow(children:[
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
+                child: Text('$index', style:TextStyle(color:gray)),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 15, 5, 15),
+                child: Text("Item", style: TextStyle(color: white),), // Here will be showed the text appering in the terminal.
+              )
+            ],)
+          ],),
         scrollDirection: Axis.vertical,
       )
     );
@@ -68,6 +77,8 @@ class _TerminalState extends State<Terminal> {
         controller: textController,
         cursorColor: white,
         style: const TextStyle(color: white),
+        minLines: 1,
+        maxLines: 3,
         decoration: const InputDecoration(
           fillColor: gray,
           filled: true,
