@@ -35,15 +35,15 @@ class LocationManager {
   }
 
   void printVariables(LocationData data) {
-    print('latitude: ${data.latitude!}');
-    print('longitude: ${data.longitude!}');
-    print('accuracy: ${data.accuracy!}');
-    print('altitude: ${data.altitude!}');
-    print('speed: ${data.speed!}');
-    print('speedAccuracy: ${data.speedAccuracy!}');
-    print('heading: ${data.heading!}');
-    print('time: ${data.time!}');
-    print('isMock: ${data.isMock!}');
+    // print('latitude: ${data.latitude!}');
+    // print('longitude: ${data.longitude!}');
+    // print('accuracy: ${data.accuracy!}');
+    // print('altitude: ${data.altitude!}');
+    // print('speed: ${data.speed!}');
+    // print('speedAccuracy: ${data.speedAccuracy!}');
+    // print('heading: ${data.heading!}');
+    // print('time: ${data.time!}');
+    // print('isMock: ${data.isMock!}');
   }
 
   bool check() {
