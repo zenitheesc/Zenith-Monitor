@@ -56,12 +56,12 @@ class _TerminalState extends State<Terminal> {
           },children:[
             TableRow(children:[
               Padding(
-                padding: EdgeInsets.fromLTRB(10, 15, 0, 15),
+                padding: EdgeInsets.fromLTRB(20, 15, 0, 15),
                 child: Text('$index', style:TextStyle(color:gray)),
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 15, 5, 15),
-                child: Text("Item", style: TextStyle(color: white),), // Here will be showed the text appering in the terminal.
+                child: Text(" ", style: TextStyle(color: white),), // Here will be showed the text appering in the terminal.
               )
             ],)
           ],),
