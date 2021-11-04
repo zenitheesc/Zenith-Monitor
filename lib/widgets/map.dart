@@ -1,56 +1,66 @@
 import 'dart:async';
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class MapSample extends StatefulWidget {
   @override
-  State<MapSample> createState() => Map();
+  State<MapSample> createState() => Mapp();
 }
 
-class Map extends State<MapSample> {
+class Mapp extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
+  Set<Marker> markers = Set();
+  PolylinePoints polylinePoints = PolylinePoints();
+
+  Map<PolylineId, Polyline> _mapPolylines = {};
+  int _polylineIdCounter = 1;
+
+  Future<void> _add() async {
+    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
+    _polylineIdCounter++;
+    final PolylineId polylineId = PolylineId(polylineIdVal);
+
+    final Polyline polyline = Polyline(
+      polylineId: polylineId,
+      consumeTapEvents: true,
+      color: Colors.red,
+      width: 5,
+      points: _createPoints(),
+    );
+
+    setState(() {
+      _mapPolylines[polylineId] = polyline;
+    });
+  }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-20.554331116, -48.567331064),
     zoom: 14.4746,
   );
 
-  // static final CameraPosition _kLake = CameraPosition(
-  //     bearing: 192.8334901395799,
-  //     target: LatLng(37.43296265331129, -122.08832357078792),
-  //     tilt: 59.440717697143555,
-  //     zoom: 19.151926040649414);
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return new Scaffold(
-  //     body:
-  //     floatingActionButton: FloatingActionButton.extended(
-  //       onPressed: _goToTheLake,
-  //       label: Text('To the lake!'),
-  //       icon: Icon(Icons.directions_boat),
-  //     ),
-  //   );
-  // }
-
-  // Future<void> _goToTheLake() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  // }
-
   @override
   Widget build(BuildContext context) {
     GoogleMapController _mapController;
 
+    markers.addAll([
+      Marker(
+          markerId: MarkerId('value'),
+          position: LatLng(-20.554331116, -48.567331064)),
+      Marker(
+          markerId: MarkerId('value2'),
+          position: LatLng(-20.7333333, -48.5833333)),
+    ]);
+
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: raisingBlack,
-        toolbarHeight: 3,
+        toolbarHeight: 5,
+        actions: <Widget>[IconButton(icon: Icon(Icons.add), onPressed: _add)],
       ),
       body: Stack(children: <Widget>[
         Positioned(
@@ -58,12 +68,15 @@ class Map extends State<MapSample> {
             mapType: MapType.normal,
             initialCameraPosition: _kGooglePlex,
             onMapCreated: (GoogleMapController controller) async {
-              // _mapController = controller;
-              // var style = await rootBundle.loadString('assets/maps/dark.json');
-              // _mapController.setMapStyle(style);
-
+              _mapController = controller;
+              var style =
+                  await rootBundle.loadString('assets/maps/aubergine.json');
+              _add();
+              _mapController.setMapStyle(style);
               _controller.complete(controller);
             },
+            markers: markers,
+            polylines: Set<Polyline>.of(_mapPolylines.values),
           ),
         ),
         Positioned(
@@ -102,20 +115,54 @@ class Map extends State<MapSample> {
             ],
           ),
         ),
-        Positioned(
-            bottom: -240,
-            top: -10,
-            left: -30,
-            child: Center(
-              child: Container(
-                child: CustomPaint(
-                  painter: MyPainter(),
-                  size: Size(70, 40),
-                ),
-              ),
-            )),
       ]),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Item 2'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  List<LatLng> _createPoints() {
+    final List<LatLng> points = <LatLng>[];
+    points.add(LatLng(-20.554331116, -48.567331064));
+    points.add(LatLng(-20.7333333, -48.5833333));
+    // points.add(LatLng(8.196142, 2.094979));
+    // points.add(LatLng(12.196142, 3.094979));
+    // points.add(LatLng(16.196142, 4.094979));
+    // points.add(LatLng(20.196142, 5.094979));
+    return points;
   }
 }
 
@@ -138,7 +185,6 @@ class MyPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
     throw UnimplementedError();
   }
 }

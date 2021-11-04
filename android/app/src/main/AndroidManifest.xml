@@ -4,7 +4,7 @@
         android:label="zenith_monitor"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value= YOUR KEY/>
+               android:value='AIzaSyA5NL0BYQxKgJDLPCf4pkOVCQL95lenw9o'/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
