@@ -3,11 +3,11 @@ import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
 class AboutUsZenithMonitor extends StatelessWidget {
-  AboutUsZenithMonitor({Key? key});
+  const AboutUsZenithMonitor({Key? key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: StandardAppBar(title: "O Zenith Monitor"),
+      appBar: const StandardAppBar(title: "O Zenith Monitor"),
       body: aboutUsZenithMonitorContainer(),
       backgroundColor: raisingBlack,
     );
@@ -24,7 +24,7 @@ class AboutUsZenithMonitor extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               color: eerieBlack,
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 "O app conta com todo nosso acervo de projetos, com o acompanhamento em tempo real de todos nossos lançamentos e suas informações técnicas.",
                 style:

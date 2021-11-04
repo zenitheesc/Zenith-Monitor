@@ -23,5 +23,8 @@ jobs:
 
       - run: flutter pub get
 
+      - name: Checking linter
+        run: flutter analyze
+
       - name: Running tests
         run: flutter test

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ZenithProgressIndicator extends StatefulWidget {
-  ZenithProgressIndicator(
+  const ZenithProgressIndicator(
       {Key? key, required this.size, required this.fileName});
 
   final double size;
   final String fileName;
 
   @override
-  _LoaderState createState() => new _LoaderState();
+  _LoaderState createState() => _LoaderState();
 }
 
 class _LoaderState extends State<ZenithProgressIndicator>
@@ -19,12 +19,12 @@ class _LoaderState extends State<ZenithProgressIndicator>
   @override
   void initState() {
     super.initState();
-    _controller = new AnimationController(
+    _controller = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
 
-    loaderMenu = new Tween(begin: 2.0, end: 0.0).animate(new CurvedAnimation(
+    loaderMenu = Tween(begin: 2.0, end: 0.0).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.fastOutSlowIn,
     ));
