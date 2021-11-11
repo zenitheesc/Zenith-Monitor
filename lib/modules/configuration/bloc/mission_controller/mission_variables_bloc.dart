@@ -39,8 +39,9 @@ class MissionVariablesBloc
       yield VariablesChanged(variablesList);
     } else if (event is StartMissionEvent) {
       try {
-        variablesList.addMissionName(event.missionName);
+        await variablesList.addMissionName(event.missionName);
         missionBloc.add(SetVariablesListEvent(variablesList: variablesList));
+        missionBloc.add(FirestoreUploaderEvent(variablesList: variablesList));
       } on EmptyMissionNameException {
         yield MissionNameError(
             variablesList, "É necessário fornecer um nome para a missão");
