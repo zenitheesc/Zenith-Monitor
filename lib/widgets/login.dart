@@ -17,7 +17,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: mainCenter(),
+      body: SingleChildScrollView(child: mainCenter()),
       backgroundColor: eerieBlack,
     ));
   }
