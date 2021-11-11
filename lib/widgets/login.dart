@@ -107,7 +107,13 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: const BoxDecoration(
-        color: gray,
+        gradient: LinearGradient(
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+            colors: [
+              Color(0xff404245),
+              Color(0xff212325),
+            ]),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: TextField(
