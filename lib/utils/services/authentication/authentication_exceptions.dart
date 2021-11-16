@@ -15,7 +15,7 @@ class WeakPassword extends StandardAuthError {
 
 class EmailAlreadyInUse extends StandardAuthError {
   EmailAlreadyInUse()
-      : super(errorMessage: "The account already exists for that email");
+      : super(errorMessage: "A account already exists for that email");
 }
 
 class WrongPassword extends StandardAuthError {

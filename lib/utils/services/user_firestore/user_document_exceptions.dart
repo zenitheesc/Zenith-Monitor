@@ -1,3 +1,5 @@
+import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
+
 class StandardUserDocError implements Exception {
   String errorMessage;
 
@@ -21,6 +23,11 @@ class EmailNotVerified extends StandardUserDocError {
 class UserFileNotFound extends StandardUserDocError {
   UserFileNotFound()
       : super(errorMessage: "User information not found in local storage");
+}
+
+class NullUserCredential extends StandardUserDocError {
+  NullUserCredential()
+      : super(errorMessage: "The provided UserCredential was null");
 }
 
 class FirebaseProblem extends StandardUserDocError {

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
+import 'package:zenith_monitor/utils/services/authentication/authentication.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
 
 class UserDocument {
@@ -8,18 +9,19 @@ class UserDocument {
   final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  Future<LocalUser> getUser(Function condition) async {
+  Future<LocalUser> getUserFirestore(Authentication authMethod) async {
     if (_auth.currentUser == null) throw NullUser();
 
-    if (!(_auth.currentUser!.emailVerified)) throw EmailNotVerified();
+    if (authMethod.type == "Email and Password" &&
+        !(_auth.currentUser!.emailVerified)) throw EmailNotVerified();
 
     DocumentSnapshot? userDoc = await _getUserFirebaseDocument();
 
-    LocalUser newUser = LocalUser("", "", null, "");
+    LocalUser? newUser = await authMethod.userCreationConditions(userDoc);
 
-    String? authType = await condition(userDoc, newUser);
-
-    if (authType != null) userDoc = await _writeUserDocument(newUser, authType);
+    if (newUser != null) {
+      userDoc = await _writeUserDocument(newUser, authMethod.type);
+    }
 
     LocalUser user = _firebaseDocToLocalUser(userDoc!);
     print(user.getAccessLevel());

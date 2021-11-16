@@ -9,6 +9,10 @@ class GoogleAuth extends Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  GoogleAuth() {
+    type = "Google";
+  }
+
   Future<void> signInwithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
@@ -19,6 +23,7 @@ class GoogleAuth extends Authentication {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
+
       await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       print(e.message);
@@ -26,7 +31,8 @@ class GoogleAuth extends Authentication {
     }
   }
 
-  LocalUser _getUserFromGoogle() {
+  @override
+  Future<LocalUser> getUserAuthentication() async {
     if (_auth.currentUser == null) throw NullUser();
 
     User currentUser = _auth.currentUser!;
@@ -41,12 +47,11 @@ class GoogleAuth extends Authentication {
   }
 
   @override
-  Future<String?> userCreationConditions(
-      DocumentSnapshot? userDoc, LocalUser user) async {
+  Future<LocalUser?> userCreationConditions(DocumentSnapshot? userDoc) async {
     if (userDoc == null || !(userDoc.exists)) {
-      LocalUser newUser = _getUserFromGoogle();
-      user.copyUserFrom(newUser);
-      return "Google auth";
+      LocalUser newUser = await getUserAuthentication();
+
+      return newUser;
     }
     return null;
   }

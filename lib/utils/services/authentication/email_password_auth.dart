@@ -10,11 +10,13 @@ class EmailAndPasswordAuth extends Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserFile userFile = UserFile();
 
+  EmailAndPasswordAuth() {
+    type = "Email and Password";
+  }
   Future<void> register(LocalUser newUser, String password) async {
     try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-              email: newUser.getEmail(), password: password);
+      await _auth.createUserWithEmailAndPassword(
+          email: newUser.getEmail(), password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw WeakPassword();
@@ -37,8 +39,8 @@ class EmailAndPasswordAuth extends Authentication {
 
         firebaseUser.updateDisplayName(newUser.getCompleteName());
         firebaseUser.updateEmail(newUser.getEmail());
-        firebaseUser.updatePhotoURL(await newUser.getImageLink());
-
+        firebaseUser.updatePhotoURL(newUser.getImageLink());
+        print("Vai salvar o arquivo");
         userFile.writeUser(newUser);
       }
     }
@@ -66,30 +68,28 @@ class EmailAndPasswordAuth extends Authentication {
   }
 
   @override
-  Future<String?> userCreationConditions(
-      DocumentSnapshot? userDoc, LocalUser user) async {
+  Future<LocalUser?> userCreationConditions(DocumentSnapshot? userDoc) async {
     if (userDoc == null ||
         !(userDoc.exists) ||
         userDoc.get('created_with') != "Email and Password") {
-      LocalUser? newUser = await _getUserFromMemory();
+      LocalUser newUser = await getUserAuthentication();
 
-      if (newUser == null) throw UserFileNotFound();
-
-      user.copyUserFrom(newUser);
-
-      return "Email and Password";
+      return newUser;
     }
 
     return null;
   }
 
-  void signOut() async {
-    await _auth.signOut();
-  }
-
-  Future<LocalUser?> _getUserFromMemory() async {
+  @override
+  Future<LocalUser> getUserAuthentication() async {
     UserFile file = UserFile();
     LocalUser? newUser = await file.readUser();
+    if (newUser == null) throw UserFileNotFound();
     return newUser;
+  }
+
+  @override
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 }
