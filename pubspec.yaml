@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^2.5.3
   location: ^4.3.0
   google_maps_flutter: ^2.0.6
+  flutter_facebook_auth: ^3.5.2
 
 dev_dependencies:
   flutter_lints: ^1.0.4
