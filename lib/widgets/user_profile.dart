@@ -12,7 +12,7 @@ class UserProfile extends StatelessWidget {
   Future<Widget> profileChild() async {
     double radius = 80.0;
     Color color = eerieBlack;
-    String? link = await user.getImageLink();
+    String? link = user.getImageLink();
 
     if (link == null) {
       return CircleAvatar(
