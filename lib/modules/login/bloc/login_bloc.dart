@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication.dart';
 import 'package:zenith_monitor/utils/services/authentication/email_password_auth.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
+import 'package:zenith_monitor/utils/services/authentication/facebook_auth.dart';
 import 'package:zenith_monitor/utils/services/authentication/google_auth.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
@@ -13,8 +15,6 @@ part 'login_event.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitialState());
 
-  EmailAndPasswordAuth emailPasswordAuth = EmailAndPasswordAuth();
-  GoogleAuth googleAuth = GoogleAuth();
   UserDocument firestore = UserDocument();
   late LocalUser _user;
   @override
@@ -22,12 +22,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is AuthenticationEvent) {
       yield LodingState();
       try {
-        if (event is EmailLoginEvent) {
-          await emailPasswordAuth.signIn(event.user, event.password);
-        } else if (event is GoogleLoginEvent) {
-          await googleAuth.signInwithGoogle();
+        await event.loginCall();
+        if (event is FacebookLoginEvent) {
+          _user = await event.auth.getUserAuthentication();
+        } else {
+          _user = await firestore.getUserFirestore(event.auth);
         }
-        _user = await firestore.getUser(event.auth.userCreationConditions);
+
         yield LoginSuccess(user: _user);
       } on WrongPassword {
         yield LoginError(errorMessage: "Senha errada");
@@ -52,7 +53,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         print(e.errorType());
         yield LoginError(
             errorMessage:
-                "Um problema ocorreu durante a utilização do banco de dados");
+                "Um problema ocorreu durante a utilização do banco de dados. Verifique se o email fornecido foi verificado.");
       } catch (e) {
         print(e.toString());
         yield LoginError(errorMessage: "Erro desconhecido");
