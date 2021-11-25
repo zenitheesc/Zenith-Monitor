@@ -36,3 +36,8 @@ class EmailBadlyFormatted extends StandardAuthError {
   EmailBadlyFormatted()
       : super(errorMessage: "The email address is badly formatted");
 }
+
+class AnotherCredentialUsed extends StandardAuthError {
+  AnotherCredentialUsed()
+      : super(errorMessage: "Account exists with different credential");
+}

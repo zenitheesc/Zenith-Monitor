@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
+import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
 
 import 'authentication.dart';
 
@@ -32,6 +33,10 @@ class FacebookAuthentication extends Authentication {
         print(result.message);
       }
     } on FirebaseAuthException catch (e) {
+      if (e.code == "account-exists-with-different-credential") {
+        throw AnotherCredentialUsed();
+      }
+
       throw FirebaseProblem(isFirebaseException: true, errorMsg: e.toString());
     } catch (e) {
       print(e.toString());
