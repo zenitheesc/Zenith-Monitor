@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/utils/helpers/name_abbreviation.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
 class UserProfile extends StatelessWidget {
-  const UserProfile({Key? key, required this.user});
+  const UserProfile({Key? key/*, required this.user*/});
 
-  final LocalUser user;
+  //final LocalUser user;
 
-  Future<Widget> profileChild() async {
+  Widget profileChild(LocalUser user) {
     double radius = 80.0;
     Color color = eerieBlack;
     String? link = user.getImageLink();
@@ -39,26 +41,20 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LocalUser? user = context.select((LoginBloc bloc) => bloc.state.user);	  
     final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Center(
-        child: Column(
+        child: (user == null) ? const Text("Usuário não encontrado",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: white,
+                  fontFamily: 'DMSans')) : 
+	Column(
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 80.0, 0, 20.0),
-              child: FutureBuilder(
-                future: profileChild(),
-                builder: (context, AsyncSnapshot<Widget> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const ZenithProgressIndicator(
-                      size: 160.0,
-                      fileName: "z_icon_white.png",
-                    );
-                  }
-                  return snapshot.data!;
-                },
-              ),
-            ),
+              child: profileChild(user)),
             Text(
               nameAbbreviation(user.getCompleteName(), screenWidth, 24.0),
               style: const TextStyle(
