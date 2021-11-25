@@ -23,13 +23,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LodingState();
       try {
         await event.loginCall();
-        if (event is FacebookLoginEvent) {
-          _user = await event.auth.getUserAuthentication();
-        } else {
-          _user = await firestore.getUserFirestore(event.auth);
-        }
-
-        yield LoginSuccess(user: _user);
+        _user = await event.getUser();
+        yield LoginSuccess(_user);
       } on WrongPassword {
         yield LoginError(errorMessage: "Senha errada");
       } on UserNotFound {
@@ -49,6 +44,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             errorMessage:
                 "Os dados do usuário não foram encontrados. Por favor, forneça-os novamente");
         //apresentar janela para fornecimento dos dados
+      } on AnotherCredentialUsed {
+        yield LoginError(
+            errorMessage:
+                "O email associado a este método de autenticação já foi utilizado em outro método. Por favor, utilize outro método.");
       } on FirebaseProblem catch (e) {
         print(e.errorType());
         yield LoginError(

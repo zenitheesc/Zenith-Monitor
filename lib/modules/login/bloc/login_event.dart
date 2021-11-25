@@ -7,7 +7,8 @@ abstract class AuthenticationEvent extends LoginEvent {
 
   AuthenticationEvent({required this.auth});
 
-  Future<void> loginCall() async {}
+  Future<void> loginCall();
+  Future<LocalUser> getUser();
 }
 
 class EmailLoginEvent extends AuthenticationEvent {
@@ -21,6 +22,11 @@ class EmailLoginEvent extends AuthenticationEvent {
   Future<void> loginCall() async {
     await EmailAndPasswordAuth().signIn(user, password);
   }
+
+  @override
+  Future<LocalUser> getUser() async {
+    return await UserDocument().getUserFirestore(auth);
+  }
 }
 
 class GoogleLoginEvent extends AuthenticationEvent {
@@ -30,6 +36,11 @@ class GoogleLoginEvent extends AuthenticationEvent {
   Future<void> loginCall() async {
     await GoogleAuth().signInwithGoogle();
   }
+
+  @override
+  Future<LocalUser> getUser() async {
+    return await UserDocument().getUserFirestore(auth);
+  }
 }
 
 class FacebookLoginEvent extends AuthenticationEvent {
@@ -37,5 +48,10 @@ class FacebookLoginEvent extends AuthenticationEvent {
   @override
   Future<void> loginCall() async {
     await FacebookAuthentication().signInWithFacebook();
+  }
+
+  @override
+  Future<LocalUser> getUser() async {
+    return await auth.getUserAuthentication();
   }
 }
