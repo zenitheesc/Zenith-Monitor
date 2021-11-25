@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/widgets/forgot_my_password.dart';
+import 'package:rive/rive.dart' as rive;
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget();
@@ -13,11 +14,39 @@ class _LoginWidgetState extends State<LoginWidget> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  late rive.RiveAnimationController _githubLoginController;
+  late rive.RiveAnimationController _facebookLoginController;
+  late rive.RiveAnimationController _googleLoginController;
+
+  void _toggleAnimation(rive.RiveAnimationController controller) {
+    if(controller.isActive == false) {
+      controller.isActive = true;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _githubLoginController = rive.OneShotAnimation(
+      'changeColors',
+      autoplay: false,
+    );
+
+    _facebookLoginController = rive.OneShotAnimation(
+      'changeColors',
+      autoplay: false,
+    );
+    _googleLoginController = rive.OneShotAnimation(
+      'changeColors',
+      autoplay: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: SingleChildScrollView(child: mainCenter()),
+      body: mainCenter(),
       backgroundColor: eerieBlack,
     ));
   }
@@ -27,7 +56,12 @@ class _LoginWidgetState extends State<LoginWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Image.asset('assets/images/Full_Logo_White.png'),
+          Container(
+            width: 340,
+            height: 80,
+            child: const rive.RiveAnimation.asset(
+                "assets/animations/zenithlogo.riv"),
+          ),
           emailPasswordForgotPasswordColumn(),
           singUpLoginRow(),
           otherMethodsOfLoginRow()
@@ -38,9 +72,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Row otherMethodsOfLoginRow() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      otherMethodsOfLoginButton("github"),
-      otherMethodsOfLoginButton("facebook"),
-      otherMethodsOfLoginButton("google")
+      otherMethodsOfLoginButton("github", _githubLoginController),
+      otherMethodsOfLoginButton("facebook", _facebookLoginController),
+      otherMethodsOfLoginButton("google", _googleLoginController)
     ]);
   }
 
@@ -63,11 +97,20 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  ElevatedButton otherMethodsOfLoginButton(String imgPathForType) {
-    String imgPath = "assets/images/" + imgPathForType + "LoginImg.png";
+  ElevatedButton otherMethodsOfLoginButton(
+      String animationPathForType, rive.RiveAnimationController _controller) {
+    String animationPath =
+        "assets/animations/" + animationPathForType + "_icon.riv";
+
     return ElevatedButton(
-      onPressed: () {},
-      child: Image.asset(imgPath),
+      onPressed: () => _toggleAnimation(_controller),
+      child: Container(
+          width: 40,
+          height: 40,
+          child: rive.RiveAnimation.asset(
+            animationPath,
+            controllers: [_controller],
+          )),
       style: ButtonStyle(
           shape: MaterialStateProperty.all(const CircleBorder()),
           backgroundColor: MaterialStateProperty.all(white.withOpacity(0.001))),
