@@ -44,10 +44,10 @@ class GoogleLoginEvent extends AuthenticationEvent {
 }
 
 class FacebookLoginEvent extends AuthenticationEvent {
-  FacebookLoginEvent() : super(auth: FacebookAuthentication());
+  FacebookLoginEvent() : super(auth: FacebookAuth());
   @override
   Future<void> loginCall() async {
-    await FacebookAuthentication().signInWithFacebook();
+    await FacebookAuth().signInWithFacebook();
   }
 
   @override

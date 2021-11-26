@@ -14,7 +14,6 @@ part 'login_event.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitialState());
 
-  UserDocument firestore = UserDocument();
   late LocalUser _user;
 
   @override
