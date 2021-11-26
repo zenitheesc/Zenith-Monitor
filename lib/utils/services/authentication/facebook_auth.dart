@@ -4,7 +4,6 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
-
 import 'authentication.dart';
 
 /// Facebook's authentication has the problem that the current User has

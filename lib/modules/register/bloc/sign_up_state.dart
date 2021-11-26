@@ -9,3 +9,5 @@ class SignUpError extends SignUpState {
 
   SignUpError({required this.errorMessage});
 }
+
+class LoadingState extends SignUpState {}

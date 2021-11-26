@@ -1,5 +1,3 @@
-import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
-
 class StandardUserDocError implements Exception {
   String errorMessage;
 

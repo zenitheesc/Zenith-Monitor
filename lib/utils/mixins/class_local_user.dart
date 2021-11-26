@@ -1,5 +1,4 @@
 import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
-import 'package:zenith_monitor/utils/helpers/link_validity.dart';
 
 /// Until now, this class is being used by:
 ///   -user_profile.dart

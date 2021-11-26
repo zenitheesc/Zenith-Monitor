@@ -26,8 +26,10 @@ class GoogleAuth extends Authentication {
 
       await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
-      print(e.message);
-      throw e;
+      throw FirebaseProblem(isFirebaseException: true, errorMsg: e.toString());
+    } catch (e) {
+      print(e.toString());
+      throw FirebaseProblem(isFirebaseException: false, errorMsg: e.toString());
     }
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 import 'modules/login/screen/login_screen.dart';
@@ -43,7 +43,7 @@ class Application extends StatelessWidget {
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
-              return LoginScreen();
+              return const LoginScreen();
             }
 
             return const ZenithProgressIndicator(

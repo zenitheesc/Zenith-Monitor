@@ -14,6 +14,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
     if (event is UserRegisterEvent) {
+      yield LoadingState();
       try {
         await auth.register(event.newUser, event.password);
       } on WeakPassword {

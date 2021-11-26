@@ -13,23 +13,11 @@ class EmailAndPasswordAuth extends Authentication {
   EmailAndPasswordAuth() {
     type = "Email and Password";
   }
+
   Future<void> register(LocalUser newUser, String password) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: newUser.getEmail(), password: password);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        throw WeakPassword();
-      } else if (e.code == 'email-already-in-use') {
-        throw EmailAlreadyInUse();
-      } else if (e.code == "invalid-email-verified") {
-        print("Erro invalid-email-verified");
-      } else {
-        print(e.code);
-      }
-    } catch (e) {
-      print(e);
-    } finally {
       User? firebaseUser = _auth.currentUser;
 
       if (firebaseUser != null) {
@@ -40,9 +28,19 @@ class EmailAndPasswordAuth extends Authentication {
         firebaseUser.updateDisplayName(newUser.getCompleteName());
         firebaseUser.updateEmail(newUser.getEmail());
         firebaseUser.updatePhotoURL(newUser.getImageLink());
-        print("Vai salvar o arquivo");
         userFile.writeUser(newUser);
       }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        throw WeakPassword();
+      } else if (e.code == 'email-already-in-use') {
+        throw EmailAlreadyInUse();
+      } else if (e.code == "invalid-email-verified") {
+        print("Erro invalid-email-verified");
+      }
+      throw FirebaseProblem(isFirebaseException: true, errorMsg: e.toString());
+    } catch (e) {
+      throw FirebaseProblem(isFirebaseException: false, errorMsg: e.toString());
     }
   }
 
@@ -59,10 +57,11 @@ class EmailAndPasswordAuth extends Authentication {
         } else if (e.code == "invalid-email") {
           throw EmailBadlyFormatted();
         }
-        print(e.code);
+        throw FirebaseProblem(
+            isFirebaseException: true, errorMsg: e.toString());
       } catch (e) {
-        print(e);
-        throw StandardAuthError(errorMessage: e.toString());
+        throw FirebaseProblem(
+            isFirebaseException: false, errorMsg: e.toString());
       }
     }
   }

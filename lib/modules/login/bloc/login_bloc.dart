@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
-import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication.dart';
 import 'package:zenith_monitor/utils/services/authentication/email_password_auth.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
@@ -17,10 +16,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   UserDocument firestore = UserDocument();
   late LocalUser _user;
+
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is AuthenticationEvent) {
-      yield LodingState();
+      yield LoadingState();
       try {
         await event.loginCall();
         _user = await event.getUser();
