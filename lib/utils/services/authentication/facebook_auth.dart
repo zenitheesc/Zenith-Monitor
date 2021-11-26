@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart'
+    as facebook_auth_method;
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication_exceptions.dart';
@@ -11,24 +12,27 @@ import 'authentication.dart';
 /// not to use the user provided by Facebook as a way to write Firebase
 /// documents.
 
-class FacebookAuthentication extends Authentication {
+class FacebookAuth extends Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FacebookAuth _facebookAuth = FacebookAuth.instance;
+  final facebook_auth_method.FacebookAuth _facebookAuth =
+      facebook_auth_method.FacebookAuth.instance;
 
-  FacebookAuthentication() {
+  FacebookAuth() {
     type = "Facebook";
   }
+
   Future<void> signInWithFacebook() async {
     try {
-      final LoginResult result = await _facebookAuth.login();
+      final facebook_auth_method.LoginResult result =
+          await _facebookAuth.login();
 
-      if (result.status == LoginStatus.success) {
+      if (result.status == facebook_auth_method.LoginStatus.success) {
         final AuthCredential facebookCredential =
             FacebookAuthProvider.credential(result.accessToken!.token);
         await _auth.signInWithCredential(facebookCredential);
-      } else if (result.status == LoginStatus.cancelled) {
+      } else if (result.status == facebook_auth_method.LoginStatus.cancelled) {
         print(result.message);
-      } else if (result.status == LoginStatus.failed) {
+      } else if (result.status == facebook_auth_method.LoginStatus.failed) {
         print(result.message);
       }
     } on FirebaseAuthException catch (e) {
