@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/mission_variables_exceptions.dart';
-import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 
 part 'mission_variables_state.dart';
 part 'mission_variables_event.dart';
@@ -13,8 +13,8 @@ part 'mission_variables_event.dart';
 class MissionVariablesBloc
     extends Bloc<MissionVariablesEvent, MissionVariablesState> {
   MissionVariablesList variablesList;
-  MissionBloc missionBloc;
-  MissionVariablesBloc(this.variablesList, this.missionBloc)
+  DataBloc dataBloc;
+  MissionVariablesBloc(this.variablesList, this.dataBloc)
       : super(VariablesInitial(variablesList));
 
   @override
@@ -40,8 +40,8 @@ class MissionVariablesBloc
     } else if (event is StartMissionEvent) {
       try {
         await variablesList.addMissionName(event.missionName);
-        missionBloc.add(SetVariablesListEvent(variablesList: variablesList));
-        missionBloc.add(FirestoreUploaderEvent(variablesList: variablesList));
+        dataBloc.add(SetVariablesListEvent(variablesList: variablesList));
+        dataBloc.add(FirestoreUploaderEvent(variablesList: variablesList));
       } on EmptyMissionNameException {
         yield MissionNameError(
             variablesList, "É necessário fornecer um nome para a missão");

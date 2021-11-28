@@ -1,26 +1,26 @@
 import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
+import 'package:zenith_monitor/utils/services/usb/usb.dart';
 
-part 'mission_state.dart';
-part 'mission_event.dart';
+part 'data_state.dart';
+part 'data_event.dart';
 
-class MissionBloc extends Bloc<MissionEvent, MissionState> {
+class DataBloc extends Bloc<DataEvent, DataState> {
   late MissionVariablesList variablesList;
   final FirestoreServices fireServices = FirestoreServices();
+  final UsbManager usbManager = UsbManager();
 
-  MissionBloc() : super(MissionStateInitial());
+  DataBloc() : super(DataStateInitial());
 
   @override
-  Stream<MissionState> mapEventToState(MissionEvent event) async* {
+  Stream<DataState> mapEventToState(DataEvent event) async* {
     if (event is SetVariablesListEvent) {
       variablesList = event.variablesList;
     } else if (event is FirestoreUploaderEvent) {
       fireServices.createAndUploadMission(event.variablesList);
     } else if (event is FirestoreDownloadEvent) {
-
-    } 
-    else {
+    } else {
       print("Unknown event in Mission Bloc");
     }
   }
@@ -29,4 +29,3 @@ class MissionBloc extends Bloc<MissionEvent, MissionState> {
 /// This pipeline is still incomplete. So far, its is only being used
 /// to get the variable list from mission_creation widget. Delete these
 /// comments if you are adding more content to this bloc.
- 

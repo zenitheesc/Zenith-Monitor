@@ -1,21 +1,20 @@
-part of 'mission_bloc.dart';
+part of 'data_bloc.dart';
 
-abstract class MissionEvent {}
+abstract class DataEvent {}
 
-class SetVariablesListEvent extends MissionEvent {
+class SetVariablesListEvent extends DataEvent {
   MissionVariablesList variablesList;
 
   SetVariablesListEvent({required this.variablesList});
 }
 
-class FirestoreUploaderEvent extends MissionEvent {
+class FirestoreUploaderEvent extends DataEvent {
   MissionVariablesList variablesList;
 
   FirestoreUploaderEvent({required this.variablesList});
 }
 
-
-class FirestoreDownloadEvent extends MissionEvent {
+class FirestoreDownloadEvent extends DataEvent {
   final String missionName;
 
   FirestoreDownloadEvent({required this.missionName});
