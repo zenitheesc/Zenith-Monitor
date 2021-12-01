@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "647188572266",
+    "firebase_url": "https://zenith-monitor-a0d89.firebaseio.com",
+    "project_id": "zenith-monitor-a0d89",
+    "storage_bucket": "zenith-monitor-a0d89.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647188572266:android:32f5b010a7468bbf5c0213",
+        "android_client_info": {
+          "package_name": "com.zenithaerospace.monitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647188572266-lgq11v9n583h40cp5kikmst94lpd0bbr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zenithaerospace.monitor",
+            "certificate_hash": "91962c976e6dc576832709338bf58626c6de3fd9"
+          }
+        },
+        {
+          "client_id": "647188572266-l4inuhtshf3p5cvo5srtao1r7tnvcdfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdFLNjRj6EtKgvuyeyZZb6lwmSneDCltw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647188572266-l4inuhtshf3p5cvo5srtao1r7tnvcdfd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

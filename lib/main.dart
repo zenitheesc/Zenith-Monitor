@@ -5,20 +5,20 @@ import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(ZenithMonitor());
+  runApp(const ZenithMonitor());
 }
 
 class ZenithMonitor extends StatelessWidget {
-  ZenithMonitor({Key? key}) : super(key: key);
+  const ZenithMonitor({Key? key}) : super(key: key);
 
-  final LocationManager data = LocationManager();
   @override
   Widget build(BuildContext context) {
-    data.init();
-    return const MaterialApp(
-      home: Application(),
+    return MaterialApp(
+      theme: ThemeData(
+        bottomSheetTheme:
+            BottomSheetThemeData(backgroundColor: Colors.black.withOpacity(0)),
+      ),
+      home: const Application(),
     );
   }
 }
