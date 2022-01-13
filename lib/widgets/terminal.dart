@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
-//import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
+import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
 /// All the code commented is related to TerminalController.
@@ -12,13 +14,23 @@ import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 class Terminal extends StatelessWidget {
   Terminal({Key? key}) : super(key: key);
   final textController = TextEditingController();
-  // List<Widget> listItems = [];
+  List<Widget> listItems = [];
+  final _scrollController = ScrollController();
+
+  _scrollToEnd() async {
+    _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 50.0,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeInOut);
+  }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
+          controller: _scrollController,
           shrinkWrap: true,
           slivers: [
             const SliverAppBar(
@@ -29,12 +41,24 @@ class Terminal extends StatelessWidget {
               expandedHeight: 80.0,
               title: StandardAppBar(title: "Terminal"),
             ),
-            /* BlocBuilder<TerminalBloc, TerminalState>(builder: (context, state) {
-              if (state is NewPackageState) {
+            BlocBuilder<TerminalBloc, TerminalState>(builder: (context, state) {
+              /* if (state is NewPackageState) {
                 listItems.add(terminalRow(listItems.length, state.usbResponse));
+                scrollController
+                    .jumpTo(scrollController.position.maxScrollExtent);
+              }*/
+
+              //return SliverList(delegate: SliverChildListDelegate(listItems));
+              List<Widget> terminalList = [];
+              if (state is NewPackageState) {
+                for (int i = 0; i < state.noParsedStringList.length; i++) {
+                  terminalList.add(terminalRow(i, state.noParsedStringList[i]));
+                }
               }
-              return SliverList(delegate: SliverChildListDelegate(listItems));
-            }),*/
+              _scrollToEnd();
+              return SliverList(
+                  delegate: SliverChildListDelegate(terminalList));
+            }),
             SliverToBoxAdapter(
               child: Container(
                 height: 50,
@@ -86,8 +110,9 @@ class Terminal extends StatelessWidget {
             ),
             prefixIcon: IconButton(
               onPressed: () {
-                /* BlocProvider.of<TerminalBloc>(context)
-                    .add(NewPackageEvent(usbResponse: textController.text));*/
+                BlocProvider.of<DataBloc>(context).add(NewPackageEventData(
+                    newPackage: MissionVariablesList(),
+                    noParsedString: textController.text));
                 textController.clear();
               },
               icon: const Icon(
