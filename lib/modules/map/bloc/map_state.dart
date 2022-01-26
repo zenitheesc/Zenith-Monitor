@@ -1,12 +1,11 @@
 part of 'map_bloc.dart';
 
-
 abstract class MapState {}
 
 class MapInitialState extends MapState {}
 
-class LatLngState extends MapState {
-  LatLng object;
+class UserInfoState extends MapState {
+  MissionVariablesList newPackage;
 
-  LatLngState({required this.object});
+  UserInfoState({required this.newPackage});
 }

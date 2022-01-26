@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zenith_monitor/widgets/map.dart';
+
+import 'modules/map/screen/map_screen.dart';
+
 void main() {
   runApp(const ZenithMonitor());
 }
@@ -15,11 +17,4 @@ class ZenithMonitor extends StatelessWidget {
   }
 }
 
-class Application extends StatelessWidget {
-  const Application({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MapSample();
-  }
-}
