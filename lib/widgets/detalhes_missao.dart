@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/utils/ui/plots/plot_gen.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
 class DetalhesMissao extends StatelessWidget {
@@ -81,7 +82,9 @@ class DetalhesMissao extends StatelessWidget {
                         style: TextStyle(color: gray, fontSize: 16)),
                   ],
                 ),
-                Expanded(child: Container(color: gray))
+                Expanded(
+                    child: PlotGenerator(
+                        animate: false, seriesList: createSampleData()))
               ],
             ),
           ),
@@ -212,13 +215,13 @@ class DetalhesMissao extends StatelessWidget {
     return Container(
       width: _mainWidth,
       height: _mainHeight * 1.2,
-      // child: checkIfImageExists
-      //     ? Image.asset(imgPath, fit: BoxFit.cover)
-      //     : const Center(
-      //         child: Text("Image Not Found",
-      //             style: TextStyle(color: white, fontSize: 20)),
-      //       ),
-      child: Image.asset(imgPath, fit: BoxFit.cover),
+      child: checkIfImageExists
+          ? Image.asset(imgPath, fit: BoxFit.cover)
+          : const Center(
+              child: Text("Image Not Found",
+                  style: TextStyle(color: white, fontSize: 20)),
+            ),
+      // child: Image.asset(imgPath, fit: BoxFit.cover),
     );
   }
 }
