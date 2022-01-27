@@ -53,19 +53,25 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Center mainCenter() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            width: 340,
-            height: 80,
-            child: const rive.RiveAnimation.asset(
-                "assets/animations/zenithlogo.riv"),
+      child: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 20.0),
+                width: 340,
+                height: 80,
+                child: const rive.RiveAnimation.asset(
+                    "assets/animations/zenithlogo.riv"),
+              ),
+              emailPasswordForgotPasswordColumn(),
+              singUpLoginRow(),
+              otherMethodsOfLoginRow()
+            ],
           ),
-          emailPasswordForgotPasswordColumn(),
-          singUpLoginRow(),
-          otherMethodsOfLoginRow()
-        ],
+        ),
       ),
     );
   }
