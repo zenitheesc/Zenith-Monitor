@@ -87,7 +87,7 @@ class ForgotMyPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: StandardAppBar(title: "Esqueci minha senha"),
+        appBar: const StandardAppBar(title: "Esqueci minha senha"),
         body: buildMainBody(),
         backgroundColor: eerieBlack);
   }

@@ -31,6 +31,6 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => MissionBloc()),
-    ], child: LoginWidget());
+    ], child: const LoginWidget());
   }
 }
