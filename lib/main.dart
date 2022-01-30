@@ -19,6 +19,6 @@ class ZenithMonitor extends StatelessWidget {
 class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LoginZenithMonitor();
+    return SignUpWidget();
   }
 }
