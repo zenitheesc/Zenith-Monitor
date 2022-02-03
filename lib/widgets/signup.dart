@@ -22,22 +22,8 @@ Center mainBody(BuildContext context) {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              VerticalDivider(
-                width: MediaQuery.of(context).size.width * 0.1,
-              ),
-              profileImage(context)
-            ],
-          ),
-          Divider(
-            height: MediaQuery.of(context).size.height * 0.07,
-          ),
+          profileImage(context),
           namePasswordColumn(context),
-          Divider(
-            height: MediaQuery.of(context).size.height * 0.16,
-          ),
           backSubmitButtonsRow(context),
         ],
       ),
@@ -48,6 +34,8 @@ Center mainBody(BuildContext context) {
 Widget profileImage(BuildContext context) {
   var imageRadius = MediaQuery.of(context).size.height * 0.1;
   var iconButtonRadius = MediaQuery.of(context).size.height * 0.035;
+  var rightMargin = 0.8 * MediaQuery.of(context).size.width - 2 * imageRadius;
+  var bottomMargin = MediaQuery.of(context).size.height * 0.07;
 
   return Stack(
     children: <Widget>[
@@ -56,6 +44,7 @@ Widget profileImage(BuildContext context) {
         width: 2.0 * imageRadius,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(imageRadius), color: white),
+        margin: EdgeInsets.only(right: rightMargin, bottom: bottomMargin),
         child: Center(
           child: Icon(
             Icons.person_outlined,
@@ -93,15 +82,17 @@ Widget profileImage(BuildContext context) {
 Container textField(
     BuildContext context, String text, bool isObscure, double width) {
   var height = MediaQuery.of(context).size.height * 0.08;
+  var bottomMargin = MediaQuery.of(context).size.height * 0.007;
   var fontSize = (MediaQuery.of(context).orientation == Orientation.portrait)
       ? 0.3 * height
       : (text == 'Nome' || text == 'Sobrenome')
-      ? 0.06 * width
-      : 0.03 * width;
+          ? 0.06 * width
+          : 0.03 * width;
 
   return Container(
     width: width,
     height: height,
+    margin: EdgeInsets.only(bottom: bottomMargin),
     child: TextField(
       style: TextStyle(
           color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
@@ -134,19 +125,13 @@ Row nameRow(BuildContext context) {
 
 Column namePasswordColumn(BuildContext context) {
   var width = MediaQuery.of(context).size.width * 0.8;
-  var dividerHeight = MediaQuery.of(context).size.height * 0.007;
-
-  var divider = Divider(height: dividerHeight);
 
   return Column(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       nameRow(context),
-      divider,
       textField(context, 'Email', false, width),
-      divider,
       textField(context, 'Senha', true, width),
-      divider,
       textField(context, 'Confirmar Senha', true, width),
     ],
   );
@@ -157,7 +142,6 @@ Row backSubmitButtonsRow(BuildContext context) {
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       buttonContainer(context, 'Voltar', 0XFFE57373),
-      VerticalDivider(width: MediaQuery.of(context).size.width * 0.02),
       buttonContainer(context, 'Submeter', 0XFF8BC34A)
     ],
   );
@@ -165,7 +149,9 @@ Row backSubmitButtonsRow(BuildContext context) {
 
 Container buttonContainer(BuildContext context, String text, int textColor) {
   var width = MediaQuery.of(context).size.width * 0.39;
-  var height = MediaQuery.of(context).size.height * 0.05; 
+  var height = MediaQuery.of(context).size.height * 0.05;
+  var horizontalMargin = MediaQuery.of(context).size.width * 0.01;
+  var topMargin = MediaQuery.of(context).size.height * 0.16;
   var fontSize = (MediaQuery.of(context).orientation == Orientation.portrait)
       ? 0.5 * height
       : 0.05 * width;
@@ -173,21 +159,22 @@ Container buttonContainer(BuildContext context, String text, int textColor) {
   return Container(
     width: width,
     height: height,
+    margin: EdgeInsets.only(
+        left: horizontalMargin, top: topMargin, right: horizontalMargin),
     child: ElevatedButton(
       child: Center(
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style:
-              TextStyle(color: white, fontSize: fontSize, fontFamily: 'DMSans'),
-        )
-      ),
+          child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style:
+            TextStyle(color: white, fontSize: fontSize, fontFamily: 'DMSans'),
+      )),
       onPressed: () {},
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.height * 0.03),
+                      MediaQuery.of(context).size.height * 0.03),
                   side: BorderSide(color: Color(textColor)))),
           fixedSize: MaterialStateProperty.all(Size(width, height)),
           backgroundColor: MaterialStateProperty.all<Color>(Color(textColor))),
