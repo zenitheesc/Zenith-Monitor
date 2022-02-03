@@ -85,7 +85,9 @@ class navigationDrawerWidget extends StatelessWidget {
             child: IconButton(
               color: Colors.white,
               iconSize: MediaQuery.of(context).size.height * 0.02,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               icon: const Icon(Icons.arrow_back_ios_new_rounded),
             ),
           )),

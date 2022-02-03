@@ -12,12 +12,12 @@ import 'package:zenith_monitor/widgets/map/map_cards.dart';
 
 class MapSample extends StatefulWidget {
   @override
-  State<MapSample> createState() => Mapp();
+  State<MapSample> createState() => BuildMap();
 }
 
-class Mapp extends State<MapSample> {
+class BuildMap extends State<MapSample> {
   final Completer<GoogleMapController> _controller = Completer();
-  final Map<PolylineId, Polyline> _mapPolylines = {};
+  final Map<PolylineId, Polyline> _BuildMapolylines = {};
 
   Set<Marker> markers = {};
   PolylinePoints polylinePoints = PolylinePoints();
@@ -48,12 +48,12 @@ class Mapp extends State<MapSample> {
     );
 
     setState(() {
-      _mapPolylines[polylineId] = polyline;
+      _BuildMapolylines[polylineId] = polyline;
     });
   }
 
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(-20.554331116, -48.567331064),
+    target: LatLng(-22.0123, -47.8908),
     zoom: 14.4746,
   );
 
@@ -63,8 +63,7 @@ class Mapp extends State<MapSample> {
 
     markers.addAll([
       const Marker(
-          markerId: MarkerId('value'),
-          position: LatLng(-20.554331116, -48.567331064)),
+          markerId: MarkerId('value'), position: LatLng(-22.0123, -47.8908)),
       const Marker(
           markerId: MarkerId('value2'),
           position: LatLng(-20.7333333, -48.5833333)),
@@ -109,7 +108,7 @@ class Mapp extends State<MapSample> {
                           _controller.complete(controller);
                         },
                         markers: markers,
-                        polylines: Set<Polyline>.of(_mapPolylines.values),
+                        polylines: Set<Polyline>.of(_BuildMapolylines.values),
                       ),
                     ),
                     Column(
@@ -209,8 +208,6 @@ class Mapp extends State<MapSample> {
                               child: Material(
                                 color: eerieBlack, // button color
                                 child: InkWell(
-                                  splashColor: Colors.white.withOpacity(0.8),
-                                  // splash color
                                   onTap: () {
                                     _setMap();
                                   },
@@ -268,7 +265,7 @@ class Mapp extends State<MapSample> {
 
   List<LatLng> _createPoints() {
     final List<LatLng> points = <LatLng>[];
-    points.add(const LatLng(-20.554331116, -48.567331064));
+    points.add(const LatLng(-22.0123, -47.8908));
     points.add(const LatLng(-20.7333333, -48.5833333));
     return points;
   }
