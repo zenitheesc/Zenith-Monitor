@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
@@ -31,7 +30,7 @@ Center mainBody(BuildContext context) {
   );
 }
 
-Widget profileImage(BuildContext context) {
+Stack profileImage(BuildContext context) {
   var imageRadius = MediaQuery.of(context).size.height * 0.1;
   var iconButtonRadius = MediaQuery.of(context).size.height * 0.035;
   var rightMargin = 0.8 * MediaQuery.of(context).size.width - 2 * imageRadius;
