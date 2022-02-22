@@ -9,7 +9,10 @@ class SignUpWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SignUpMainBody(rootContext: context),
+        body: SignUpMainBody(
+            screenWidth: MediaQuery.of(context).size.width,
+            screenHeight: MediaQuery.of(context).size.height,
+            deviceOrientation: MediaQuery.of(context).orientation),
         backgroundColor: eerieBlack,
       ),
     );

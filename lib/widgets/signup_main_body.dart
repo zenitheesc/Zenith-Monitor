@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/widgets/elevated_button_container.dart';
+import 'package:zenith_monitor/widgets/text_field_container.dart';
 
 class SignUpMainBody extends StatelessWidget {
-  final BuildContext _rootContext;
+  double screenWidth;
+  double screenHeight;
+  Orientation deviceOrientation;
 
-  const SignUpMainBody({required BuildContext rootContext})
-      : _rootContext = rootContext;
+  SignUpMainBody(
+      {required this.screenWidth,
+      required this.screenHeight,
+      required this.deviceOrientation});
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +20,16 @@ class SignUpMainBody extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ProfileImageSection(rootContext: _rootContext),
-            NamePasswordSection(rootContext: _rootContext),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              ButtonContainer(
-                  rootContext: _rootContext,
-                  text: 'Voltar',
-                  buttonColor: 0XFFE57373),
-              ButtonContainer(
-                  rootContext: _rootContext,
-                  text: 'Submeter',
-                  buttonColor: 0XFF8BC34A)
-            ])
+            ProfileImageSection(
+                screenWidth: screenWidth, screenHeight: screenHeight),
+            NamePasswordSection(
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+                deviceOrientation: deviceOrientation),
+            ButtonsSection(
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+                deviceOrientation: deviceOrientation)
           ],
         ),
       ),
@@ -34,17 +38,14 @@ class SignUpMainBody extends StatelessWidget {
 }
 
 class ProfileImageSection extends StatelessWidget {
-  double _screenWidth;
-  double _screenHeight;
+  double screenWidth;
+  double screenHeight;
   double _imageContainerSize;
   double _iconButtonContainerSize;
 
-  ProfileImageSection({required BuildContext rootContext})
-      : _screenWidth = MediaQuery.of(rootContext).size.width,
-        _screenHeight = MediaQuery.of(rootContext).size.height,
-        _imageContainerSize = 0.2 * MediaQuery.of(rootContext).size.height,
-        _iconButtonContainerSize =
-            0.07 * MediaQuery.of(rootContext).size.height;
+  ProfileImageSection({required this.screenWidth, required this.screenHeight})
+      : _imageContainerSize = 0.2 * screenHeight,
+        _iconButtonContainerSize = 0.07 * screenHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +58,8 @@ class ProfileImageSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(0.5 * _imageContainerSize),
               color: white),
           margin: EdgeInsets.only(
-              right: 0.8 * _screenWidth - _imageContainerSize,
-              bottom: 0.07 * _screenHeight),
+              right: 0.8 * screenWidth - _imageContainerSize,
+              bottom: 0.07 * screenHeight),
           child: Center(
             child: Icon(
               Icons.person_outlined,
@@ -95,133 +96,124 @@ class ProfileImageSection extends StatelessWidget {
   }
 }
 
-class TextFieldContainer extends StatelessWidget {
-  final BuildContext _rootContext;
-  final String _labelText;
-  final bool _isObscure;
-  double _containerWidth;
-  double _containerHeight;
-  double _fontSize;
-  double _bottomMargin;
-
-  TextFieldContainer(
-      {required BuildContext rootContext,
-      required String labelText,
-      bool isObscure = false})
-      : _rootContext = rootContext,
-        _labelText = labelText,
-        _isObscure = isObscure,
-        _containerWidth = (labelText == 'Nome' || labelText == 'Sobrenome')
-            ? 0.39 * MediaQuery.of(rootContext).size.width
-            : 0.80 * MediaQuery.of(rootContext).size.width,
-        _containerHeight = 0.08 * MediaQuery.of(rootContext).size.height,
-        _fontSize =
-            (MediaQuery.of(rootContext).orientation == Orientation.portrait)
-                ? 0.024 * MediaQuery.of(rootContext).size.height
-                : 0.024 * MediaQuery.of(rootContext).size.width,
-        _bottomMargin = 0.007 * MediaQuery.of(rootContext).size.height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: _containerWidth,
-      height: _containerHeight,
-      margin: EdgeInsets.only(bottom: _bottomMargin),
-      child: TextField(
-        style: TextStyle(
-            color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
-        decoration: InputDecoration(
-            labelText: "  " + _labelText,
-            labelStyle: TextStyle(
-                color: white, fontSize: _fontSize, fontFamily: 'DMSans'),
-            filled: true,
-            fillColor: Colors.black,
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(
-                    MediaQuery.of(_rootContext).size.height * 0.015)))),
-        obscureText: _isObscure,
-      ),
-    );
-  }
-}
-
 class NamePasswordSection extends StatelessWidget {
-  final BuildContext _rootContext;
+  double screenWidth;
+  double screenHeight;
+  Orientation deviceOrientation;
 
-  const NamePasswordSection({required BuildContext rootContext})
-      : _rootContext = rootContext;
+  NamePasswordSection(
+      {required this.screenWidth,
+      required this.screenHeight,
+      required this.deviceOrientation});
 
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        TextFieldContainer(rootContext: _rootContext, labelText: 'Nome'),
-        VerticalDivider(width: MediaQuery.of(_rootContext).size.width * 0.02),
-        TextFieldContainer(rootContext: _rootContext, labelText: 'Sobrenome')
+        TextFieldContainer(
+            labelText: 'Nome',
+            fontSize: _fontSize(),
+            width: _width(isName: true),
+            height: _height(),
+            margin: EdgeInsets.only(
+                bottom: 0.007 * screenHeight, right: 0.02 * screenWidth)),
+        TextFieldContainer(
+            labelText: 'Sobrenome',
+            fontSize: _fontSize(),
+            width: _width(isName: true),
+            height: _height(),
+            margin: EdgeInsets.only(bottom: 0.007 * screenHeight)),
       ]),
-      TextFieldContainer(rootContext: _rootContext, labelText: 'Email'),
       TextFieldContainer(
-          rootContext: _rootContext, labelText: 'Senha', isObscure: true),
+          labelText: 'Email',
+          fontSize: _fontSize(),
+          width: _width(),
+          height: _height(),
+          margin: EdgeInsets.only(bottom: 0.007 * screenHeight)),
       TextFieldContainer(
-          rootContext: _rootContext,
+          labelText: 'Senha',
+          fontSize: _fontSize(),
+          width: _width(),
+          height: _height(),
+          margin: EdgeInsets.only(bottom: 0.007 * screenHeight),
+          isObscure: true),
+      TextFieldContainer(
           labelText: 'Confirmar Senha',
+          fontSize: _fontSize(),
+          width: _width(),
+          height: _height(),
           isObscure: true),
     ]);
   }
+
+  double _fontSize() {
+    return (deviceOrientation == Orientation.portrait)
+        ? 0.024 * screenHeight
+        : 0.024 * screenWidth;
+  }
+
+  double _width({bool isName = false}) {
+    return (isName) ? 0.39 * screenWidth : 0.8 * screenWidth;
+  }
+
+  double _height() {
+    return 0.08 * screenHeight;
+  }
 }
 
-class ButtonContainer extends StatelessWidget {
-  final String _text;
-  final int _buttonColor;
-  double _screenWidth;
-  double _screenHeight;
-  double _leftMargin;
-  double _rightMargin;
-  double _topMargin;
-  double _fontSize;
+class ButtonsSection extends StatelessWidget {
+  double screenWidth;
+  double screenHeight;
+  Orientation deviceOrientation;
 
-  ButtonContainer(
-      {required BuildContext rootContext,
-      required String text,
-      required int buttonColor})
-      : _text = text,
-        _buttonColor = buttonColor,
-        _screenWidth = MediaQuery.of(rootContext).size.width,
-        _screenHeight = MediaQuery.of(rootContext).size.height,
-        _leftMargin = 0.01 * MediaQuery.of(rootContext).size.width,
-        _rightMargin = 0.01 * MediaQuery.of(rootContext).size.width,
-        _topMargin = 0.16 * MediaQuery.of(rootContext).size.height,
-        _fontSize =
-            (MediaQuery.of(rootContext).orientation == Orientation.portrait)
-                ? 0.025 * MediaQuery.of(rootContext).size.height
-                : 0.0195 * MediaQuery.of(rootContext).size.width;
+  ButtonsSection(
+      {required this.screenWidth,
+      required this.screenHeight,
+      required this.deviceOrientation});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 0.39 * _screenWidth,
-      height: 0.05 * _screenHeight,
-      margin: EdgeInsets.only(
-          left: _leftMargin, top: _topMargin, right: _rightMargin),
-      child: ElevatedButton(
-        child: Center(
-            child: Text(
-          _text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: white, fontSize: _fontSize, fontFamily: 'DMSans'),
-        )),
-        onPressed: () {},
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.03 * _screenHeight),
-                    side: BorderSide(color: Color(_buttonColor)))),
-            fixedSize: MaterialStateProperty.all(
-                Size(0.039 * _screenWidth, 0.05 * _screenHeight)),
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Color(_buttonColor))),
-      ),
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      ElevatedButtonContainer(
+          text: 'Voltar',
+          textStyle: TextStyle(
+              color: white, fontSize: _fontSize(), fontFamily: 'DMSans'),
+          width: 0.39 * screenWidth,
+          height: 0.05 * screenHeight,
+          margin: _margin(),
+          buttonStyle: _buttonStyle(lightCoral)),
+      ElevatedButtonContainer(
+          text: 'Submeter',
+          textStyle: TextStyle(
+              color: white, fontSize: _fontSize(), fontFamily: 'DMSans'),
+          width: 0.39 * screenWidth,
+          height: 0.05 * screenHeight,
+          margin: _margin(),
+          buttonStyle: _buttonStyle(mantisGreen))
+    ]);
+  }
+
+  double _fontSize() {
+    return (deviceOrientation == Orientation.portrait)
+        ? 0.025 * screenHeight
+        : 0.0195 * screenWidth;
+  }
+
+  EdgeInsets _margin() {
+    return EdgeInsets.only(
+        left: 0.01 * screenWidth,
+        top: 0.16 * screenHeight,
+        right: 0.01 * screenWidth);
+  }
+
+  ButtonStyle _buttonStyle(Color color) {
+    return ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0.03 * screenHeight),
+                side: BorderSide(color: color))),
+        fixedSize: MaterialStateProperty.all(
+            Size(0.039 * screenWidth, 0.05 * screenHeight)),
+        backgroundColor: MaterialStateProperty.all<Color>(color));
   }
 }
