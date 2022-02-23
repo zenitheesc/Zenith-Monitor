@@ -1,110 +1,129 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/widgets/elevated_button_container.dart';
+import 'package:zenith_monitor/widgets/text_field_container.dart';
 
-class ForgotMyPassword extends StatelessWidget {
-  ForgotMyPassword({Key? key});
+class ForgotMyPasswordBody extends StatelessWidget {
+  double screenWidth;
+  double screenHeight;
+  Orientation deviceOrientation;
 
-  Widget buildButton(double height, double width, Color buttoncolor,
-      double borderradius, String text, Color textColor) {
-    return Container(
-      alignment: Alignment.center,
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text(text),
-        style: ElevatedButton.styleFrom(
-            primary: buttoncolor,
-            onPrimary: textColor,
-            textStyle: TextStyle(
-              color: textColor,
-              fontSize: 18,
-              fontFamily: 'DMSans-Regular',
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(borderradius))),
-            fixedSize: Size(width, height)),
-      ),
-    );
-  }
-
-  AppBar buildTitle() {
-    return AppBar(
-      toolbarHeight: 200,
-      elevation: 0.0,
-      backgroundColor: eerieBlack,
-      title: Padding(
-        padding: EdgeInsets.all(28.0),
-        child: Text('Esqueci minha \nsenha',
-            style: TextStyle(
-                color: white,
-                fontSize: 36,
-                fontFamily: 'DMSans-Bold',
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start),
-      ),
-    );
-  }
-
-  Align buildMainBody() {
-    return Align(
-      alignment: FractionalOffset.bottomCenter,
-      child: Container(
-        height: 405.0,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  raisingBlack,
-                  black,
-                ]),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(45.0),
-                topRight: Radius.circular(45.0))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 70,
-              width: 340,
-              decoration: BoxDecoration(
-                  color: black, borderRadius: BorderRadius.circular(15)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  cursorColor: white,
-                  style: TextStyle(
-                      color: gray, fontSize: 16, fontFamily: 'DMSans-Regular'),
-                  decoration: InputDecoration(
-                    hintText: 'Email cadastrado',
-                    hintStyle: TextStyle(
-                        color: gray,
-                        fontSize: 16,
-                        fontFamily: 'DMSans-Regular'),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: black),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: black),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 60),
-            buildButton(56, 265, white, 12, 'Submeter', black),
-            SizedBox(height: 30),
-            buildButton(40, 263, lightCoral, 20, 'Voltar', white),
-          ],
-        ),
-      ),
-    );
-  }
+  ForgotMyPasswordBody(
+      {required this.screenWidth,
+      required this.screenHeight,
+      required this.deviceOrientation});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: buildTitle(),
-        body: buildMainBody(),
-        backgroundColor: eerieBlack);
+    return SingleChildScrollView(
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      TitleSection(
+          screenWidth: screenWidth,
+          screenHeight: screenHeight,
+          deviceOrientation: deviceOrientation),
+      Container(
+          height: 0.50 * screenHeight,
+          margin: EdgeInsets.only(top: 0.27 * screenHeight),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    raisingBlack,
+                    black,
+                  ]),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(_boderRadius()),
+                  topRight: Radius.circular(_boderRadius()))),
+          child: EmailButtonsSection(
+              screenWidth: screenWidth,
+              screenHeight: screenHeight,
+              deviceOrientation: deviceOrientation),
+          alignment: Alignment.center)
+    ]));
+  }
+
+  double _boderRadius() {
+    return screenWidth *
+        ((deviceOrientation == Orientation.portrait) ? 0.14 : 0.07);
+  }
+}
+
+class TitleSection extends StatelessWidget {
+  double screenWidth;
+  double screenHeight;
+  Orientation deviceOrientation;
+
+  TitleSection(
+      {required this.screenWidth,
+      required this.screenHeight,
+      required this.deviceOrientation});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 0.8 * screenWidth,
+        padding: EdgeInsets.only(top: 0.10 * screenHeight),
+        child: Text('Esqueci minha \nsenha',
+            style: TextStyle(
+                color: white,
+                fontFamily: 'DMSans',
+                fontSize: _fontSize(),
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start));
+  }
+
+  double _fontSize() {
+    return (deviceOrientation == Orientation.portrait)
+        ? 0.05 * screenHeight
+        : 0.03 * screenWidth;
+  }
+}
+
+class EmailButtonsSection extends StatelessWidget {
+  double screenWidth;
+  double screenHeight;
+  Orientation deviceOrientation;
+
+  EmailButtonsSection(
+      {required this.screenWidth,
+      required this.screenHeight,
+      required this.deviceOrientation});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      TextFieldContainer(
+          labelText: 'Email cadastrado',
+          fontSize: _fontSize(),
+          width: 0.80 * screenWidth,
+          height: 0.08 * screenHeight,
+          margin: EdgeInsets.only(bottom: 0.03 * screenHeight)),
+      ElevatedButtonContainer(
+          labelText: 'Submeter',
+          textStyle: TextStyle(
+              color: Colors.black, fontSize: _fontSize(), fontFamily: 'DMSans'),
+          width: 0.62 * screenWidth,
+          height: 0.07 * screenHeight,
+          margin: EdgeInsets.only(
+              top: 0.03 * screenHeight, bottom: 0.02 * screenHeight),
+          borderRadius: 0.016 * screenHeight,
+          buttonColor: white),
+      ElevatedButtonContainer(
+          labelText: 'Voltar',
+          textStyle: TextStyle(
+              color: white, fontSize: _fontSize(), fontFamily: 'DMSans'),
+          width: 0.62 * screenWidth,
+          height: 0.05 * screenHeight,
+          margin: EdgeInsets.only(top: 0.02 * screenHeight),
+          borderRadius: 0.03 * screenHeight,
+          buttonColor: lightCoral)
+    ]);
+  }
+
+  double _fontSize() {
+    return (deviceOrientation == Orientation.portrait)
+        ? 0.025 * screenHeight
+        : 0.0195 * screenWidth;
   }
 }

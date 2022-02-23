@@ -1,4 +1,4 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 import 'package:zenith_monitor/utils/helpers/string_to_pattern.dart';
 import 'package:zenith_monitor/constants/variables_types.dart';
 import 'class_mission_variable.dart';
@@ -22,7 +22,7 @@ class MissionVariablesList {
     if (integerNames.contains(type)) {
       _list.add(MissionVariable<int>(name, "Integer"));
     } else if (floatNames.contains(type)) {
-      _list.add(MissionVariable<Float>(name, "Float"));
+      //_list.add(MissionVariable<Float>(name, "Float"));
     } else if (stringNames.contains(type)) {
       _list.add(MissionVariable<String>(name, "String"));
     } else {
