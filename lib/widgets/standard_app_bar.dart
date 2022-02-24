@@ -17,7 +17,9 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0.0,
         title: Text(title, style: const TextStyle(color: white, fontSize: 20)),
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: const Icon(Icons.arrow_back_ios_new_rounded)));
   }
 }

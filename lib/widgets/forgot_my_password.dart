@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
 class ForgotMyPassword extends StatelessWidget {
   const ForgotMyPassword({Key? key});
@@ -26,23 +27,6 @@ class ForgotMyPassword extends StatelessWidget {
     );
   }
 
-  AppBar buildTitle() {
-    return AppBar(
-      toolbarHeight: 200,
-      elevation: 0.0,
-      backgroundColor: eerieBlack,
-      title: const Padding(
-        padding: EdgeInsets.all(28.0),
-        child: Text('Esqueci minha \nsenha',
-            style: TextStyle(
-                color: white,
-                fontSize: 36,
-                fontFamily: 'DMSans-Bold',
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start),
-      ),
-    );
-  }
 
   Align buildMainBody() {
     return Align(
@@ -103,7 +87,7 @@ class ForgotMyPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: buildTitle(),
+        appBar: const StandardAppBar(title: "Esqueci minha senha"),
         body: buildMainBody(),
         backgroundColor: eerieBlack);
   }
