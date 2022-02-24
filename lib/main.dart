@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
+import 'package:zenith_monitor/widgets/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,6 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => MissionBloc()),
-    ], child: const Scaffold());
+    ], child: const LoginWidget());
   }
 }

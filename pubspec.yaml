@@ -38,6 +38,7 @@ dependencies:
   google_maps_flutter: ^2.0.6
 
   flutter_bloc: ^7.0.1
+  rive: ^0.7.33
 
 dev_dependencies:
   flutter_lints: ^1.0.4
@@ -57,6 +58,7 @@ flutter:
   
   assets:
     - assets/images/
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
