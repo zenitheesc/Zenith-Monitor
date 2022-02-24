@@ -21,7 +21,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
+  flutter: 
     sdk: flutter
   # auto_size_text: ^2.1.0
 
@@ -29,16 +29,19 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^0.13.3
+  path_provider: ^2.0.3
+  flutter_bloc: ^7.3.0
   http_parser: ^4.0.0
   # Firebase related
-  firebase_core: "^1.7.0"
+  google_sign_in: ^5.1.0
+  firebase_auth: ^3.0.2
+  firebase_core: ^1.7.0
   cloud_firestore: ^2.5.3
-
   location: ^4.3.0
   google_maps_flutter: ^2.0.6
-
-  flutter_bloc: ^7.0.1
+  flutter_facebook_auth: ^3.5.2
   rive: ^0.7.33
+
 
 dev_dependencies:
   flutter_lints: ^1.0.4
