@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
 class ProfileImageSection extends StatelessWidget {
-  double screenWidth;
-  double screenHeight;
-  double _imageContainerSize;
-  double _iconButtonContainerSize;
+  final double screenWidth;
+  final double screenHeight;
+  final double _imageContainerSize;
+  final double _iconButtonContainerSize;
 
-  ProfileImageSection({required this.screenWidth, required this.screenHeight})
+  const ProfileImageSection(
+      {required this.screenWidth, required this.screenHeight})
       : _imageContainerSize = 0.2 * screenHeight,
         _iconButtonContainerSize = 0.07 * screenHeight;
 
@@ -48,7 +49,7 @@ class ProfileImageSection extends StatelessWidget {
               onPressed: () {
                 print('Icon button was pressed!');
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.photo_library_outlined,
               ),
             ),

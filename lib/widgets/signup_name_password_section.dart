@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/widgets/text_field_container.dart';
 
 class NamePasswordSection extends StatelessWidget {
-  double screenWidth;
-  double screenHeight;
-  Orientation deviceOrientation;
+  final double screenWidth;
+  final double screenHeight;
+  final Orientation deviceOrientation;
 
-  NamePasswordSection(
+  const NamePasswordSection(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation});

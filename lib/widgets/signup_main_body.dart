@@ -4,11 +4,11 @@ import 'package:zenith_monitor/widgets/signup_name_password_section.dart';
 import 'package:zenith_monitor/widgets/signup_profile_image_section.dart';
 
 class SignUpMainBody extends StatelessWidget {
-  double screenWidth;
-  double screenHeight;
-  Orientation deviceOrientation;
+  final double screenWidth;
+  final double screenHeight;
+  final Orientation deviceOrientation;
 
-  SignUpMainBody(
+  const SignUpMainBody(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation});

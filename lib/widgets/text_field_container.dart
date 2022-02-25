@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
 class TextFieldContainer extends StatelessWidget {
-  double width;
-  double height;
-  EdgeInsetsGeometry? margin;
-  bool obscureText;
-  double fontSize;
+  final double width;
+  final double height;
+  final EdgeInsetsGeometry? margin;
+  final bool obscureText;
+  final double fontSize;
   final String labelText;
 
-  TextFieldContainer(
+  const TextFieldContainer(
       {required this.labelText,
       required this.fontSize,
       required this.width,

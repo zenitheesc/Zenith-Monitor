@@ -3,11 +3,11 @@ import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/widgets/elevated_button_container.dart';
 
 class ButtonsSection extends StatelessWidget {
-  double screenWidth;
-  double screenHeight;
-  Orientation deviceOrientation;
+  final double screenWidth;
+  final double screenHeight;
+  final Orientation deviceOrientation;
 
-  ButtonsSection(
+  const ButtonsSection(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation});
