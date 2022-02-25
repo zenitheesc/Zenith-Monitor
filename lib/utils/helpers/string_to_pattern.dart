@@ -3,7 +3,7 @@
 /// to format names.
 
 String stringToPattern(String str) {
-  str = str.replaceAll(new RegExp(r'[^a-zA-Z\ ]'), '');
+  str = str.replaceAll(RegExp(r'[^a-zA-Z\ ]'), '');
 
   var list = <String>[];
 

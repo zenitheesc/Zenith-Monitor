@@ -5,7 +5,7 @@ import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
 class UserProfile extends StatelessWidget {
-  UserProfile({Key? key, required this.user});
+  const UserProfile({Key? key, required this.user});
 
   final User user;
 
@@ -18,7 +18,7 @@ class UserProfile extends StatelessWidget {
       return CircleAvatar(
         child: Text(
           user.getName()[0].toUpperCase(),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 60.0,
             color: white,
           ),
@@ -49,11 +49,12 @@ class UserProfile extends StatelessWidget {
               child: FutureBuilder(
                 future: profileChild(),
                 builder: (context, AsyncSnapshot<Widget> snapshot) {
-                  if (!snapshot.hasData)
-                    return ZenithProgressIndicator(
+                  if (!snapshot.hasData) {
+                    return const ZenithProgressIndicator(
                       size: 160.0,
                       fileName: "z_icon_white.png",
                     );
+                  }
                   return snapshot.data!;
                 },
               ),
@@ -67,7 +68,7 @@ class UserProfile extends StatelessWidget {
                 fontSize: 24.0,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(12.0, 5.0, 12.0, 5.0),
               decoration: const BoxDecoration(

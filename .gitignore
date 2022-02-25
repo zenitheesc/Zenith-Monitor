@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+#Firebase google's service json is already ignored, this is a redunducy
+android/app/google-services.json
