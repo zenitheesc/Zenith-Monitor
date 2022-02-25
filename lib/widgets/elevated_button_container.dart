@@ -25,11 +25,12 @@ class ElevatedButtonContainer extends StatelessWidget {
       height: height,
       margin: margin,
       child: ElevatedButton(
-          child: Text(
+          child: Center(
+              child: Text(
             labelText,
             textAlign: TextAlign.center,
             style: textStyle,
-          ),
+          )),
           onPressed: () {},
           style: ElevatedButton.styleFrom(
               primary: buttonColor,
