@@ -5,7 +5,7 @@ class TextFieldContainer extends StatelessWidget {
   double width;
   double height;
   EdgeInsetsGeometry? margin;
-  bool isObscure;
+  bool obscureText;
   double fontSize;
   final String labelText;
 
@@ -15,7 +15,7 @@ class TextFieldContainer extends StatelessWidget {
       required this.width,
       required this.height,
       this.margin,
-      this.isObscure = false});
+      this.obscureText = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,10 @@ class TextFieldContainer extends StatelessWidget {
       margin: margin,
       child: TextField(
         style: TextStyle(
-            color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
+            color: white,
+            fontSize: fontSize,
+            fontWeight: FontWeight.normal,
+            fontFamily: 'DMSans'),
         decoration: InputDecoration(
             labelText: "  " + labelText,
             labelStyle: TextStyle(
@@ -35,7 +38,7 @@ class TextFieldContainer extends StatelessWidget {
             border: OutlineInputBorder(
                 borderRadius:
                     BorderRadius.all(Radius.circular(0.24 * height)))),
-        obscureText: isObscure,
+        obscureText: obscureText,
       ),
     );
   }

@@ -4,16 +4,18 @@ class ElevatedButtonContainer extends StatelessWidget {
   double width;
   double height;
   EdgeInsetsGeometry? margin;
-  ButtonStyle buttonStyle;
+  double borderRadius;
+  Color buttonColor;
   TextStyle textStyle;
-  final String text;
+  final String labelText;
 
   ElevatedButtonContainer(
       {required this.width,
       required this.height,
       this.margin,
-      required this.buttonStyle,
-      required this.text,
+      required this.borderRadius,
+      required this.buttonColor,
+      required this.labelText,
       required this.textStyle});
 
   @override
@@ -23,15 +25,20 @@ class ElevatedButtonContainer extends StatelessWidget {
       height: height,
       margin: margin,
       child: ElevatedButton(
-        child: Center(
-            child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: textStyle,
-        )),
-        onPressed: () {},
-        style: buttonStyle,
-      ),
+          child: Center(
+              child: Text(
+            labelText,
+            textAlign: TextAlign.center,
+            style: textStyle,
+          )),
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+              primary: buttonColor,
+              onPrimary: Colors.grey,
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(borderRadius))),
+              fixedSize: Size(width, height))),
     );
   }
 }
