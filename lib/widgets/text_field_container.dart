@@ -24,12 +24,16 @@ class TextFieldContainer extends StatelessWidget {
       height: height,
       margin: margin,
       child: TextField(
+        cursorColor: white,
         style: TextStyle(
             color: white,
             fontSize: fontSize,
             fontWeight: FontWeight.normal,
             fontFamily: 'DMSans'),
         decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(0.24 * height)),
+                borderSide: const BorderSide(color: white, width: 2.0)),
             labelText: "  " + labelText,
             labelStyle: TextStyle(
                 color: white, fontSize: fontSize, fontFamily: 'DMSans'),
