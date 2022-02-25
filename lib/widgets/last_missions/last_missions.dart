@@ -3,14 +3,14 @@ import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/widgets/detalhes_missao.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
-class LastMissions extends StatefulWidget {
-  const LastMissions({Key? key}) : super(key: key);
+class LastMissionsWidget extends StatefulWidget {
+  const LastMissionsWidget({Key? key}) : super(key: key);
 
   @override
-  _LastMissionsState createState() => _LastMissionsState();
+  _LastMissionsWidgetState createState() => _LastMissionsWidgetState();
 }
 
-class _LastMissionsState extends State<LastMissions> {
+class _LastMissionsWidgetState extends State<LastMissionsWidget> {
   @override
   Widget build(BuildContext context) {
     final List<Container> entries = [
