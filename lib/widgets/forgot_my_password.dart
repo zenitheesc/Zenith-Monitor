@@ -25,7 +25,7 @@ class ForgotMyPasswordBody extends StatelessWidget {
           height: 0.50 * screenHeight,
           margin: EdgeInsets.only(top: 0.27 * screenHeight),
           decoration: BoxDecoration(
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
