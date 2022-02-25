@@ -19,7 +19,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   late rive.RiveAnimationController _googleLoginController;
 
   void _toggleAnimation(rive.RiveAnimationController controller) {
-    if(controller.isActive == false) {
+    if (controller.isActive == false) {
       controller.isActive = true;
     }
   }
@@ -55,7 +55,8 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Center(
       child: SingleChildScrollView(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -166,6 +167,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: TextField(
+        controller: controller,
         cursorColor: white,
         style: const TextStyle(
             color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
