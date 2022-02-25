@@ -44,11 +44,11 @@ class EmailAndPasswordAuth extends Authentication {
     }
   }
 
-  Future<void> signIn(LocalUser user, String password) async {
+  Future<void> signIn(String email, String password) async {
     if (_auth.currentUser == null) {
       try {
         await _auth.signInWithEmailAndPassword(
-            email: user.getEmail(), password: password);
+            email: email, password: password);
       } on FirebaseAuthException catch (e) {
         if (e.code == "wrong-password") {
           throw WrongPassword();

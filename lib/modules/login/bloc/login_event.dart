@@ -12,15 +12,15 @@ abstract class AuthenticationEvent extends LoginEvent {
 }
 
 class EmailLoginEvent extends AuthenticationEvent {
-  LocalUser user;
+  String email;
   String password;
 
-  EmailLoginEvent({required this.user, required this.password})
+  EmailLoginEvent({required this.email, required this.password})
       : super(auth: EmailAndPasswordAuth());
 
   @override
   Future<void> loginCall() async {
-    await EmailAndPasswordAuth().signIn(user, password);
+    await EmailAndPasswordAuth().signIn(email, password);
   }
 
   @override
