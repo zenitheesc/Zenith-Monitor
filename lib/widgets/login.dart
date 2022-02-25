@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/widgets/forgot_my_password.dart';
 import 'package:rive/rive.dart' as rive;
 
@@ -79,9 +81,12 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Row otherMethodsOfLoginRow() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      otherMethodsOfLoginButton("github", _githubLoginController),
-      otherMethodsOfLoginButton("facebook", _facebookLoginController),
-      otherMethodsOfLoginButton("google", _googleLoginController)
+      otherMethodsOfLoginButton("github", _githubLoginController,
+          null), // github auth service doesn't exist yet, later github auth event must be passed as a parameter
+      otherMethodsOfLoginButton(
+          "facebook", _facebookLoginController, FacebookLoginEvent()),
+      otherMethodsOfLoginButton(
+          "google", _googleLoginController, GoogleLoginEvent())
     ]);
   }
 
@@ -104,13 +109,19 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  ElevatedButton otherMethodsOfLoginButton(
-      String animationPathForType, rive.RiveAnimationController _controller) {
+  ElevatedButton otherMethodsOfLoginButton(String animationPathForType,
+      rive.RiveAnimationController _controller, AuthenticationEvent? event) {
     String animationPath =
         "assets/animations/" + animationPathForType + "_icon.riv";
 
     return ElevatedButton(
-      onPressed: () => _toggleAnimation(_controller),
+      onPressed: () => {
+        if (event != null)
+          {
+            _toggleAnimation(_controller),
+            BlocProvider.of<LoginBloc>(context).add(event),
+          }
+      },
       child: Container(
           width: 40,
           height: 40,
@@ -130,7 +141,13 @@ class _LoginWidgetState extends State<LoginWidget> {
           color: lightBrown, borderRadius: BorderRadius.circular(20)),
       width: MediaQuery.of(context).size.width * 0.35,
       child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            if (buttonText == "Login") {
+              BlocProvider.of<LoginBloc>(context).add(EmailLoginEvent(
+                  email: emailController.text,
+                  password: passwordController.text));
+            }
+          },
           child: Text(buttonText, style: const TextStyle(color: white))),
     );
   }
