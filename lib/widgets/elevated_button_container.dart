@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ElevatedButtonContainer extends StatelessWidget {
-  double width;
-  double height;
-  EdgeInsetsGeometry? margin;
-  double borderRadius;
-  Color buttonColor;
-  TextStyle textStyle;
+  final double width;
+  final double height;
+  final EdgeInsetsGeometry? margin;
+  final double borderRadius;
+  final Color buttonColor;
+  final TextStyle textStyle;
   final String labelText;
 
-  ElevatedButtonContainer(
+  const ElevatedButtonContainer(
       {required this.width,
       required this.height,
       this.margin,
