@@ -4,11 +4,11 @@ import 'package:zenith_monitor/widgets/elevated_button_container.dart';
 import 'package:zenith_monitor/widgets/text_field_container.dart';
 
 class EmailButtonsSection extends StatelessWidget {
-  double screenWidth;
-  double screenHeight;
-  Orientation deviceOrientation;
+  final double screenWidth;
+  final double screenHeight;
+  final Orientation deviceOrientation;
 
-  EmailButtonsSection(
+  const EmailButtonsSection(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation});

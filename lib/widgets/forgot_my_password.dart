@@ -4,11 +4,11 @@ import 'package:zenith_monitor/widgets/forgot_my_password_email_buttons_section.
 import 'package:zenith_monitor/widgets/forgot_my_password_title_section.dart';
 
 class ForgotMyPasswordBody extends StatelessWidget {
-  double screenWidth;
-  double screenHeight;
-  Orientation deviceOrientation;
+  final double screenWidth;
+  final double screenHeight;
+  final Orientation deviceOrientation;
 
-  ForgotMyPasswordBody(
+  const ForgotMyPasswordBody(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation});

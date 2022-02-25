@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 
 class TitleSection extends StatelessWidget {
-  double screenWidth;
-  double screenHeight;
-  Orientation deviceOrientation;
+  final double screenWidth;
+  final double screenHeight;
+  final Orientation deviceOrientation;
 
-  TitleSection(
+  const TitleSection(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation});
