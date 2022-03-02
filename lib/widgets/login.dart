@@ -139,10 +139,11 @@ class _LoginWidgetState extends State<LoginWidget> {
       alignment: const Alignment(0.7, 0),
       child: TextButton(
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ForgotMyPassword()));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => const ForgotMyPassword()));
+            // Maybe all the routes should be created at main, and then we don't need create a MaterialPageRoute every time
           },
           child: const Text(
             "Esqueci a Senha",
