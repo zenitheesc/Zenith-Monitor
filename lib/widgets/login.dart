@@ -143,9 +143,12 @@ class _LoginWidgetState extends State<LoginWidget> {
       child: TextButton(
           onPressed: () {
             if (buttonText == "Login") {
+              print(emailController.text);
               BlocProvider.of<LoginBloc>(context).add(EmailLoginEvent(
                   email: emailController.text,
                   password: passwordController.text));
+            } else {
+              Navigator.pushNamed(context, '/signup');
             }
           },
           child: Text(buttonText, style: const TextStyle(color: white))),

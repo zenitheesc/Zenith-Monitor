@@ -8,12 +8,14 @@ class TextFieldContainer extends StatelessWidget {
   final bool obscureText;
   final double fontSize;
   final String labelText;
+  final TextEditingController controller;
 
   const TextFieldContainer(
       {required this.labelText,
       required this.fontSize,
       required this.width,
       required this.height,
+      required this.controller,
       this.margin,
       this.obscureText = false});
 
@@ -24,6 +26,7 @@ class TextFieldContainer extends StatelessWidget {
       height: height,
       margin: margin,
       child: TextField(
+        controller: controller,
         cursorColor: white,
         style: TextStyle(
             color: white,
