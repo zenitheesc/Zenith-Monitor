@@ -33,7 +33,9 @@ class FirebaseProblem extends StandardUserDocError {
   String errorMsg;
 
   FirebaseProblem({required this.isFirebaseException, required this.errorMsg})
-      : super(errorMessage: "An error occurred during firebase interaction");
+      : super(
+            errorMessage:
+                "An error occurred during firebase interaction: " + errorMsg);
 
   String errorType() {
     return isFirebaseException

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
@@ -43,7 +45,21 @@ class Application extends StatelessWidget {
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
-              return const LoginScreen();
+              FirebaseAuth a = FirebaseAuth.instance;
+              a.signOut();
+              return MaterialApp(
+                showPerformanceOverlay: false, // shows fps
+                debugShowCheckedModeBanner: false,
+                title: 'Main Screen',
+                theme: ThemeData(
+                  primaryColor: Colors.black,
+                ),
+                initialRoute: '/login',
+                routes: {
+                  '/login': (context) => const LoginScreen(),
+                  '/signup': (context) => const SignUpScreen(),
+                },
+              );
             }
 
             return const ZenithProgressIndicator(
