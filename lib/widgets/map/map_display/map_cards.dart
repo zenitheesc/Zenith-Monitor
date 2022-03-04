@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/widgets/map/map.dart';
 
-Widget insertText(BuildContext context, String text, String input) {
+double setSizeForOrientation(
+    BuildContext context, Orientation orientation, double size) {
+  if (orientation == Orientation.portrait) {
+    return screenSize(context, "width", size);
+  }
+  return screenSize(context, "height", size);
+}
+
+Widget insertText(
+    BuildContext context, Orientation orientation, String text, String input) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -10,13 +19,13 @@ Widget insertText(BuildContext context, String text, String input) {
         text,
         style: TextStyle(
             color: white,
-            fontSize: screenSize(context, "width", 0.04),
+            fontSize: setSizeForOrientation(context, orientation, 0.04),
             fontFamily: 'DMSans'),
       ),
       Text(input,
           style: TextStyle(
               color: white,
-              fontSize: screenSize(context, "width", 0.03),
+              fontSize: setSizeForOrientation(context, orientation, 0.03),
               fontFamily: 'DMSans')),
     ],
   );
@@ -33,22 +42,22 @@ Container mapButton(BuildContext context) {
       width: MediaQuery.of(context).size.width * 0,
       decoration: const BoxDecoration(
         color: Colors.white,
-        // borderRadius: BorderRadius.circular(),
       ));
 }
 
-Row informations(BuildContext context, String text1, String text2,
-    String input1, String input2) {
+Row informations(BuildContext context, Orientation orientation, String text1,
+    String text2, String input1, String input2) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      informationsContainer(context, text1, input1),
-      informationsContainer(context, text2, input2)
+      informationsContainer(context, orientation, text1, input1),
+      informationsContainer(context, orientation, text2, input2)
     ],
   );
 }
 
-Widget informationsContainer(BuildContext context, String text, String input) {
+Widget informationsContainer(
+    BuildContext context, Orientation orientation, String text, String input) {
   return Container(
     decoration: BoxDecoration(
       color: eerieBlack,
@@ -61,7 +70,7 @@ Widget informationsContainer(BuildContext context, String text, String input) {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         const Image(image: AssetImage('assets/images/award.png')),
-        insertText(context, text, input),
+        insertText(context, orientation, text, input),
       ],
     )),
   );

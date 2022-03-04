@@ -6,8 +6,6 @@ part 'map_event.dart';
 class MapBloc extends Bloc<MapEvent, MapState> {
   MapBloc() : super(MapInitialState());
 
-  late List _list;
-
   @override
   Stream<MapState> mapEventToState(MapEvent event) async* {
     if (event is UserInfoEvent) {

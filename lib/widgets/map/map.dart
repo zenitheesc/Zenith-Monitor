@@ -4,11 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
-import 'package:zenith_monitor/widgets/map/navigation_drawer.dart';
-import 'package:zenith_monitor/widgets/map/map_cards.dart';
+import 'package:zenith_monitor/widgets/map/map_display/map_theme_button.dart';
+import 'package:zenith_monitor/widgets/map/navigation_drawer/navigation_drawer.dart';
+
+import 'map_display/info_listview.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -16,42 +17,14 @@ class MapSample extends StatefulWidget {
 }
 
 class BuildMap extends State<MapSample> {
-  final Completer<GoogleMapController> _controller = Completer();
-  final Map<PolylineId, Polyline> _BuildMapolylines = {};
-
   Set<Marker> markers = {};
   PolylinePoints polylinePoints = PolylinePoints();
-  MapType _maptype = MapType.normal;
+
   int _polylineIdCounter = 1;
-
-  void _setMap() async {
-    setState(() {
-      if (_maptype == MapType.normal) {
-        _maptype = MapType.satellite;
-      } else {
-        _maptype = MapType.normal;
-      }
-    });
-  }
-
-  Future<void> _add() async {
-    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
-    _polylineIdCounter++;
-    final PolylineId polylineId = PolylineId(polylineIdVal);
-
-    final Polyline polyline = Polyline(
-      polylineId: polylineId,
-      consumeTapEvents: true,
-      color: Colors.red,
-      width: 5,
-      points: _createPoints(),
-    );
-
-    setState(() {
-      _BuildMapolylines[polylineId] = polyline;
-    });
-  }
-
+  final Completer<GoogleMapController> _controller = Completer();
+  // ignore: non_constant_identifier_names
+  final Map<PolylineId, Polyline> _BuildMapolylines = {};
+  MapType _maptype = MapType.normal;
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-22.0123, -47.8908),
     zoom: 14.4746,
@@ -60,14 +33,6 @@ class BuildMap extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     GoogleMapController _mapController;
-
-    markers.addAll([
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0123, -47.8908)),
-      const Marker(
-          markerId: MarkerId('value2'),
-          position: LatLng(-20.7333333, -48.5833333)),
-    ]);
 
     MissionVariablesList t = MissionVariablesList();
 
@@ -87,9 +52,17 @@ class BuildMap extends State<MapSample> {
 
     BlocProvider.of<MapBloc>(context).add(UserInfoEvent(newPackage: t));
 
+    markers.addAll([
+      const Marker(
+          markerId: MarkerId('value'), position: LatLng(-22.0123, -47.8908)),
+      const Marker(
+          markerId: MarkerId('value2'),
+          position: LatLng(-20.7333333, -48.5833333)),
+    ]);
+
     return Scaffold(
-      body: Builder(
-          builder: (context) => Align(
+      body: OrientationBuilder(
+          builder: (context, orientation) => Align(
                 alignment: Alignment.bottomCenter,
                 child: Stack(children: <Widget>[
                   Column(children: [
@@ -111,139 +84,21 @@ class BuildMap extends State<MapSample> {
                         polylines: Set<Polyline>.of(_BuildMapolylines.values),
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                            height: screenSize(context, "height", 0.25),
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              color: Colors.black,
-                            ),
-                            child: BlocBuilder<MapBloc, MapState>(
-                                builder: (context, state) {
-                              if (state is UserInfoState) {
-                                List scrollList =
-                                    state.newPackage.getVariablesList();
-
-                                return ListView.separated(
-                                    itemCount: scrollList.length % 2 == 0
-                                        ? scrollList.length ~/ 2
-                                        : scrollList.length ~/ 2 + 1,
-                                    separatorBuilder:
-                                        (BuildContext context, int index) =>
-                                            Divider(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.02),
-                                    padding: EdgeInsets.only(
-                                        top:
-                                            MediaQuery.of(context).size.height *
-                                                0.02,
-                                        bottom:
-                                            MediaQuery.of(context).size.height *
-                                                0.01),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      if (2 * index + 1 < scrollList.length) {
-                                        return informations(
-                                            context,
-                                            scrollList[index * 2]
-                                                .getVariableName()
-                                                .toString(),
-                                            scrollList[index * 2 + 1]
-                                                .getVariableName()
-                                                .toString(),
-                                            scrollList[index * 2]
-                                                .getVariableValue()
-                                                .toString(),
-                                            scrollList[index * 2 + 1]
-                                                .getVariableValue()
-                                                .toString());
-                                      } else {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              right: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.23,
-                                              left: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.23),
-                                          child: informationsContainer(
-                                              context,
-                                              scrollList[index * 2]
-                                                  .getVariableName()
-                                                  .toString(),
-                                              scrollList[index * 2]
-                                                  .getVariableName()
-                                                  .toString()),
-                                        );
-                                      }
-                                    });
-                              }
-                              return Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: const []);
-                            }))
-                      ],
-                    ),
+                    infoListView(context, orientation),
                   ]),
                   Positioned.fill(
-                    left: -MediaQuery.of(context).size.width +
-                        1.8 / 10 * MediaQuery.of(context).size.width,
-                    bottom: -MediaQuery.of(context).size.height * 0.33,
-                    child: Center(
-                      child: Container(
-                          height: screenSize(context, "height", 0.08),
-                          child: SizedBox.fromSize(
-                            size: Size(
-                                screenSize(context, "height", 0.068),
-                                screenSize(context, "height",
-                                    0.068)), // button width and height
-                            child: ClipPath(
-                              child: Material(
-                                color: eerieBlack, // button color
-                                child: InkWell(
-                                  onTap: () {
-                                    _setMap();
-                                  },
-                                  // button pressed
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const <Widget>[
-                                      Text(
-                                        "Tema",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: white,
-                                        ),
-                                      ), // icon
-                                      Icon(
-                                        Icons.palette,
-                                        color: white,
-                                      ), // text
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )),
-                    ),
+                    left: getLeftPositionForOrientation(orientation),
+                    bottom: getBottomPositionForOrientation(orientation),
+                    child: mapThemeButton(context, orientation, this),
                   ),
                   Positioned.fill(
-                      left: -MediaQuery.of(context).size.width +
-                          0.5 / 10 * MediaQuery.of(context).size.width,
+                      left: -1 * MediaQuery.of(context).size.width,
                       child: Center(
                         child: CustomPaint(
                             size: const Size(20, 50), painter: Draw()),
                       )),
                   Positioned.fill(
-                      left: -MediaQuery.of(context).size.width +
-                          0.75 / 10 * MediaQuery.of(context).size.width,
+                      left: -0.975 * MediaQuery.of(context).size.width,
                       child: Center(
                           child: CircleAvatar(
                         radius: 20,
@@ -263,11 +118,52 @@ class BuildMap extends State<MapSample> {
     );
   }
 
+  double getLeftPositionForOrientation(Orientation orientation) {
+    if (orientation == Orientation.landscape) {
+      return 0.92 * MediaQuery.of(context).size.width;
+    }
+    return -0.83 * MediaQuery.of(context).size.width;
+  }
+
+  double getBottomPositionForOrientation(Orientation orientation) {
+    if (orientation == Orientation.landscape) {
+      return 0.45 * MediaQuery.of(context).size.height;
+    }
+    return -0.3 * MediaQuery.of(context).size.height;
+  }
+
   List<LatLng> _createPoints() {
     final List<LatLng> points = <LatLng>[];
     points.add(const LatLng(-22.0123, -47.8908));
     points.add(const LatLng(-20.7333333, -48.5833333));
     return points;
+  }
+
+  void setMap() async {
+    setState(() {
+      if (_maptype == MapType.normal) {
+        _maptype = MapType.satellite;
+      } else {
+        _maptype = MapType.normal;
+      }
+    });
+  }
+
+  Future<void> _add() async {
+    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
+    _polylineIdCounter++;
+    final PolylineId polylineId = PolylineId(polylineIdVal);
+    final Polyline polyline = Polyline(
+      polylineId: polylineId,
+      consumeTapEvents: true,
+      color: Colors.red,
+      width: 5,
+      points: _createPoints(),
+    );
+
+    setState(() {
+      _BuildMapolylines[polylineId] = polyline;
+    });
   }
 }
 
