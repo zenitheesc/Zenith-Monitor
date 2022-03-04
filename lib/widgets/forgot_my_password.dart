@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/modules/forget_password/bloc/forgot_pwd_bloc.dart';
 import 'package:zenith_monitor/widgets/forgot_my_password_email_buttons_section.dart';
 import 'package:zenith_monitor/widgets/forgot_my_password_title_section.dart';
 
@@ -60,6 +62,8 @@ class _FMyPWDBodyState extends State<ForgotMyPasswordBody> {
             screenHeight: widget.screenHeight,
             deviceOrientation: widget.deviceOrientation,
             emailController: emailController,
+            funcSubmit: () => BlocProvider.of<ForgotPwdBloc>(context)
+                .add(PwdResetEmail(email: emailController.text)),
           ),
           alignment: Alignment.center)
     ]));

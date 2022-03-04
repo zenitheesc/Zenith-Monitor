@@ -66,6 +66,10 @@ class EmailAndPasswordAuth extends Authentication {
     }
   }
 
+  Future resetPassword(String email) async {
+    await _auth.sendPasswordResetEmail(email: email);
+  }
+
   @override
   Future<LocalUser?> userCreationConditions(DocumentSnapshot? userDoc) async {
     if (userDoc == null ||

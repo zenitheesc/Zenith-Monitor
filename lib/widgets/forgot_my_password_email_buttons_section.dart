@@ -8,12 +8,14 @@ class EmailButtonsSection extends StatelessWidget {
   final double screenHeight;
   final Orientation deviceOrientation;
   final TextEditingController emailController;
+  final VoidCallback? funcSubmit;
 
   const EmailButtonsSection(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation,
-      required this.emailController});
+      required this.emailController,
+      required this.funcSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class EmailButtonsSection extends StatelessWidget {
             top: 0.03 * screenHeight, bottom: 0.02 * screenHeight),
         borderRadius: 0.016 * screenHeight,
         buttonColor: white,
-        buttonFunction: () => Navigator.pop(context),
+        buttonFunction: funcSubmit,
       ),
       ElevatedButtonContainer(
         labelText: 'Voltar',
