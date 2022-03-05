@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:rive/rive.dart' as rive;
+import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget();
@@ -46,35 +47,62 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      body: mainCenter(),
-      backgroundColor: eerieBlack,
-    ));
+      child: BlocConsumer<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginSuccess) {
+            Navigator.popAndPushNamed(context, '/map');
+          }
+        },
+        builder: (context, state) {
+          if (state is LoadingState) {
+            return const ZenithProgressIndicator(
+              size: 10,
+              fileName: "z_icon_white.png",
+            );
+          }
+          if (state is LoginError) {
+            return mainCenter(state.errorMessage);
+          }
+          return mainCenter(null);
+        },
+      ),
+    );
   }
 
-  Center mainCenter() {
-    return Center(
-      child: SingleChildScrollView(
+  Scaffold mainCenter(String? errorMsg) {
+    return Scaffold(
+      body: SingleChildScrollView(
         child: ConstrainedBox(
           constraints:
               BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 20.0),
-                width: 340,
-                height: 80,
-                child: const rive.RiveAnimation.asset(
-                    "assets/animations/zenithlogo.riv"),
-              ),
-              emailPasswordForgotPasswordColumn(),
-              singUpLoginRow(),
-              otherMethodsOfLoginRow()
-            ],
+          child: Container(
+            decoration: const BoxDecoration(
+                color: eerieBlack,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0))),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.80,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 20.0),
+                  width: 340,
+                  height: 80,
+                  child: const rive.RiveAnimation.asset(
+                      "assets/animations/zenithlogo.riv"),
+                ),
+                emailPasswordForgotPasswordColumn(),
+                errorMessage(errorMsg),
+                singUpLoginRow(),
+                otherMethodsOfLoginRow()
+              ],
+            ),
           ),
         ),
       ),
+      backgroundColor: raisingBlackDarker,
     );
   }
 
@@ -89,10 +117,21 @@ class _LoginWidgetState extends State<LoginWidget> {
     ]);
   }
 
+  Widget errorMessage(String? errorMsg) {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width * 0.80,
+        child: Center(
+          child: Text(
+            errorMsg ?? "",
+            style: const TextStyle(color: lightCoral),
+          ),
+        ));
+  }
+
   Row singUpLoginRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [singInLoginButton("Sing Up"), singInLoginButton("Login")],
+      children: [singInLoginButton("Sign Up"), singInLoginButton("Login")],
     );
   }
 
@@ -100,9 +139,9 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        textField("Email", emailController),
+        textField("Email", emailController, false),
         const Divider(),
-        textField("Senha", passwordController),
+        textField("Senha", passwordController, true),
         forgotPasswordButton(),
       ],
     );
@@ -137,20 +176,22 @@ class _LoginWidgetState extends State<LoginWidget> {
   Container singInLoginButton(String buttonText) {
     return Container(
       decoration: BoxDecoration(
-          color: lightBrown, borderRadius: BorderRadius.circular(20)),
+          color: lightBrown, borderRadius: BorderRadius.circular(30)),
       width: MediaQuery.of(context).size.width * 0.35,
       child: TextButton(
           onPressed: () {
             if (buttonText == "Login") {
-              print(emailController.text);
               BlocProvider.of<LoginBloc>(context).add(EmailLoginEvent(
                   email: emailController.text,
                   password: passwordController.text));
+              passwordController.clear();
             } else {
               Navigator.pushNamed(context, '/signup');
             }
           },
-          child: Text(buttonText, style: const TextStyle(color: white))),
+          child: Text(buttonText,
+              style: const TextStyle(
+                  color: white, fontFamily: 'DMSans', fontSize: 18))),
     );
   }
 
@@ -159,11 +200,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       alignment: const Alignment(0.7, 0),
       child: TextButton(
           onPressed: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const ForgotMyPassword()));
-            // Maybe all the routes should be created at main, and then we don't need create a MaterialPageRoute every time
+            Navigator.pushNamed(context, '/forgotPwd');
           },
           child: const Text(
             "Esqueci a Senha",
@@ -173,7 +210,8 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Container textField(String hintText, TextEditingController controller) {
+  Container textField(
+      String hintText, TextEditingController controller, bool hideText) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: const BoxDecoration(
@@ -189,8 +227,12 @@ class _LoginWidgetState extends State<LoginWidget> {
       child: TextField(
         controller: controller,
         cursorColor: white,
+        obscureText: hideText,
         style: const TextStyle(
-            color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
+            color: white,
+            fontWeight: FontWeight.normal,
+            fontFamily: 'DMSans',
+            fontSize: 20.0),
         decoration: InputDecoration(
             isDense: true,
             hintStyle: const TextStyle(color: white),
