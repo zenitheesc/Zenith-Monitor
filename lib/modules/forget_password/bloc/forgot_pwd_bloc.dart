@@ -10,9 +10,11 @@ class ForgotPwdBloc extends Bloc<ForgotPwdEvent, ForgotPwdState> {
   @override
   Stream<ForgotPwdState> mapEventToState(ForgotPwdEvent event) async* {
     if (event is PwdResetEmail) {
+      yield LoadingState();
       EmailAndPasswordAuth _auth = EmailAndPasswordAuth();
       try {
         await _auth.resetPassword(event.email);
+        yield ForgotPwdSuccess();
       } catch (e) {
         print(e.toString());
       }
