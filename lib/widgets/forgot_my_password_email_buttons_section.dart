@@ -9,13 +9,15 @@ class EmailButtonsSection extends StatelessWidget {
   final Orientation deviceOrientation;
   final TextEditingController emailController;
   final VoidCallback? funcSubmit;
+  final Widget statusMessage;
 
   const EmailButtonsSection(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation,
       required this.emailController,
-      required this.funcSubmit});
+      required this.funcSubmit,
+      required this.statusMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class EmailButtonsSection extends StatelessWidget {
           width: 0.80 * screenWidth,
           height: 0.09 * screenHeight,
           margin: EdgeInsets.only(bottom: 0.03 * screenHeight)),
+      statusMessage,
       ElevatedButtonContainer(
         labelText: 'Submeter',
         textStyle: TextStyle(
