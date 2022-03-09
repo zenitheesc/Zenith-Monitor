@@ -4,6 +4,7 @@ import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:rive/rive.dart' as rive;
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
+import 'package:zenith_monitor/widgets/status_message.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget();
@@ -47,62 +48,62 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {
-          if (state is LoginSuccess) {
-            Navigator.popAndPushNamed(context, '/map');
-          }
-        },
-        builder: (context, state) {
-          if (state is LoadingState) {
-            return const ZenithProgressIndicator(
-              size: 10,
-              fileName: "z_icon_white.png",
-            );
-          }
-          if (state is LoginError) {
-            return mainCenter(state.errorMessage);
-          }
-          return mainCenter(null);
-        },
+      child: Scaffold(
+        body: BlocConsumer<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state is LoginSuccess) {
+              Navigator.popAndPushNamed(context, '/map');
+            }
+          },
+          builder: (context, state) {
+            if (state is LoadingState) {
+              return const ZenithProgressIndicator(
+                size: 100,
+                fileName: "z_icon_white.png",
+              );
+            }
+            if (state is LoginError) {
+              return mainCenter(state.errorMessage);
+            }
+            return mainCenter(null);
+          },
+        ),
+        backgroundColor: raisingBlackDarker,
       ),
     );
   }
 
-  Scaffold mainCenter(String? errorMsg) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-          child: Container(
-            decoration: const BoxDecoration(
-                color: eerieBlack,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40.0),
-                    bottomRight: Radius.circular(40.0))),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.80,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20.0),
-                  width: 340,
-                  height: 80,
-                  child: const rive.RiveAnimation.asset(
-                      "assets/animations/zenithlogo.riv"),
-                ),
-                emailPasswordForgotPasswordColumn(),
-                errorMessage(errorMsg),
-                singUpLoginRow(),
-                otherMethodsOfLoginRow()
-              ],
-            ),
+  Widget mainCenter(String? errorMsg) {
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+        child: Container(
+          decoration: const BoxDecoration(
+              color: eerieBlack,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(40.0),
+                  bottomRight: Radius.circular(40.0))),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.80,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 20.0),
+                width: 340,
+                height: 80,
+                child: const rive.RiveAnimation.asset(
+                    "assets/animations/zenithlogo.riv"),
+              ),
+              emailPasswordForgotPasswordColumn(),
+              StatusMessage(message: errorMsg, color: lightCoral),
+              singUpLoginRow(),
+              otherMethodsOfLoginRow()
+            ],
           ),
         ),
       ),
-      backgroundColor: raisingBlackDarker,
     );
   }
 
@@ -115,17 +116,6 @@ class _LoginWidgetState extends State<LoginWidget> {
       otherMethodsOfLoginButton(
           "google", _googleLoginController, GoogleLoginEvent())
     ]);
-  }
-
-  Widget errorMessage(String? errorMsg) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.80,
-        child: Center(
-          child: Text(
-            errorMsg ?? "",
-            style: const TextStyle(color: lightCoral),
-          ),
-        ));
   }
 
   Row singUpLoginRow() {

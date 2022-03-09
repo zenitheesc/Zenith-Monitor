@@ -11,7 +11,7 @@ class SignUpMainBody extends StatefulWidget {
   final double screenHeight;
   final Orientation deviceOrientation;
 
-  SignUpMainBody(
+  const SignUpMainBody(
       {required this.screenWidth,
       required this.screenHeight,
       required this.deviceOrientation});
