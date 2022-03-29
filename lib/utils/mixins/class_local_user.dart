@@ -8,14 +8,16 @@ class LocalUser {
   late String _firstName;
   late String _lastName;
   String? _imageLink;
+  String? _imagePath;
   String? _accessLevel;
   late String _email;
 
-  LocalUser(
-      String firstName, String lastName, String? imageLink, String email) {
+  LocalUser(String firstName, String lastName, String email,
+      {String? imageLink, String? imagePath}) {
     setFirstName(firstName);
     setLastName(lastName);
     setImageLink(imageLink);
+    setImagePath(imagePath);
     setEmail(email);
   }
 
@@ -23,12 +25,14 @@ class LocalUser {
       : _firstName = json['First Name'],
         _lastName = json['Last Name'],
         _imageLink = json['Image Link'],
+        _imagePath = json['Image Path'],
         _email = json['Email'];
 
   Map<String, dynamic> toJson() => {
         'First Name': _firstName,
         'Last Name': _lastName,
         'Image Link': _imageLink,
+        'Image Path': _imagePath,
         'Email': _email,
       };
 
@@ -46,6 +50,10 @@ class LocalUser {
 
   void setImageLink(String? imageLink) {
     _imageLink = imageLink;
+  }
+
+  void setImagePath(String? imagePath) {
+    _imagePath = imagePath;
   }
 
   void setEmail(String email) {
@@ -68,6 +76,10 @@ class LocalUser {
     return _imageLink;
   }
 
+  String? getImagePath() {
+    return _imagePath;
+  }
+
   String getAccessLevel() {
     if (_accessLevel == null) return "";
     return _accessLevel!;
@@ -82,6 +94,7 @@ class LocalUser {
     setLastName(origin.getLastName());
     setEmail(origin.getEmail());
     setImageLink(origin.getImageLink());
+    setImagePath(origin.getImagePath());
     setAccessLevel(origin.getAccessLevel());
   }
 }
