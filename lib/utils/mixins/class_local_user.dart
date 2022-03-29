@@ -57,7 +57,7 @@ class LocalUser {
   }
 
   void setEmail(String email) {
-    _email = email.toLowerCase();
+    _email = (email.toLowerCase()).trim();
   }
 
   String getFirstName() {
