@@ -45,7 +45,7 @@ class GoogleAuth extends Authentication {
     name ??= "Usuário do Google";
     email ??= "Email não fornecido";
 
-    return LocalUser(name, "", currentUser.photoURL, email);
+    return LocalUser(name, "", email, imageLink: currentUser.photoURL);
   }
 
   @override

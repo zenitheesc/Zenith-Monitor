@@ -67,8 +67,8 @@ class FacebookAuth extends Authentication {
 
     final Map<String, dynamic> userData = await _facebookAuth.getUserData();
 
-    LocalUser user = LocalUser(userData["name"], "",
-        userData["picture"]["data"]["url"], userData["email"]);
+    LocalUser user = LocalUser(userData["name"], "", userData["email"],
+        imageLink: userData["picture"]["data"]["url"]);
     user.setAccessLevel("Normal User");
     return user;
   }
