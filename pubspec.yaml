@@ -41,6 +41,9 @@ dependencies:
   google_maps_flutter: ^2.0.6
   flutter_facebook_auth: ^3.5.2
   rive: ^0.7.33
+  image_picker: ^0.8.4+10
+  image_cropper: ^1.5.0
+  firebase_storage: ^10.2.9
 
 
 dev_dependencies:
