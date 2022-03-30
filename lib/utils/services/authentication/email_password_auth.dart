@@ -36,6 +36,8 @@ class EmailAndPasswordAuth extends Authentication {
         throw WeakPassword();
       } else if (e.code == 'email-already-in-use') {
         throw EmailAlreadyInUse();
+      } else if (e.code == "invalid-email") {
+        throw EmailBadlyFormatted();
       } else if (e.code == "invalid-email-verified") {
         print("Erro invalid-email-verified");
       }
