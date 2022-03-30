@@ -85,7 +85,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                   bottomLeft: Radius.circular(40.0),
                   bottomRight: Radius.circular(40.0))),
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.80,
+          height: MediaQuery.of(context).size.height *
+              ((MediaQuery.of(context).orientation == Orientation.portrait)
+                  ? 0.80
+                  : 1),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -172,7 +175,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           onPressed: () {
             if (buttonText == "Login") {
               BlocProvider.of<LoginBloc>(context).add(EmailLoginEvent(
-                  email: emailController.text,
+                  email: emailController.text.trim(),
                   password: passwordController.text));
               passwordController.clear();
             } else {
