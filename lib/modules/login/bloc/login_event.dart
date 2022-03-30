@@ -25,6 +25,8 @@ class EmailLoginEvent extends AuthenticationEvent {
 
   @override
   Future<LocalUser> getUser() async {
+    await UserStorage().uploadImage();
+
     return await UserDocument().getUserFirestore(auth);
   }
 }

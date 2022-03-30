@@ -7,6 +7,7 @@ import 'package:zenith_monitor/utils/services/authentication/facebook_auth.dart'
 import 'package:zenith_monitor/utils/services/authentication/google_auth.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
+import 'package:zenith_monitor/utils/services/user_storage/user_storage.dart';
 
 part 'login_state.dart';
 part 'login_event.dart';
