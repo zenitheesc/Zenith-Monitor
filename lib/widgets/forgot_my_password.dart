@@ -68,7 +68,7 @@ class _FMyPWDBodyState extends State<ForgotMyPasswordBody> {
             deviceOrientation: widget.deviceOrientation,
             emailController: emailController,
             funcSubmit: () => BlocProvider.of<ForgotPwdBloc>(context)
-                .add(PwdResetEmail(email: emailController.text)),
+                .add(PwdResetEmail(email: emailController.text.trim())),
             statusMessage: StatusMessage(
               message: widget.statusMessage,
               color: widget.messageColor,
