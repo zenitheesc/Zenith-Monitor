@@ -84,7 +84,12 @@ class BuildMap extends State<MapSample> {
                         polylines: Set<Polyline>.of(_BuildMapolylines.values),
                       ),
                     ),
-                    infoListView(context, orientation),
+                    Container(
+                      height: 200,
+                      child: InfoListView(
+                        orientation: orientation,
+                      ),
+                    ),
                   ]),
                   Positioned.fill(
                     left: getLeftPositionForOrientation(orientation),
