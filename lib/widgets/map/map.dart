@@ -85,7 +85,7 @@ class BuildMap extends State<MapSample> {
                       ),
                     ),
                     Container(
-                      height: 200,
+                      height: MediaQuery.of(context).size.height * 0.25,
                       child: InfoListView(
                         orientation: orientation,
                       ),
