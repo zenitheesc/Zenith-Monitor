@@ -1,55 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/widgets/map.dart';
 
-import '../../../constants/colors_constants.dart';
-import '../map.dart';
-
-double getSizeForOrientation(
-    BuildContext context, Orientation orientation, double size) {
-  if (orientation == Orientation.landscape) {
-    return screenSize(context, "width", size);
-  }
-  return screenSize(context, "height", size);
-}
-
-Widget mapThemeButton(
-    BuildContext context, Orientation orientation, BuildMap buildMap) {
-  return Center(
-    child: Container(
-        height: getSizeForOrientation(context, orientation, 0.08),
-        child: SizedBox.fromSize(
-          size: Size(
-              getSizeForOrientation(context, orientation, 0.068),
-              getSizeForOrientation(
-                  context, orientation, 0.068)), // button width and height
-          child: ClipPath(
-            child: Material(
-              color: eerieBlack, // button color
-              child: InkWell(
-                onTap: () {
-                  buildMap.setMap();
-                },
-                // button pressed
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Tema",
-                      style: TextStyle(
-                        fontSize:
-                            getSizeForOrientation(context, orientation, 0.015),
-                        color: white,
-                      ),
-                    ), // icon
-                    Icon(
-                      Icons.palette,
-                      size: getSizeForOrientation(context, orientation, 0.035),
-                      color: white,
-                    ), // text
-                  ],
+class MapThemeButton extends StatelessWidget {
+  final BuildMap buildMap;
+  const MapThemeButton({required this.buildMap});
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: Container(
+      color: eerieBlack,
+      height: 70,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Text(
+                "Tema",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: white,
                 ),
-              ),
+              )),
+          IconButton(
+            onPressed: () => buildMap.setMap(),
+            icon: const Icon(
+              Icons.palette,
+              size: 25,
+              color: white,
             ),
-          ),
-        )),
-  );
+          )
+        ],
+      ),
+    ));
+  }
 }
