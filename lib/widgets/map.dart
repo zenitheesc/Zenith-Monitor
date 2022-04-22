@@ -6,24 +6,22 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
+import 'package:zenith_monitor/widgets/map/map_display/info_listview.dart';
 import 'package:zenith_monitor/widgets/map/map_display/map_theme_button.dart';
 import 'package:zenith_monitor/widgets/map/navigation_drawer/navigation_drawer.dart';
 
-import 'map_display/info_listview.dart';
-
-class MapSample extends StatefulWidget {
+class MapWidget extends StatefulWidget {
   @override
-  State<MapSample> createState() => BuildMap();
+  State<MapWidget> createState() => BuildMap();
 }
 
-class BuildMap extends State<MapSample> {
+class BuildMap extends State<MapWidget> {
   Set<Marker> markers = {};
   PolylinePoints polylinePoints = PolylinePoints();
 
   int _polylineIdCounter = 1;
   final Completer<GoogleMapController> _controller = Completer();
-  // ignore: non_constant_identifier_names
-  final Map<PolylineId, Polyline> _BuildMapolylines = {};
+  final Map<PolylineId, Polyline> _buildMapolylines = {};
   MapType _maptype = MapType.normal;
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-22.0123, -47.8908),
@@ -56,6 +54,12 @@ class BuildMap extends State<MapSample> {
       const Marker(
           markerId: MarkerId('value'), position: LatLng(-22.0123, -47.8908)),
       const Marker(
+          markerId: MarkerId('value'), position: LatLng(-22.0135, -47.8908)),
+      const Marker(
+          markerId: MarkerId('value'), position: LatLng(-22.0135, -47.8928)),
+      const Marker(
+          markerId: MarkerId('value'), position: LatLng(-22.0139, -47.8930)),
+      const Marker(
           markerId: MarkerId('value2'),
           position: LatLng(-20.7333333, -48.5833333)),
     ]);
@@ -65,36 +69,32 @@ class BuildMap extends State<MapSample> {
           builder: (context, orientation) => Align(
                 alignment: Alignment.bottomCenter,
                 child: Stack(children: <Widget>[
-                  Column(children: [
-                    Container(
-                      width: screenSize(context, "width", 1),
-                      height: screenSize(context, "height", 0.75),
-                      child: GoogleMap(
-                        mapType: _maptype,
-                        initialCameraPosition: _kGooglePlex,
-                        onMapCreated: (GoogleMapController controller) async {
-                          _mapController = controller;
-                          var style = await rootBundle
-                              .loadString('assets/maps/aubergine.json');
-                          _add();
-                          _mapController.setMapStyle(style);
-                          _controller.complete(controller);
-                        },
-                        markers: markers,
-                        polylines: Set<Polyline>.of(_BuildMapolylines.values),
-                      ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    //height: screenSize(context, "height", 0.85),
+                    child: GoogleMap(
+                      zoomControlsEnabled: false,
+                      mapType: _maptype,
+                      initialCameraPosition: _kGooglePlex,
+                      onMapCreated: (GoogleMapController controller) async {
+                        _mapController = controller;
+                        var style = await rootBundle
+                            .loadString('assets/maps/aubergine.json');
+                        _add();
+                        _mapController.setMapStyle(style);
+                        _controller.complete(controller);
+                      },
+                      markers: markers,
+                      polylines: Set<Polyline>.of(_buildMapolylines.values),
                     ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      child: InfoListView(
-                        orientation: orientation,
-                      ),
-                    ),
-                  ]),
+                  ),
+                  InfoListView(
+                    orientation: orientation,
+                  ),
                   Positioned.fill(
                     left: getLeftPositionForOrientation(orientation),
                     bottom: getBottomPositionForOrientation(orientation),
-                    child: mapThemeButton(context, orientation, this),
+                    child: MapThemeButton(buildMap: this),
                   ),
                   Positioned.fill(
                       left: -1 * MediaQuery.of(context).size.width,
@@ -119,7 +119,7 @@ class BuildMap extends State<MapSample> {
                       ))),
                 ]),
               )),
-      drawer: navigationDrawerWidget(),
+      drawer: NavigationDrawerWidget(),
     );
   }
 
@@ -140,6 +140,9 @@ class BuildMap extends State<MapSample> {
   List<LatLng> _createPoints() {
     final List<LatLng> points = <LatLng>[];
     points.add(const LatLng(-22.0123, -47.8908));
+    points.add(const LatLng(-22.0134, -47.8908));
+    points.add(const LatLng(-22.0134, -47.8912));
+    points.add(const LatLng(-22.0139, -47.8915));
     points.add(const LatLng(-20.7333333, -48.5833333));
     return points;
   }
@@ -167,16 +170,8 @@ class BuildMap extends State<MapSample> {
     );
 
     setState(() {
-      _BuildMapolylines[polylineId] = polyline;
+      _buildMapolylines[polylineId] = polyline;
     });
-  }
-}
-
-double screenSize(BuildContext context, String type, double size) {
-  if (type == "height") {
-    return MediaQuery.of(context).size.height * size;
-  } else {
-    return MediaQuery.of(context).size.width * size;
   }
 }
 
