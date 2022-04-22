@@ -6,14 +6,14 @@ import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 import 'modules/login/screen/login_screen.dart';
 
-const bool debugEnableDeviceSimulator = true;
-void main() {
-  runApp(const ZenithMonitor());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(ZenithMonitor());
 }
 
 class ZenithMonitor extends StatelessWidget {
-  const ZenithMonitor({Key? key}) : super(key: key);
-
+  ZenithMonitor({Key? key}) : super(key: key);
 
   final LocationManager data = LocationManager();
 
