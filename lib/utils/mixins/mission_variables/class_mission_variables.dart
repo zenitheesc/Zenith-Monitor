@@ -11,7 +11,7 @@ class MissionVariablesList {
   MissionVariablesList() {
     _list = [];
     // Adding standard and required variables
-    // _list.add(MissionVariable<Timestamp>("timestamp", "Timestamp"));
+    _list.add(MissionVariable<Timestamp>("timestamp", "Timestamp"));
   }
 
   void addStandardVariable(String name, String type) {
@@ -30,21 +30,6 @@ class MissionVariablesList {
     } else {
       throw VariableTypeUnknownException();
     }
-  }
-
-  void addValueToVariable(String variableName, var value) {
-    MissionVariable? variable = getVariableByName(variableName);
-
-    if (variableName.isEmpty) throw EmptyVariablesException();
-
-    if (!contains(variableName)) throw EmptyValuesNameException();
-
-    variable!.addValue(value);
-  }
-
-  void removeMission(int index) {
-
-    _list.removeAt(index);
   }
 
   void addAbstractVariable(MissionVariable m) {
@@ -97,12 +82,5 @@ class MissionVariablesList {
 
   String getMissionName() {
     return _missionName;
-  }
-
-  MissionVariable? getVariableByName(String variableName) {
-    for (var i = 0; i < _list.length; i++) {
-      if (_list[i].getVariableName() == variableName) return _list[i];
-    }
-    return null;
   }
 }
