@@ -23,7 +23,7 @@ class MissionVariable<T> {
     return _variableValue;
   }
 
-  void addValue(var value) {
-    _variableValue = (value) as T?;
+  void addValue(T value) {
+    _variableValue = value;
   }
 }

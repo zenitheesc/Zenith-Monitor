@@ -23,13 +23,6 @@ class EmptyVariablesException implements Exception {
   }
 }
 
-class EmptyValuesNameException implements Exception {
-  @override
-  String toString() {
-    return "Variable's doesn't exist";
-  }
-}
-
 class EmptyMissionNameException implements Exception {
   @override
   String toString() {
