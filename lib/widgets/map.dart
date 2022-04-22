@@ -32,24 +32,6 @@ class BuildMap extends State<MapWidget> {
   Widget build(BuildContext context) {
     GoogleMapController _mapController;
 
-    MissionVariablesList t = MissionVariablesList();
-
-    t.addStandardVariable('Latitude', 'String');
-    t.addStandardVariable('Longitude', 'String');
-    t.addStandardVariable('Altitude', 'String');
-    t.addStandardVariable('Velocidade', 'String');
-    t.addStandardVariable('name', 'String');
-
-    t.addValueToVariable('Latitude', '30º');
-    t.addValueToVariable('Longitude', '90º');
-    t.addValueToVariable('Altitude', '5000m');
-    t.addValueToVariable('Velocidade', '9m/s');
-    t.addValueToVariable('name', '90');
-
-    // t.removeMission(0);
-
-    BlocProvider.of<MapBloc>(context).add(UserInfoEvent(newPackage: t));
-
     markers.addAll([
       const Marker(
           markerId: MarkerId('value'), position: LatLng(-22.0123, -47.8908)),
@@ -71,7 +53,6 @@ class BuildMap extends State<MapWidget> {
                 child: Stack(children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    //height: screenSize(context, "height", 0.85),
                     child: GoogleMap(
                       zoomControlsEnabled: false,
                       mapType: _maptype,

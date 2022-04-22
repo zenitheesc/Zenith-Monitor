@@ -9,7 +9,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   @override
   Stream<MapState> mapEventToState(MapEvent event) async* {
     if (event is UserInfoEvent) {
-      yield UserInfoState(newPackage: event.newPackage);
+      List variablesList = event.newPackage.getVariablesList();
+      variablesList.removeAt(0);
+
+      /// Removes the timestamp variable
+      yield UserInfoState(newVariablesList: variablesList);
     }
   }
 }

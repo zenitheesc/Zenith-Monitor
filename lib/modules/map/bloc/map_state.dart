@@ -5,7 +5,7 @@ abstract class MapState {}
 class MapInitialState extends MapState {}
 
 class UserInfoState extends MapState {
-  MissionVariablesList newPackage;
+  List newVariablesList;
 
-  UserInfoState({required this.newPackage});
+  UserInfoState({required this.newVariablesList});
 }
