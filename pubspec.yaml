@@ -21,7 +21,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
+  flutter: 
     sdk: flutter
   get: ^4.3.8
   
@@ -33,13 +33,18 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   bloc: ^7.2.1
   flutter_bloc: ^7.3.1
+  path_provider: ^2.0.3
   http_parser: ^4.0.0
-  # Firebase related
-  firebase_core: "^1.7.0"
+  google_sign_in: ^5.1.0
+  firebase_auth: ^3.0.2
+  firebase_core: ^1.7.0
   cloud_firestore: ^2.5.3
   geoflutterfire: ^3.0.0-nullsafety.2
   google_maps_flutter: ^2.0.10
   location: ^4.3.0
+  flutter_facebook_auth: ^3.5.2
+  rive: ^0.7.33
+
 
 dev_dependencies:
   flutter_lints: ^1.0.4
@@ -60,6 +65,7 @@ flutter:
   assets:
     - assets/images/
     - assets/maps/
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
