@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
-import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
-import 'package:zenith_monitor/widgets/map/map_display/info_listview.dart';
-import 'package:zenith_monitor/widgets/map/map_display/map_theme_button.dart';
-import 'package:zenith_monitor/widgets/map/navigation_drawer/navigation_drawer.dart';
+import 'package:zenith_monitor/widgets/map_info_listview.dart';
+import 'package:zenith_monitor/widgets/map_theme_button.dart';
+import 'package:zenith_monitor/widgets/map_navigation_drawer.dart';
 
 class MapWidget extends StatefulWidget {
   @override

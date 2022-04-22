@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
-import 'package:zenith_monitor/widgets/map/map_display/map_cards.dart';
+import 'package:zenith_monitor/widgets/map_cards.dart';
 
 class InfoListView extends StatelessWidget {
   final Orientation orientation;
