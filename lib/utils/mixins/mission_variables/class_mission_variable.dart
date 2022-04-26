@@ -11,7 +11,6 @@ class MissionVariable<T> {
     _variableValue = null;
   }
 
-
   String getVariableName() {
     return _variableName;
   }
