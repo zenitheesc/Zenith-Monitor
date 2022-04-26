@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
+import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
@@ -60,7 +61,7 @@ class Application extends StatelessWidget {
                   '/login': (context) => const LoginScreen(),
                   '/signup': (context) => const SignUpScreen(),
                   '/forgotPwd': (context) => const ForgotMyPassword(),
-                  '/map': (context) => const Text("tela do mapa"),
+                  '/map': (context) => const MapScreen(),
                 },
               );
             }
