@@ -14,7 +14,6 @@ class UserDocument {
 
     if (authMethod.type == "Email and Password" &&
         !(_auth.currentUser!.emailVerified)) throw EmailNotVerified();
-
     DocumentSnapshot? userDoc = await _getUserFirebaseDocument();
 
     LocalUser? newUser = await authMethod.userCreationConditions(userDoc);
@@ -71,8 +70,8 @@ class UserDocument {
 
   LocalUser _firebaseDocToLocalUser(DocumentSnapshot userDoc) {
     Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
-    LocalUser user = LocalUser(
-        data["name"], data["last_name"], data["image_link"], data["email"]);
+    LocalUser user = LocalUser(data["name"], data["last_name"], data["email"],
+        imageLink: data["image_link"]);
     user.setAccessLevel(data["access_level"]);
     return user;
   }

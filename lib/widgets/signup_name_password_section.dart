@@ -5,17 +5,28 @@ class NamePasswordSection extends StatelessWidget {
   final double screenWidth;
   final double screenHeight;
   final Orientation deviceOrientation;
+  final TextEditingController nameController;
+  final TextEditingController surnameController;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController pwdConfirmController;
 
   const NamePasswordSection(
       {required this.screenWidth,
       required this.screenHeight,
-      required this.deviceOrientation});
+      required this.deviceOrientation,
+      required this.nameController,
+      required this.surnameController,
+      required this.emailController,
+      required this.passwordController,
+      required this.pwdConfirmController});
 
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         TextFieldContainer(
+            controller: nameController,
             labelText: 'Nome',
             fontSize: _fontSize(),
             width: _width(isName: true),
@@ -23,6 +34,7 @@ class NamePasswordSection extends StatelessWidget {
             margin: EdgeInsets.only(
                 bottom: 0.007 * screenHeight, right: 0.02 * screenWidth)),
         TextFieldContainer(
+            controller: surnameController,
             labelText: 'Sobrenome',
             fontSize: _fontSize(),
             width: _width(isName: true),
@@ -30,12 +42,14 @@ class NamePasswordSection extends StatelessWidget {
             margin: EdgeInsets.only(bottom: 0.007 * screenHeight)),
       ]),
       TextFieldContainer(
+          controller: emailController,
           labelText: 'Email',
           fontSize: _fontSize(),
           width: _width(),
           height: _height(),
           margin: EdgeInsets.only(bottom: 0.007 * screenHeight)),
       TextFieldContainer(
+          controller: passwordController,
           labelText: 'Senha',
           fontSize: _fontSize(),
           width: _width(),
@@ -43,6 +57,7 @@ class NamePasswordSection extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 0.007 * screenHeight),
           obscureText: true),
       TextFieldContainer(
+          controller: pwdConfirmController,
           labelText: 'Confirmar Senha',
           fontSize: _fontSize(),
           width: _width(),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:rive/rive.dart' as rive;
+import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
+import 'package:zenith_monitor/widgets/status_message.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget();
@@ -44,18 +48,47 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      body: mainCenter(),
-      backgroundColor: eerieBlack,
-    ));
+      child: Scaffold(
+        body: BlocConsumer<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state is LoginSuccess) {
+              Navigator.popAndPushNamed(context, '/map');
+            }
+          },
+          builder: (context, state) {
+            if (state is LoadingState) {
+              return const ZenithProgressIndicator(
+                size: 100,
+                fileName: "z_icon_white.png",
+              );
+            }
+            if (state is LoginError) {
+              return mainCenter(state.errorMessage);
+            }
+            return mainCenter(null);
+          },
+        ),
+        backgroundColor: raisingBlackDarker,
+      ),
+    );
   }
 
-  Center mainCenter() {
-    return Center(
-      child: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+  Widget mainCenter(String? errorMsg) {
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+        child: Container(
+          decoration: const BoxDecoration(
+              color: eerieBlack,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(40.0),
+                  bottomRight: Radius.circular(40.0))),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height *
+              ((MediaQuery.of(context).orientation == Orientation.portrait)
+                  ? 0.80
+                  : 1),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -67,6 +100,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     "assets/animations/zenithlogo.riv"),
               ),
               emailPasswordForgotPasswordColumn(),
+              StatusMessage(message: errorMsg, color: lightCoral),
               singUpLoginRow(),
               otherMethodsOfLoginRow()
             ],
@@ -78,16 +112,19 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   Row otherMethodsOfLoginRow() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      otherMethodsOfLoginButton("github", _githubLoginController),
-      otherMethodsOfLoginButton("facebook", _facebookLoginController),
-      otherMethodsOfLoginButton("google", _googleLoginController)
+      otherMethodsOfLoginButton("github", _githubLoginController,
+          null), // github auth service doesn't exist yet, later github auth event must be passed as a parameter
+      otherMethodsOfLoginButton(
+          "facebook", _facebookLoginController, FacebookLoginEvent()),
+      otherMethodsOfLoginButton(
+          "google", _googleLoginController, GoogleLoginEvent())
     ]);
   }
 
   Row singUpLoginRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [singInLoginButton("Sing Up"), singInLoginButton("Login")],
+      children: [singInLoginButton("Sign Up"), singInLoginButton("Login")],
     );
   }
 
@@ -95,21 +132,27 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        textField("Email", emailController),
+        textField("Email", emailController, false),
         const Divider(),
-        textField("Senha", passwordController),
+        textField("Senha", passwordController, true),
         forgotPasswordButton(),
       ],
     );
   }
 
-  ElevatedButton otherMethodsOfLoginButton(
-      String animationPathForType, rive.RiveAnimationController _controller) {
+  ElevatedButton otherMethodsOfLoginButton(String animationPathForType,
+      rive.RiveAnimationController _controller, AuthenticationEvent? event) {
     String animationPath =
         "assets/animations/" + animationPathForType + "_icon.riv";
 
     return ElevatedButton(
-      onPressed: () => _toggleAnimation(_controller),
+      onPressed: () => {
+        if (event != null)
+          {
+            _toggleAnimation(_controller),
+            BlocProvider.of<LoginBloc>(context).add(event),
+          }
+      },
       child: Container(
           width: 40,
           height: 40,
@@ -126,11 +169,22 @@ class _LoginWidgetState extends State<LoginWidget> {
   Container singInLoginButton(String buttonText) {
     return Container(
       decoration: BoxDecoration(
-          color: lightBrown, borderRadius: BorderRadius.circular(20)),
+          color: lightBrown, borderRadius: BorderRadius.circular(30)),
       width: MediaQuery.of(context).size.width * 0.35,
       child: TextButton(
-          onPressed: () {},
-          child: Text(buttonText, style: const TextStyle(color: white))),
+          onPressed: () {
+            if (buttonText == "Login") {
+              BlocProvider.of<LoginBloc>(context).add(EmailLoginEvent(
+                  email: emailController.text.trim(),
+                  password: passwordController.text));
+              passwordController.clear();
+            } else {
+              Navigator.pushNamed(context, '/signup');
+            }
+          },
+          child: Text(buttonText,
+              style: const TextStyle(
+                  color: white, fontFamily: 'DMSans', fontSize: 18))),
     );
   }
 
@@ -139,11 +193,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       alignment: const Alignment(0.7, 0),
       child: TextButton(
           onPressed: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const ForgotMyPassword()));
-            // Maybe all the routes should be created at main, and then we don't need create a MaterialPageRoute every time
+            Navigator.pushNamed(context, '/forgotPwd');
           },
           child: const Text(
             "Esqueci a Senha",
@@ -153,7 +203,8 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Container textField(String hintText, TextEditingController controller) {
+  Container textField(
+      String hintText, TextEditingController controller, bool hideText) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: const BoxDecoration(
@@ -169,8 +220,12 @@ class _LoginWidgetState extends State<LoginWidget> {
       child: TextField(
         controller: controller,
         cursorColor: white,
+        obscureText: hideText,
         style: const TextStyle(
-            color: white, fontWeight: FontWeight.normal, fontFamily: 'DMSans'),
+            color: white,
+            fontWeight: FontWeight.normal,
+            fontFamily: 'DMSans',
+            fontSize: 20.0),
         decoration: InputDecoration(
             isDense: true,
             hintStyle: const TextStyle(color: white),

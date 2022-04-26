@@ -29,12 +29,15 @@ class EmailAndPasswordAuth extends Authentication {
         firebaseUser.updateEmail(newUser.getEmail());
         firebaseUser.updatePhotoURL(newUser.getImageLink());
         userFile.writeUser(newUser);
+        _auth.signOut();
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw WeakPassword();
       } else if (e.code == 'email-already-in-use') {
         throw EmailAlreadyInUse();
+      } else if (e.code == "invalid-email") {
+        throw EmailBadlyFormatted();
       } else if (e.code == "invalid-email-verified") {
         print("Erro invalid-email-verified");
       }
@@ -44,25 +47,35 @@ class EmailAndPasswordAuth extends Authentication {
     }
   }
 
-  Future<void> signIn(LocalUser user, String password) async {
-    if (_auth.currentUser == null) {
-      try {
-        await _auth.signInWithEmailAndPassword(
-            email: user.getEmail(), password: password);
-      } on FirebaseAuthException catch (e) {
-        if (e.code == "wrong-password") {
-          throw WrongPassword();
-        } else if (e.code == "user-not-found") {
-          throw UserNotFound();
-        } else if (e.code == "invalid-email") {
-          throw EmailBadlyFormatted();
-        }
-        throw FirebaseProblem(
-            isFirebaseException: true, errorMsg: e.toString());
-      } catch (e) {
-        throw FirebaseProblem(
-            isFirebaseException: false, errorMsg: e.toString());
+  Future<void> signIn(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "wrong-password") {
+        throw WrongPassword();
+      } else if (e.code == "user-not-found") {
+        throw UserNotFound();
+      } else if (e.code == "invalid-email") {
+        throw EmailBadlyFormatted();
       }
+      throw FirebaseProblem(isFirebaseException: true, errorMsg: e.toString());
+    } catch (e) {
+      throw FirebaseProblem(isFirebaseException: false, errorMsg: e.toString());
+    }
+  }
+
+  Future resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        throw UserNotFound();
+      } else if (e.code == "invalid-email") {
+        throw EmailBadlyFormatted();
+      }
+      throw FirebaseProblem(isFirebaseException: true, errorMsg: e.toString());
+    } catch (e) {
+      throw FirebaseProblem(isFirebaseException: false, errorMsg: e.toString());
     }
   }
 

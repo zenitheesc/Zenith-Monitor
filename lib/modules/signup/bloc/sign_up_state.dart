@@ -11,3 +11,7 @@ class SignUpError extends SignUpState {
 }
 
 class LoadingState extends SignUpState {}
+
+class ProfileImagePicked extends SignUpState {}
+
+class SuccessfulSignup extends SignUpState {}

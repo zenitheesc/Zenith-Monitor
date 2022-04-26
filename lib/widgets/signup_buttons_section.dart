@@ -6,33 +6,39 @@ class ButtonsSection extends StatelessWidget {
   final double screenWidth;
   final double screenHeight;
   final Orientation deviceOrientation;
+  final VoidCallback? funcConfirm;
 
   const ButtonsSection(
       {required this.screenWidth,
       required this.screenHeight,
-      required this.deviceOrientation});
+      required this.deviceOrientation,
+      required this.funcConfirm});
 
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       ElevatedButtonContainer(
-          labelText: 'Voltar',
-          textStyle: TextStyle(
-              color: white, fontSize: _fontSize(), fontFamily: 'DMSans'),
-          width: 0.39 * screenWidth,
-          height: 0.05 * screenHeight,
-          margin: _margin(),
-          borderRadius: 0.03 * screenHeight,
-          buttonColor: lightCoral),
+        labelText: 'Voltar',
+        textStyle: TextStyle(
+            color: white, fontSize: _fontSize(), fontFamily: 'DMSans'),
+        width: 0.39 * screenWidth,
+        height: 0.05 * screenHeight,
+        margin: _margin(),
+        borderRadius: 0.03 * screenHeight,
+        buttonColor: lightCoral,
+        buttonFunction: () => Navigator.pop(context),
+      ),
       ElevatedButtonContainer(
-          labelText: 'Submeter',
-          textStyle: TextStyle(
-              color: white, fontSize: _fontSize(), fontFamily: 'DMSans'),
-          width: 0.39 * screenWidth,
-          height: 0.05 * screenHeight,
-          margin: _margin(),
-          borderRadius: 0.03 * screenHeight,
-          buttonColor: mantisGreen)
+        labelText: 'Submeter',
+        textStyle: TextStyle(
+            color: white, fontSize: _fontSize(), fontFamily: 'DMSans'),
+        width: 0.39 * screenWidth,
+        height: 0.05 * screenHeight,
+        margin: _margin(),
+        borderRadius: 0.03 * screenHeight,
+        buttonColor: mantisGreen,
+        buttonFunction: funcConfirm,
+      )
     ]);
   }
 

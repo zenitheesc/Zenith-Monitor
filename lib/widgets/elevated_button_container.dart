@@ -8,6 +8,7 @@ class ElevatedButtonContainer extends StatelessWidget {
   final Color buttonColor;
   final TextStyle textStyle;
   final String labelText;
+  final VoidCallback? buttonFunction;
 
   const ElevatedButtonContainer(
       {required this.width,
@@ -16,7 +17,8 @@ class ElevatedButtonContainer extends StatelessWidget {
       required this.borderRadius,
       required this.buttonColor,
       required this.labelText,
-      required this.textStyle});
+      required this.textStyle,
+      required this.buttonFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class ElevatedButtonContainer extends StatelessWidget {
             textAlign: TextAlign.center,
             style: textStyle,
           )),
-          onPressed: () {},
+          onPressed: buttonFunction,
           style: ElevatedButton.styleFrom(
               primary: buttonColor,
               onPrimary: Colors.grey,

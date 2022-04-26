@@ -40,12 +40,14 @@ class _LoaderState extends State<ZenithProgressIndicator>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: widget.size,
-      width: widget.size,
-      child: RotationTransition(
-        turns: loaderMenu,
-        child: Image.asset('assets/images/' + widget.fileName),
+    return Center(
+      child: Container(
+        height: widget.size,
+        width: widget.size,
+        child: RotationTransition(
+          turns: loaderMenu,
+          child: Image.asset('assets/images/' + widget.fileName),
+        ),
       ),
     );
   }
