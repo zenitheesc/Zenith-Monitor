@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,8 +45,6 @@ class Application extends StatelessWidget {
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
-              FirebaseAuth a = FirebaseAuth.instance;
-              a.signOut();
               return MaterialApp(
                 showPerformanceOverlay: false, // shows fps
                 debugShowCheckedModeBanner: false,
