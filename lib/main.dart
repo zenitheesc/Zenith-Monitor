@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
+import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
@@ -40,6 +41,7 @@ class Application extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => MissionBloc()),
+          BlocProvider(create: (context) => LoginBloc()),
         ],
         child: FutureBuilder(
           future: _initialization,
