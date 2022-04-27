@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
+import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
+import 'package:zenith_monitor/widgets/user_image.dart';
+import 'package:zenith_monitor/utils/helpers/name_abbreviation.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 1);
@@ -14,9 +19,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const name = 'fulano fulano';
-    const email = 'fulano@usp.br';
-    const urlImage = '';
+    final LocalUser? user = context.select((LoginBloc bloc) => bloc.state.user);
     const List<String> list = [
       'Terminal',
       'Configurações',
@@ -37,10 +40,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                       color: Colors.black,
                       child: ListView(
                         children: <Widget>[
-                          buildHeader(context, orientation,
-                              urlImage: urlImage,
-                              name: name,
-                              email: email,
+                          buildHeader(context, orientation, user,
                               onClicked: () {}),
                           SizedBox(
                               height: finalSize(
@@ -74,10 +74,8 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   Widget buildHeader(
     BuildContext context,
-    Orientation orientation, {
-    required String urlImage,
-    required String name,
-    required String email,
+    Orientation orientation,
+    LocalUser? user, {
     required VoidCallback onClicked,
   }) {
     return InkWell(
@@ -91,32 +89,29 @@ class NavigationDrawerWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-                radius: finalSize(
-                    orientation,
-                    MediaQuery.of(context).size.height * 0.04,
-                    MediaQuery.of(context).size.width * 0.035),
-                backgroundColor: Colors.black,
-                child: IconButton(
-                  iconSize: finalSize(
-                      orientation,
-                      MediaQuery.of(context).size.height * 0.045,
-                      MediaQuery.of(context).size.width * 0.04),
-                  icon: const Icon(
-                    Icons.person_add,
-                    color: white,
-                  ),
-                  onPressed: () {},
-                )),
-
+            UserImage(
+              user: user,
+              radius: finalSize(
+                  orientation,
+                  MediaQuery.of(context).size.height * 0.04,
+                  MediaQuery.of(context).size.width * 0.035),
+            ),
             SizedBox(
                 height: finalSize(
                     orientation,
                     MediaQuery.of(context).size.height * 0.002,
                     MediaQuery.of(context).size.width * 0.002)),
-            //  backgroundImage: AssetImage(urlImage)),
             Text(
-              name,
+              nameAbbreviation(
+                  user!.getCompleteName(),
+                  finalSize(
+                      orientation,
+                      MediaQuery.of(context).size.width * 0.5,
+                      MediaQuery.of(context).size.width * 0.3),
+                  finalSize(
+                      orientation,
+                      MediaQuery.of(context).size.height * 0.022,
+                      MediaQuery.of(context).size.width * 0.022)),
               style: TextStyle(
                   fontSize: finalSize(
                       orientation,
@@ -130,7 +125,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     MediaQuery.of(context).size.height * 0.0015,
                     MediaQuery.of(context).size.width * 0.0015)),
             Text(
-              email,
+              user.getAccessLevel(),
               style: TextStyle(
                   fontSize: finalSize(
                       orientation,
