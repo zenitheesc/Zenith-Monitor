@@ -11,8 +11,13 @@ class UserImage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (user == null) {
       return CircleAvatar(
+        backgroundColor: eerieBlack,
         radius: radius,
-        child: const Icon(Icons.favorite),
+        child: Icon(
+          Icons.person,
+          color: white,
+          size: radius,
+        ),
       );
     }
 
@@ -21,8 +26,8 @@ class UserImage extends StatelessWidget {
       return CircleAvatar(
         child: Text(
           user!.getFirstName()[0].toUpperCase(),
-          style: const TextStyle(
-            fontSize: 60.0,
+          style: TextStyle(
+            fontSize: radius,
             color: white,
           ),
         ),
