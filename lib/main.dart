@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/modules/configuration/screen/configuration_screen.dart';
 import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
 import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
@@ -64,6 +65,7 @@ class Application extends StatelessWidget {
                   '/signup': (context) => const SignUpScreen(),
                   '/forgotPwd': (context) => const ForgotMyPassword(),
                   '/map': (context) => const MapScreen(),
+                  '/configuration': (context) => const ConfigurationScreen(),
                 },
               );
             }

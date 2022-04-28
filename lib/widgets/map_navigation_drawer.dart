@@ -20,13 +20,13 @@ class NavigationDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LocalUser? user = context.select((LoginBloc bloc) => bloc.state.user);
-    const List<String> list = [
-      'Terminal',
-      'Configurações',
-      'Estatísticas',
-      'Missões',
-      'Sobre nós'
-    ];
+    const Map<String, String> map = {
+      'Terminal': '/configuration',
+      'Configurações': '/configuration',
+      'Estatísticas': '/configuration',
+      'Missões': '/configuration',
+      'Sobre nós': '/configuration'
+    };
     return OrientationBuilder(
         builder: (context, orientation) => (Stack(
               children: [
@@ -47,11 +47,11 @@ class NavigationDrawerWidget extends StatelessWidget {
                                   orientation,
                                   MediaQuery.of(context).size.height * 0.005,
                                   MediaQuery.of(context).size.width * 0.005)),
-                          for (String page in list)
-                            buildMenuItem(context, orientation, text: page),
-
-                          /// When all page routes are created, a navigator.push needs to be passed as an argument
-
+                          for (final page in map.entries)
+                            buildMenuItem(context, orientation, text: page.key,
+                                onClicked: () {
+                              Navigator.popAndPushNamed(context, page.value);
+                            }),
                           SizedBox(
                               height: finalSize(
                                   orientation,
@@ -61,7 +61,10 @@ class NavigationDrawerWidget extends StatelessWidget {
                             context,
                             orientation,
                             text: 'Sair',
-                            onClicked: () {},
+                            onClicked: () {
+                              BlocProvider.of<LoginBloc>(context)
+                                  .add(SignOutEvent(context: context));
+                            },
                           ),
                         ],
                       ),
