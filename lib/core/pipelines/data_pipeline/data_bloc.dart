@@ -7,16 +7,17 @@ part 'data_state.dart';
 part 'data_event.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
-  late MissionVariablesList variablesList;
+  late MissionVariablesList packageModel;
   final FirestoreServices fireServices = FirestoreServices();
-  final UsbManager usbManager = UsbManager();
+  late UsbManager usbManager;
 
   DataBloc() : super(DataStateInitial());
 
   @override
   Stream<DataState> mapEventToState(DataEvent event) async* {
     if (event is SetVariablesListEvent) {
-      variablesList = event.variablesList;
+      packageModel = event.variablesList;
+      usbManager = UsbManager(packageModel: packageModel);
     } else if (event is FirestoreUploaderEvent) {
       fireServices.createAndUploadMission(event.variablesList);
     } else if (event is FirestoreDownloadEvent) {
