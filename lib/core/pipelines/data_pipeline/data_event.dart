@@ -19,3 +19,10 @@ class FirestoreDownloadEvent extends DataEvent {
 
   FirestoreDownloadEvent({required this.missionName});
 }
+
+class NewPackageEventData extends DataEvent {
+  final String noParsedString;
+  final MissionVariablesList newPackage;
+
+  NewPackageEventData({required this.noParsedString, required this.newPackage});
+}

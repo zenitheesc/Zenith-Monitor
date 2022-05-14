@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zenith_monitor/utils/services/location/location.dart';
+import 'package:zenith_monitor/modules/terminal/screen/terminal_screen.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 
 void main() async {
@@ -30,6 +29,6 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => DataBloc()),
-    ], child: const Scaffold());
+    ], child: const TerminalScreen());
   }
 }

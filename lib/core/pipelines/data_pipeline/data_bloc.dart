@@ -11,7 +11,28 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   final FirestoreServices fireServices = FirestoreServices();
   late UsbManager usbManager;
 
-  DataBloc() : super(DataStateInitial());
+  DataBloc() : super(DataStateInitial()) {
+    /* usbManager.funcLoc().listen((i) {
+      print("Ta chegando no databloc ");
+
+      add(NewPackageEventData(
+          noParsedString: i.toString(), newPackage: MissionVariablesList()));
+    });*/
+    usbManager.receive().listen((event) {
+      add(NewPackageEventData(
+          noParsedString: event, newPackage: MissionVariablesList()));
+    });
+    usbManager.attached().listen((event) {
+      if (event) {
+        add(NewPackageEventData(
+            noParsedString: "Ta conectado cachorro",
+            newPackage: MissionVariablesList()));
+      } else {
+        add(NewPackageEventData(
+            noParsedString: "Desconectou", newPackage: MissionVariablesList()));
+      }
+    });
+  }
 
   @override
   Stream<DataState> mapEventToState(DataEvent event) async* {
@@ -21,6 +42,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     } else if (event is FirestoreUploaderEvent) {
       fireServices.createAndUploadMission(event.variablesList);
     } else if (event is FirestoreDownloadEvent) {
+    } else if (event is NewPackageEventData) {
+      //provavelmente não vai ser assim posteriormente, isso serve mais para testar o terminalBloc
+      yield NewPackageStateData(
+          noParsedString: event.noParsedString, newPackage: event.newPackage);
     } else {
       print("Unknown event in Mission Bloc");
     }

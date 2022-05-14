@@ -13,11 +13,6 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
   List<String> noParsedStringList = [];
 
   TerminalBloc({required this.dataBloc}) : super(TerminalInitialState()) {
-    Stream<int> sla = funcLoca();
-    sla.listen((event) {
-      print(event.toString());
-      add(NewPackageEvent(usbResponse: event.toString()));
-    });
     dataSubscription = dataBloc.stream.listen((state) {
       if (state is NewPackageStateData) {
         add(NewPackageEvent(usbResponse: state.noParsedString));
@@ -25,12 +20,6 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
     });
   }
 
-  Stream<int> funcLoca() async* {
-    for (int i = 0; i < 50; i++) {
-      await Future.delayed(Duration(seconds: 1));
-      add(NewPackageEvent(usbResponse: i.toString()));
-    }
-  }
   /* {
 	   on<NewPackageEvent>((event, emit) {
 	   emit(NewPackageState(usbResponse: event.usbResponse));
