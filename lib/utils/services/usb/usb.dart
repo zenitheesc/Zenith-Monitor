@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:usb_serial/usb_serial.dart';
 import 'package:usb_serial/transaction.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variable.dart';
 
 //##### adb connect 192.168.99.101:5555 #####//
 
@@ -16,22 +17,57 @@ class UsbManager {
       StreamController<MissionVariablesList>.broadcast();
   final StreamController<int> _status = StreamController<int>.broadcast();
   final StreamController<bool> _attatched = StreamController<bool>.broadcast();
+  MissionVariablesList packageModel;
+
+  UsbManager({required this.packageModel}) {
+    if (UsbSerial.usbEventStream == null) {
+      print("UsbSerial.usbEventStream é null");
+      return;
+    }
+    UsbSerial.usbEventStream!.listen((UsbEvent event) {
+      if (event.event == UsbEvent.ACTION_USB_ATTACHED) {
+        _getPorts();
+        _attatched.add(true);
+      }
+      if (event.event == UsbEvent.ACTION_USB_DETACHED) {
+        _connectTo(null);
+        _status.add(0);
+        _attatched.add(false);
+      }
+    });
+
+    _getPorts();
+    _status.add(0);
+  }
 
   MissionVariablesList makePackage(String line) {
     List<String> dados = line.split(";");
 
-    double? alt, vel;
-    LatLng? pos;
-    int? id;
-
     /*
-    id = int.tryParse(dados.elementAt(0));
-    pos = LatLng(double.tryParse(dados.elementAt(1)),
-        double.tryParse(dados.elementAt(2)));
-    alt = double.tryParse(dados.elementAt(3));
-    vel = double.tryParse(dados.elementAt(4));
-*/
-    return MissionVariablesList();
+		   id = int.tryParse(dados.elementAt(0));
+		   pos = LatLng(double.tryParse(dados.elementAt(1)),
+		   double.tryParse(dados.elementAt(2)));
+		   alt = double.tryParse(dados.elementAt(3));
+		   vel = double.tryParse(dados.elementAt(4));
+		   */
+
+    MissionVariablesList newPackage = MissionVariablesList();
+    newPackage.setVariablesList(packageModel.getVariablesList());
+    List<MissionVariable> packageList = newPackage.getVariablesList();
+
+    for (int i = 1; i < packageList.length; i++) {
+      MissionVariable v = packageList[i];
+      if (v.getVariableType() == "Integer") {
+        v.addValue(int.tryParse((dados.elementAt(i - 1))));
+      } else if (v.getVariableType() == "Double") {
+        v.addValue(double.tryParse((dados.elementAt(i - 1))));
+      } else if (v.getVariableType() == "String") {
+        v.addValue((dados.elementAt(i - 1)));
+      } else {
+        print("Fazer throw de exception");
+      }
+    }
+    return newPackage;
   }
 
   Future<bool> _connectTo(device) async {
@@ -104,27 +140,6 @@ class UsbManager {
         await _connectTo(device);
       }
     });
-  }
-
-  UsbManager() {
-    if (UsbSerial.usbEventStream == null) {
-      print("UsbSerial.usbEventStream é null");
-      return;
-    }
-    UsbSerial.usbEventStream!.listen((UsbEvent event) {
-      if (event.event == UsbEvent.ACTION_USB_ATTACHED) {
-        _getPorts();
-        _attatched.add(true);
-      }
-      if (event.event == UsbEvent.ACTION_USB_DETACHED) {
-        _connectTo(null);
-        _status.add(0);
-        _attatched.add(false);
-      }
-    });
-
-    _getPorts();
-    _status.add(0);
   }
 
   Stream<int> status() {
