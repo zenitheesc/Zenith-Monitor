@@ -9,179 +9,139 @@ import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_vari
 //##### adb connect 192.168.99.101:5555 #####//
 
 class UsbManager {
-	UsbPort? _port;
-	List<MissionVariablesList> _serialData = [];
-	StreamSubscription<String>? _subscription;
-	Transaction<String>? _transaction;
-	/*StreamController<MissionVariablesList> dados =
-	  StreamController<MissionVariablesList>.broadcast();*/
-	StreamController<String> dados = StreamController<String>.broadcast();
-	final StreamController<int> _status = StreamController<int>.broadcast();
-	final StreamController<bool> _attatched = StreamController<bool>.broadcast();
-	MissionVariablesList packageModel;
+  UsbPort? _port;
+  List<MissionVariablesList> _serialData = [];
+  StreamSubscription<String>? _subscription;
+  Transaction<String>? _transaction;
+  final StreamController<MissionVariablesList> _parsedData =
+      StreamController<MissionVariablesList>.broadcast();
+  final StreamController<String> _rawData =
+      StreamController<String>.broadcast();
+  final StreamController<int> _status = StreamController<int>.broadcast();
+  final StreamController<bool> _attatched = StreamController<bool>.broadcast();
+  MissionVariablesList packageModel;
 
-	UsbManager({required this.packageModel}) {
-		if (UsbSerial.usbEventStream == null) {
-			print("UsbSerial.usbEventStream é null");
-			return;
-		}
-		UsbSerial.usbEventStream!.listen((UsbEvent event) {
-			if (event.event == UsbEvent.ACTION_USB_ATTACHED) {
-				_getPorts();
-				_attatched.add(true);
-			}
-			if (event.event == UsbEvent.ACTION_USB_DETACHED) {
-				_connectTo(null);
-				_status.add(0);
-				_attatched.add(false);
-			}
-		});
+  UsbManager({required this.packageModel}) {
+    if (UsbSerial.usbEventStream == null) {
+      print("UsbSerial.usbEventStream é null");
+      return;
+    }
+    UsbSerial.usbEventStream!.listen((UsbEvent event) {
+      if (event.event == UsbEvent.ACTION_USB_ATTACHED) {
+        _getPorts();
+        _attatched.add(true);
+      }
+      if (event.event == UsbEvent.ACTION_USB_DETACHED) {
+        _connectTo(null);
+        _status.add(0);
+        _attatched.add(false);
+      }
+    });
 
-		_getPorts();
-		_status.add(0);
-	}
+    _getPorts();
+    _status.add(0);
+  }
 
-	MissionVariablesList makePackage(String line) {
-		List<String> dados = line.split(";");
+  MissionVariablesList makePackage(String line) {
+    List<String> splitedString = line.split(";");
 
-		/*
-		   id = int.tryParse(dados.elementAt(0));
-		   pos = LatLng(double.tryParse(dados.elementAt(1)),
-		   double.tryParse(dados.elementAt(2)));
-		   alt = double.tryParse(dados.elementAt(3));
-		   vel = double.tryParse(dados.elementAt(4));
-		   */
+    List<MissionVariable> packageList = packageModel.getVariablesList();
 
-		MissionVariablesList newPackage = MissionVariablesList();
-		newPackage.setVariablesList(packageModel.getVariablesList());
-		List<MissionVariable> packageList = newPackage.getVariablesList();
+    for (int i = 0; i < packageList.length - 1; i++) {
+      MissionVariable v = packageList[i + 1];
+      if (v.getVariableType() == "Integer") {
+        v.addValue(int.tryParse(splitedString[i]));
+      } else if (v.getVariableType() == "Double") {
+        v.addValue(double.tryParse(splitedString[i]));
+      } else if (v.getVariableType() == "String") {
+        v.addValue(splitedString[i]);
+      } else {
+        print("Fazer throw de exception");
+      }
+    }
+    MissionVariablesList newPackage = MissionVariablesList();
+    newPackage.setVariablesList(packageList);
+    return newPackage;
+  }
 
-		for (int i = 1; i < packageList.length; i++) {
-			MissionVariable v = packageList[i];
-			if (v.getVariableType() == "Integer") {
-				v.addValue(int.tryParse((dados.elementAt(i - 1))));
-			} else if (v.getVariableType() == "Double") {
-				v.addValue(double.tryParse((dados.elementAt(i - 1))));
-			} else if (v.getVariableType() == "String") {
-				v.addValue((dados.elementAt(i - 1)));
-			} else {
-				print("Fazer throw de exception");
-			}
-		}
-		return newPackage;
-	}
+  Future<bool> _connectTo(device) async {
+    _serialData.clear();
 
-	Future<bool> _connectTo(device) async {
-		dados.add("chamou o connetTo");
-		_serialData.clear();
+    if (_subscription != null) {
+      _subscription!.cancel();
+      _subscription = null;
+    }
 
-		if (_subscription != null) {
-			_subscription!.cancel();
-			_subscription = null;
-		}
+    if (_transaction != null) {
+      _transaction!.dispose();
+      _transaction = null;
+    }
 
-		if (_transaction != null) {
-			_transaction!.dispose();
-			_transaction = null;
-		}
+    if (_port != null) {
+      _port!.close();
+      _port = null;
+    }
 
-		if (_port != null) {
-			_port!.close();
-			_port = null;
-		}
+    if (device == null) {
+      return true;
+    }
 
-		if (device == null) {
-			return true;
-		}
-		dados.add("passou por toda a galera");
-		_port = await device.create();
-		if (_port == null || !await _port!.open()) {
-			return false;
-		}
+    _port = await device.create();
 
-		_status.add(1);
+    if (await (_port!.open()) != true) {
+      return false;
+    }
 
-		await _port!.setDTR(true);
-		await _port!.setRTS(true);
-		await _port!.setPortParameters(
-				9600, UsbPort.DATABITS_8, UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
-		dados.add("parametros setados");
-		if (_port!.inputStream == null) {
-			dados.add("_port!.inputStream é null");
-			return false;
-		}
+    _status.add(1);
 
-		_transaction = Transaction.stringTerminated(
-				(_port!.inputStream)!, Uint8List.fromList([13, 10]));
+    await _port!.setDTR(true);
+    await _port!.setRTS(true);
+    await _port!.setPortParameters(
+        9600, UsbPort.DATABITS_8, UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
 
-		if (_transaction == null) {
-			dados.add("_transaction é null");
-			return false;
-		}
-		_port!.inputStream!.listen((Uint8List data) {
-			dados.add(data.toString());
-		});
-		_subscription = _transaction!.stream.listen((String line) {
-			// MissionVariablesList data = makePackage(line);
-			print(line);
+    _transaction = Transaction.stringTerminated(
+        _port!.inputStream as Stream<Uint8List>, Uint8List.fromList([13, 10]));
 
-			/*_serialData.add(data);
-			  if (_serialData.length > 20) {
-			  _serialData.removeAt(0);
-			  }
-			  dados.add(data);*/
-			dados.add(line);
-		});
+    _subscription = _transaction!.stream.listen((String line) {
+      _rawData.add(line);
+      MissionVariablesList data = makePackage(line);
 
-		return true;
-	}
+      _parsedData.add(data);
+      /*_serialData.add(data);
 
-	Future<void> _getPorts() async {
-		dados.add("chamou o getPorts");
-		List<UsbDevice> devices = await UsbSerial.listDevices();
-		print("Devices:");
-		print(devices);
-		dados.add("os devices são: " + devices.toString());
-		dados.add("total de " + devices.length.toString());
-		/*devices.forEach((device) async {
-		  dados.add("device vid: " + device.vid.toString());
-		  dados.add("device pid: " + device.pid.toString());
-		  if (device.vid == 6790 && device.pid == 29987) {
-		  await _connectTo(device);
-		  }
-		  });*/
-		if (devices.isNotEmpty) await _connectTo(devices[0]);
-		<<<<<<< Updated upstream
-				=======
-	}
+      if (_serialData.length > 20) {
+        _serialData.removeAt(0);
+      }
+      dados.add(data);*/
+    });
 
-	Stream<int> funcLoc() async* {
-		for (int i = 0; i < 50; i++) {
-			await Future.delayed(Duration(seconds: 1));
-			yield i;
-		}
-		>>>>>>> Stashed changes
-	}
+    return true;
+  }
 
-	Stream<int> funcLoc() async* {
-		for (int i = 0; i < 50; i++) {
-			await Future.delayed(Duration(seconds: 1));
-			yield i;
-		}
-	}
+  Future<void> _getPorts() async {
+    List<UsbDevice> devices = await UsbSerial.listDevices();
 
-	Stream<int> status() {
-		return _status.stream;
-	}
+    devices.forEach((device) async {
+      if (device.vid == 6790 && device.pid == 29987) {
+        await _connectTo(device);
+      }
+    });
+    if (devices.isNotEmpty) await _connectTo(devices[0]);
+  }
 
-	Stream<bool> attached() {
-		return _attatched.stream;
-	}
+  Stream<int> status() {
+    return _status.stream;
+  }
 
-	/*Stream<MissionVariablesList> receive() {
-	  return dados.stream;
-	  }*/
-	Stream<String> receive() {
-		return dados.stream;
-	}
+  Stream<bool> attached() {
+    return _attatched.stream;
+  }
+
+  Stream<MissionVariablesList> parsedData() {
+    return _parsedData.stream;
+  }
+
+  Stream<String> rawData() {
+    return _rawData.stream;
+  }
 }
