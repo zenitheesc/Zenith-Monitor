@@ -4,9 +4,18 @@ abstract class DataState {}
 
 class DataStateInitial extends DataState {}
 
-class NewPackageStateData extends DataState {
+class NewPackageRawData extends DataState {
   final String noParsedString;
+
+  NewPackageRawData({required this.noParsedString});
+}
+
+class NewPackageParsedData extends DataState {
   final MissionVariablesList newPackage;
 
-  NewPackageStateData({required this.noParsedString, required this.newPackage});
+  NewPackageParsedData({required this.newPackage});
 }
+
+class UsbConnectedState extends DataState {}
+
+class UsbDisconnectedState extends DataState {}
