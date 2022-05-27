@@ -11,12 +11,16 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   late MissionVariablesList packageModel;
   final FirestoreServices fireServices = FirestoreServices();
   late UsbManager usbManager;
+  late bool usbIsConnected;
 
   DataBloc() : super(DataStateInitial()) {
+    usbIsConnected = false;
+
     packageModel = MissionVariablesList();
     packageModel.addStandardVariable("nome", "S");
     packageModel.addStandardVariable("numero inteiro", "I");
     packageModel.addStandardVariable("numero real", "R");
+
     usbManager = UsbManager(packageModel: packageModel);
 
     usbManager.parsedData().listen((event) {
@@ -32,8 +36,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     });
     usbManager.attached().listen((event) {
       if (event) {
+        usbIsConnected = true;
         add(UsbConnected());
       } else {
+        usbIsConnected = false;
         add(UsbDisconnected());
       }
     });
