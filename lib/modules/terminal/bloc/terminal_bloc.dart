@@ -42,8 +42,7 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
           ///Command to device connected
           /// Deve enviar os dados ainda
           dataBloc.add(UsbCommand(command: event.command));
-          yield TerminalRow(
-              message: "Comando: " + event.command, color: Colors.orangeAccent);
+          yield TerminalRow(message: event.command, color: Colors.orangeAccent);
         }
       }
     } else if (event is UsbConnectedEvent) {
