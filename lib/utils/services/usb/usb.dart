@@ -37,6 +37,13 @@ class UsbManager {
     _status.add(0);
   }
 
+  void sendData(String data) async {
+    if (_port == null) return;
+
+    data += "\r\n";
+    await _port!.write(Uint8List.fromList(data.codeUnits));
+  }
+
   MissionVariablesList makePackage(String line) {
     List<String> splitedString = line.split(";");
 

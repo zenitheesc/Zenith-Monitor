@@ -43,8 +43,6 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
             yield CmdHistory(cmdHistory: cmdHistory);
           }
         } else {
-          ///Command to device connected
-          /// Deve enviar os dados ainda
           if (dataBloc.usbIsConnected) {
             dataBloc.add(UsbCommand(command: event.command));
             cmdHistory.add(event.command);
@@ -52,8 +50,7 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
                 message: event.command, color: Colors.orangeAccent);
           } else {
             yield TerminalRow(
-                message:
-                    "Não foi possível enviar o comando, o usb está desconectado",
+                message: "Impossível enviar o comando, o usb está desconectado",
                 color: lightCoral);
           }
         }

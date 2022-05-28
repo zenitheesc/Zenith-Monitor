@@ -61,6 +61,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       yield UsbConnectedState();
     } else if (event is UsbDisconnected) {
       yield UsbDisconnectedState();
+    } else if (event is UsbCommand) {
+      usbManager.sendData(event.command);
     } else {
       print("Unknown event in Mission Bloc");
     }
