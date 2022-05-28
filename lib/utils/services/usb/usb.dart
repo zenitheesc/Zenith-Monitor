@@ -1,4 +1,3 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:typed_data';
 import 'dart:async';
 import 'package:usb_serial/usb_serial.dart';
@@ -6,11 +5,8 @@ import 'package:usb_serial/transaction.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variable.dart';
 
-//##### adb connect 192.168.99.101:5555 #####//
-
 class UsbManager {
   UsbPort? _port;
-  List<MissionVariablesList> _serialData = [];
   StreamSubscription<String>? _subscription;
   Transaction<String>? _transaction;
   final StreamController<MissionVariablesList> _parsedData =
@@ -23,7 +19,6 @@ class UsbManager {
 
   UsbManager({required this.packageModel}) {
     if (UsbSerial.usbEventStream == null) {
-      print("UsbSerial.usbEventStream é null");
       return;
     }
     UsbSerial.usbEventStream!.listen((UsbEvent event) {
@@ -65,8 +60,6 @@ class UsbManager {
   }
 
   Future<bool> _connectTo(device) async {
-    _serialData.clear();
-
     if (_subscription != null) {
       _subscription!.cancel();
       _subscription = null;
@@ -107,12 +100,6 @@ class UsbManager {
       MissionVariablesList data = makePackage(line);
 
       _parsedData.add(data);
-      /*_serialData.add(data);
-
-      if (_serialData.length > 20) {
-        _serialData.removeAt(0);
-      }
-      dados.add(data);*/
     });
 
     return true;
@@ -121,11 +108,11 @@ class UsbManager {
   Future<void> _getPorts() async {
     List<UsbDevice> devices = await UsbSerial.listDevices();
 
-    devices.forEach((device) async {
+    for (UsbDevice device in devices) {
       if (device.vid == 6790 && device.pid == 29987) {
         await _connectTo(device);
       }
-    });
+    }
     if (devices.isNotEmpty) await _connectTo(devices[0]);
   }
 
