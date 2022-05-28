@@ -9,3 +9,10 @@ class TerminalRow extends TerminalState {
   String message;
   TerminalRow({required this.message, required this.color});
 }
+
+class CleanTerminalList extends TerminalState {}
+
+class CmdHistory extends TerminalState {
+  List<String> cmdHistory;
+  CmdHistory({required this.cmdHistory});
+}

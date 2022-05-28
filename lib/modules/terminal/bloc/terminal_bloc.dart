@@ -13,6 +13,7 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
   late StreamSubscription dataSubscription;
   List<String> noParsedStringList = [];
   List<Widget> terminalList = [];
+  List<String> cmdHistory = [];
 
   TerminalBloc({required this.dataBloc}) : super(TerminalInitialState()) {
     dataSubscription = dataBloc.stream.listen((state) {
@@ -37,12 +38,24 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
           if (event.command == ":clear") {
             noParsedStringList.clear();
             terminalList.clear();
+            yield CleanTerminalList();
+          } else if (event.command == ":cmdhist") {
+            yield CmdHistory(cmdHistory: cmdHistory);
           }
         } else {
           ///Command to device connected
           /// Deve enviar os dados ainda
-          dataBloc.add(UsbCommand(command: event.command));
-          yield TerminalRow(message: event.command, color: Colors.orangeAccent);
+          if (dataBloc.usbIsConnected) {
+            dataBloc.add(UsbCommand(command: event.command));
+            cmdHistory.add(event.command);
+            yield TerminalRow(
+                message: event.command, color: Colors.orangeAccent);
+          } else {
+            yield TerminalRow(
+                message:
+                    "Não foi possível enviar o comando, o usb está desconectado",
+                color: lightCoral);
+          }
         }
       }
     } else if (event is UsbConnectedEvent) {
