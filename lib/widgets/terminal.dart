@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
-//import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
+import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 
-/// All the code commented is related to TerminalController.
-/// Due to a bloc package update, the code already implemented
-/// in zenith_monitor has became obsolete.
-/// New design decisions must be made prior to any implementation.
-
 class Terminal extends StatelessWidget {
-  Terminal({Key? key}) : super(key: key);
   final textController = TextEditingController();
-  // List<Widget> listItems = [];
+  final _scrollController = ScrollController();
+
+  _scrollToEnd() async {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent + 100.0,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (WidgetsBinding.instance != null) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
+    }
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
+          controller: _scrollController,
           shrinkWrap: true,
           slivers: [
             const SliverAppBar(
@@ -29,12 +35,34 @@ class Terminal extends StatelessWidget {
               expandedHeight: 80.0,
               title: StandardAppBar(title: "Terminal"),
             ),
-            /* BlocBuilder<TerminalBloc, TerminalState>(builder: (context, state) {
-              if (state is NewPackageState) {
-                listItems.add(terminalRow(listItems.length, state.usbResponse));
+            BlocBuilder<TerminalBloc, TerminalState>(builder: (context, state) {
+              List<Widget> terminalList = [];
+              if (state is TerminalRow) {
+                terminalList.addAll(
+                    context.select((TerminalBloc bloc) => bloc.terminalList));
+                terminalList.add(terminalRow(
+                    terminalList.length, state.message, state.color));
+
+                context.select(
+                    (TerminalBloc bloc) => bloc.terminalList = terminalList);
+                _scrollToEnd();
+              } else if (state is CleanTerminalList) {
+                terminalList.clear();
+              } else if (state is CmdHistory) {
+                terminalList.addAll(
+                    context.select((TerminalBloc bloc) => bloc.terminalList));
+                for (String command in state.cmdHistory) {
+                  terminalList.add(terminalRow(
+                      terminalList.length, command, Colors.orangeAccent));
+                }
+
+                context.select(
+                    (TerminalBloc bloc) => bloc.terminalList = terminalList);
+                _scrollToEnd();
               }
-              return SliverList(delegate: SliverChildListDelegate(listItems));
-            }),*/
+              return SliverList(
+                  delegate: SliverChildListDelegate(terminalList));
+            }),
             SliverToBoxAdapter(
               child: Container(
                 height: 50,
@@ -48,7 +76,7 @@ class Terminal extends StatelessWidget {
     );
   }
 
-  Wrap terminalRow(int index, String package) {
+  Wrap terminalRow(int index, String text, Color color) {
     return Wrap(
       spacing: 20,
       children: [
@@ -59,9 +87,9 @@ class Terminal extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 15, 5, 15),
           child: Text(
-            package,
-            style: const TextStyle(color: white),
-          ), // Here will be showed the text appering in the terminal.
+            text,
+            style: TextStyle(color: color),
+          ),
         )
       ],
     );
@@ -69,7 +97,7 @@ class Terminal extends StatelessWidget {
 
   Widget terminalTextField(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(28, 0, 28, 10), //values from figma
+        padding: const EdgeInsets.fromLTRB(28, 0, 28, 10),
         child: TextField(
           controller: textController,
           cursorColor: white,
@@ -86,8 +114,8 @@ class Terminal extends StatelessWidget {
             ),
             prefixIcon: IconButton(
               onPressed: () {
-                /* BlocProvider.of<TerminalBloc>(context)
-                    .add(NewPackageEvent(usbResponse: textController.text));*/
+                BlocProvider.of<TerminalBloc>(context)
+                    .add(TerminalCommand(command: textController.text));
                 textController.clear();
               },
               icon: const Icon(

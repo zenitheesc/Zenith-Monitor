@@ -47,7 +47,7 @@ dependencies:
   image_picker: ^0.8.4+10
   image_cropper: ^1.5.0
   firebase_storage: ^10.2.9
-
+  usb_serial: ^0.3.0
 
 dev_dependencies:
   flutter_lints: ^1.0.4
@@ -103,3 +103,4 @@ flutter:
         - asset: assets/fonts/DM_Sans/DMSans-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+

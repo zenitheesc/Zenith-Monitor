@@ -1,0 +1,21 @@
+part of 'data_bloc.dart';
+
+abstract class DataState {}
+
+class DataStateInitial extends DataState {}
+
+class NewPackageRawData extends DataState {
+  final String noParsedString;
+
+  NewPackageRawData({required this.noParsedString});
+}
+
+class NewPackageParsedData extends DataState {
+  final MissionVariablesList newPackage;
+
+  NewPackageParsedData({required this.newPackage});
+}
+
+class UsbConnectedState extends DataState {}
+
+class UsbDisconnectedState extends DataState {}
