@@ -21,23 +21,32 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
+  flutter: 
     sdk: flutter
-  # auto_size_text: ^2.1.0
+  get: ^4.3.8
+  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^0.13.3
+  flutter_polyline_points: ^1.0.0
+  bloc: ^7.2.1
+  flutter_bloc: ^7.3.1
+  path_provider: ^2.0.3
   http_parser: ^4.0.0
-  # Firebase related
-  firebase_core: "^1.7.0"
+  google_sign_in: ^5.1.0
+  firebase_auth: ^3.0.2
+  firebase_core: ^1.7.0
   cloud_firestore: ^2.5.3
-
+  geoflutterfire: ^3.0.0-nullsafety.2
+  google_maps_flutter: ^2.0.10
   location: ^4.3.0
-  google_maps_flutter: ^2.0.6
-
-  flutter_bloc: ^7.0.1
+  flutter_facebook_auth: ^3.5.2
+  rive: ^0.7.33
+  image_picker: ^0.8.4+10
+  image_cropper: ^1.5.0
+  firebase_storage: ^10.2.9
   usb_serial: ^0.3.0
 
 dev_dependencies:
@@ -58,6 +67,8 @@ flutter:
   
   assets:
     - assets/images/
+    - assets/maps/
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -92,3 +103,4 @@ flutter:
         - asset: assets/fonts/DM_Sans/DMSans-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+

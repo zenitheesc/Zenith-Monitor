@@ -1,110 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/modules/forget_password/bloc/forgot_pwd_bloc.dart';
+import 'package:zenith_monitor/widgets/status_message.dart';
+import 'package:zenith_monitor/widgets/forgot_my_password_email_buttons_section.dart';
+import 'package:zenith_monitor/widgets/forgot_my_password_title_section.dart';
 
-class ForgotMyPassword extends StatelessWidget {
-  const ForgotMyPassword({Key? key});
+class ForgotMyPasswordBody extends StatefulWidget {
+  final double screenWidth;
+  final double screenHeight;
+  final Orientation deviceOrientation;
+  final String? statusMessage;
+  final Color? messageColor;
 
-  Widget buildButton(double height, double width, Color buttoncolor,
-      double borderradius, String text, Color textColor) {
-    return Container(
-      alignment: Alignment.center,
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text(text),
-        style: ElevatedButton.styleFrom(
-            primary: buttoncolor,
-            onPrimary: textColor,
-            textStyle: TextStyle(
-              color: textColor,
-              fontSize: 18,
-              fontFamily: 'DMSans-Regular',
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(borderradius))),
-            fixedSize: Size(width, height)),
-      ),
-    );
+  const ForgotMyPasswordBody(
+      {required this.screenWidth,
+      required this.screenHeight,
+      required this.deviceOrientation,
+      required this.statusMessage,
+      required this.messageColor});
+
+  @override
+  _FMyPWDBodyState createState() => _FMyPWDBodyState();
+}
+
+class _FMyPWDBodyState extends State<ForgotMyPasswordBody> {
+  late TextEditingController emailController;
+  @override
+  void initState() {
+    super.initState();
+
+    emailController = TextEditingController();
   }
 
-  AppBar buildTitle() {
-    return AppBar(
-      toolbarHeight: 200,
-      elevation: 0.0,
-      backgroundColor: eerieBlack,
-      title: const Padding(
-        padding: EdgeInsets.all(28.0),
-        child: Text('Esqueci minha \nsenha',
-            style: TextStyle(
-                color: white,
-                fontSize: 36,
-                fontFamily: 'DMSans-Bold',
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start),
-      ),
-    );
-  }
+  @override
+  void dispose() {
+    super.dispose();
 
-  Align buildMainBody() {
-    return Align(
-      alignment: FractionalOffset.bottomCenter,
-      child: Container(
-        height: 405.0,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  raisingBlack,
-                  black,
-                ]),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(45.0),
-                topRight: Radius.circular(45.0))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 70,
-              width: 340,
-              decoration: BoxDecoration(
-                  color: black, borderRadius: BorderRadius.circular(15)),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextField(
-                  cursorColor: white,
-                  style: TextStyle(
-                      color: gray, fontSize: 16, fontFamily: 'DMSans-Regular'),
-                  decoration: InputDecoration(
-                    hintText: 'Email cadastrado',
-                    hintStyle: TextStyle(
-                        color: gray,
-                        fontSize: 16,
-                        fontFamily: 'DMSans-Regular'),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: black),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: black),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 60),
-            buildButton(56, 265, white, 12, 'Submeter', black),
-            const SizedBox(height: 30),
-            buildButton(40, 263, lightCoral, 20, 'Voltar', white),
-          ],
-        ),
-      ),
-    );
+    emailController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: buildTitle(),
-        body: buildMainBody(),
-        backgroundColor: eerieBlack);
+    return SingleChildScrollView(
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      TitleSection(
+          screenWidth: widget.screenWidth,
+          screenHeight: widget.screenHeight,
+          deviceOrientation: widget.deviceOrientation),
+      Container(
+          height: 0.50 * widget.screenHeight,
+          margin: EdgeInsets.only(top: 0.27 * widget.screenHeight),
+          decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    raisingBlack,
+                    black,
+                  ]),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(_boderRadius()),
+                  topRight: Radius.circular(_boderRadius()))),
+          child: EmailButtonsSection(
+            screenWidth: widget.screenWidth,
+            screenHeight: widget.screenHeight,
+            deviceOrientation: widget.deviceOrientation,
+            emailController: emailController,
+            funcSubmit: () => BlocProvider.of<ForgotPwdBloc>(context)
+                .add(PwdResetEmail(email: emailController.text.trim())),
+            statusMessage: StatusMessage(
+              message: widget.statusMessage,
+              color: widget.messageColor,
+            ),
+          ),
+          alignment: Alignment.center)
+    ]));
+  }
+
+  double _boderRadius() {
+    return widget.screenWidth *
+        ((widget.deviceOrientation == Orientation.portrait) ? 0.14 : 0.07);
   }
 }
