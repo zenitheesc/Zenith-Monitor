@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/screen/configuration_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/modules/terminal/screen/terminal_screen.dart';
 import 'firebase_options.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
@@ -42,6 +43,9 @@ class Application extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => LoginBloc()),
           BlocProvider(create: (context) => DataBloc()),
+          BlocProvider(
+              create: (context) =>
+                  TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
         ],
         child: FutureBuilder(
           future: _initialization,

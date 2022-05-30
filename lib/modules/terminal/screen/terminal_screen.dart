@@ -1,7 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
-import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/widgets/terminal.dart';
 
 class TerminalScreen extends StatelessWidget {
@@ -9,9 +6,6 @@ class TerminalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) =>
-            TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context)),
-        child: Terminal());
+    return Terminal();
   }
 }
