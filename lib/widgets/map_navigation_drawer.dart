@@ -21,7 +21,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final LocalUser? user = context.select((LoginBloc bloc) => bloc.state.user);
     const Map<String, String> map = {
-      'Terminal': '/configuration',
+      'Terminal': '/terminal',
       'Configurações': '/configuration',
       'Estatísticas': '/configuration',
       'Missões': '/configuration',
