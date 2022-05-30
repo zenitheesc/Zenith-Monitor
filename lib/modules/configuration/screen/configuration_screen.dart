@@ -47,30 +47,14 @@ class ConfigurationScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: <Widget>[
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: const Text(
-                              'Criação de Missão',
-                              style: TextStyle(color: gray, fontSize: 12.0),
-                            )),
+                        sectionsTitle("Conexões"),
                         ConnectionDisplay(connections: [
                           Connection("carlos", true),
                           Connection("carlos", false),
                           Connection("carlos", true),
                           Connection("carlos", true)
                         ]),
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.90,
-                            child: const Text(
-                              'Criação de Missão',
-                              style: TextStyle(color: gray, fontSize: 12.0),
-                            )),
+                        sectionsTitle('Criação de Missão'),
                         const MissionCreation(),
                       ],
                     ),
@@ -79,6 +63,19 @@ class ConfigurationScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Align sectionsTitle(String title) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 60.0, left: 20.0, bottom: 20.0),
+        child: Text(
+          title,
+          style: const TextStyle(color: gray, fontSize: 12.0),
         ),
       ),
     );

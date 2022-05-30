@@ -232,17 +232,10 @@ class _MissionCreationState extends State<MissionCreation> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-            width: MediaQuery.of(context).size.width * 0.90,
-            child: const Text(
-              'Criação de Missão',
-              style: TextStyle(color: gray, fontSize: 12.0),
-            )),
         Container(
           width: MediaQuery.of(context).size.width * 0.83,
           child: Column(
             children: [
-              const SizedBox(height: 20),
               textInputs(),
               const SizedBox(height: 20),
               variablesTable(),
