@@ -29,13 +29,7 @@ class ZenithMonitor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     data.init();
-    return MaterialApp(
-      theme: ThemeData(
-        bottomSheetTheme:
-            BottomSheetThemeData(backgroundColor: Colors.black.withOpacity(0)),
-      ),
-      home: Application(),
-    );
+    return Application();
   }
 }
 
@@ -62,6 +56,8 @@ class Application extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 title: 'Main Screen',
                 theme: ThemeData(
+                  bottomSheetTheme: BottomSheetThemeData(
+                      backgroundColor: Colors.black.withOpacity(0)),
                   primaryColor: Colors.black,
                 ),
                 initialRoute: '/login',
