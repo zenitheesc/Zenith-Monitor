@@ -28,6 +28,7 @@ class Terminal extends StatelessWidget {
           shrinkWrap: true,
           slivers: [
             const SliverAppBar(
+              automaticallyImplyLeading: false,
               pinned: false,
               snap: false,
               floating: false,
