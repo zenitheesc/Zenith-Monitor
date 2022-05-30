@@ -47,8 +47,12 @@ class MissionVariablesList {
     return false;
   }
 
-  List getVariablesList() {
+  List<MissionVariable> getVariablesList() {
     return _list;
+  }
+
+  void setVariablesList(List<MissionVariable> newList) {
+    _list = List.from(newList);
   }
 
   void deleteVariable(int index) {

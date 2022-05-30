@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/screen/configuration_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:zenith_monitor/modules/terminal/screen/terminal_screen.dart';
+import 'firebase_options.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
 import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
-import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
-import 'modules/login/screen/login_screen.dart';
-import 'firebase_options.dart';
+import 'package:zenith_monitor/modules/login/screen/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,10 @@ class ZenithMonitor extends StatelessWidget {
   Widget build(BuildContext context) {
     data.init();
     return MaterialApp(
+      theme: ThemeData(
+        bottomSheetTheme:
+            BottomSheetThemeData(backgroundColor: Colors.black.withOpacity(0)),
+      ),
       home: Application(),
     );
   }
@@ -41,8 +46,8 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => MissionBloc()),
           BlocProvider(create: (context) => LoginBloc()),
+          BlocProvider(create: (context) => DataBloc()),
         ],
         child: FutureBuilder(
           future: _initialization,
@@ -66,6 +71,7 @@ class Application extends StatelessWidget {
                   '/forgotPwd': (context) => const ForgotMyPassword(),
                   '/map': (context) => const MapScreen(),
                   '/configuration': (context) => const ConfigurationScreen(),
+                  '/terminal': (context) => const TerminalScreen(),
                 },
               );
             }

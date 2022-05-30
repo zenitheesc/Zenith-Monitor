@@ -5,7 +5,7 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
   const StandardAppBar({Key? key, required this.title});
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(60);
 
   final String title;
 
