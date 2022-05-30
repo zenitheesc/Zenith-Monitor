@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/mission_variables_bloc.dart';
-import 'package:zenith_monitor/core/pipelines/mission_pipeline/mission_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/class_connection.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/widgets/connections.dart';
@@ -20,7 +20,7 @@ class ConfigurationScreen extends StatelessWidget {
         BlocProvider(
             create: (context) => MissionVariablesBloc(
                   MissionVariablesList(),
-                  BlocProvider.of<MissionBloc>(context),
+                  BlocProvider.of<DataBloc>(context),
                 ))
       ],
       child: Scaffold(
