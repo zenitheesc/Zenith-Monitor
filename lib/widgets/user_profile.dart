@@ -24,7 +24,7 @@ class UserProfile extends StatelessWidget {
             : Column(
                 children: [
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 80.0, 0, 20.0),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 20.0),
                       child: UserImage(
                         user: user,
                         radius: 80.0,
