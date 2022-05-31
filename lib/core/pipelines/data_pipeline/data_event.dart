@@ -40,3 +40,8 @@ class UsbCommand extends DataEvent {
   String command;
   UsbCommand({required this.command});
 }
+
+class SettingMissionName extends DataEvent {
+  String missionName;
+  SettingMissionName({required this.missionName});
+}

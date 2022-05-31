@@ -1,6 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
+import 'package:zenith_monitor/widgets/dropdown_list.dart';
 import 'package:zenith_monitor/widgets/map.dart';
 
 class MapScreen extends StatelessWidget {
@@ -8,9 +11,42 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 2), () => missionSelection(context));
+
     return BlocProvider(
-      create: (context) => MapBloc(),
+      create: (context) => MapBloc(BlocProvider.of<DataBloc>(context)),
       child: MapWidget(),
     );
+  }
+
+  void missionSelection(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Selecao de missao",
+                  style: TextStyle(color: white)),
+              content: const Text(
+                  "O seu aplicativo nao esta acompanhando nenhuma missao, selecione dentre as missoes que estao ocorrendo qual voce deseja acompanhar. Caso voce queria criar uma missao ou nao quer acompanhar nenhuma missao, basta deixar a opcao selecionada com 'Nenhum'.",
+                  style: TextStyle(color: white)),
+              backgroundColor: black.withOpacity(1),
+              actions: <Widget>[
+                DropdownList(
+                  defaultValue: "Nenhum",
+                  itemsList: const <String>[
+                    'Nenhum',
+                    'One',
+                    'Two',
+                    'Free',
+                    'Four'
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      BlocProvider.of<DataBloc>(context)
+                          .add(SettingMissionName(missionName: value));
+                    }
+                  },
+                )
+              ],
+            ));
   }
 }

@@ -12,6 +12,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   final FirestoreServices fireServices = FirestoreServices();
   late UsbManager usbManager;
   late bool usbIsConnected;
+  late String missionName;
 
   DataBloc() : super(DataStateInitial()) {
     usbIsConnected = false;
@@ -63,6 +64,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       yield UsbDisconnectedState();
     } else if (event is UsbCommand) {
       usbManager.sendData(event.command);
+    } else if (event is SettingMissionName) {
+      missionName = event.missionName;
+      print("Nome da missao definido para " + missionName);
     } else {
       print("Unknown event in Mission Bloc");
     }
