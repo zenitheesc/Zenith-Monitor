@@ -2,14 +2,8 @@ part of 'map_bloc.dart';
 
 abstract class MapEvent {}
 
-class UserInfoEvent extends MapEvent {
+class NewPackageEvent extends MapEvent {
   MissionVariablesList newPackage;
 
-  UserInfoEvent({required this.newPackage});
-
-  
-  List returnValuesList() {
-    return newPackage.getVariablesList();
-  }
+  NewPackageEvent({required this.newPackage});
 }
-
