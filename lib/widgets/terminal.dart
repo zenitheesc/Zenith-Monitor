@@ -9,11 +9,13 @@ class Terminal extends StatelessWidget {
   final _scrollController = ScrollController();
 
   _scrollToEnd() async {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent + 100.0,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-    );
+    if (_scrollController.position.hasContentDimensions) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100.0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override

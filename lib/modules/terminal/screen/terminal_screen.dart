@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:zenith_monitor/widgets/scroll_glow_remove.dart';
 import 'package:zenith_monitor/widgets/terminal.dart';
 
 class TerminalScreen extends StatelessWidget {
@@ -6,6 +7,6 @@ class TerminalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Terminal();
+    return ScrollConfiguration(behavior: ScrollGlowRemove(), child: Terminal());
   }
 }
