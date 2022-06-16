@@ -15,6 +15,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   late String missionName;
 
   DataBloc() : super(DataStateInitial()) {
+    missionName = "Nenhuma";
     usbIsConnected = false;
 
     packageModel = MissionVariablesList();
@@ -48,11 +49,12 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
   @override
   Stream<DataState> mapEventToState(DataEvent event) async* {
-    if (event is SetVariablesListEvent) {
-      packageModel = event.variablesList;
-      //      usbManager = UsbManager(packageModel: packageModel);
-    } else if (event is FirestoreUploaderEvent) {
-      fireServices.createAndUploadMission(event.variablesList);
+    if (event is MissionInfoSetup) {
+      fireServices.createAndUploadMission(
+          event.packageModel, event.missionName);
+
+      packageModel = event.packageModel;
+      add(SettingMissionName(missionName: event.missionName));
     } else if (event is FirestoreDownloadEvent) {
     } else if (event is NewParsedDataEvent) {
       yield NewPackageParsedData(newPackage: event.newPackage);
@@ -66,7 +68,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       usbManager.sendData(event.command);
     } else if (event is SettingMissionName) {
       missionName = event.missionName;
-      print("Nome da missao definido para " + missionName);
+      List<String> missionsNames = await FirestoreServices().getMissionNames();
+      yield NewMissionNameValue(
+          missionName: missionName, missionsNames: missionsNames);
     } else {
       print("Unknown event in Mission Bloc");
     }

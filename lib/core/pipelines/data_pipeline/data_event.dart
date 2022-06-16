@@ -2,16 +2,11 @@ part of 'data_bloc.dart';
 
 abstract class DataEvent {}
 
-class SetVariablesListEvent extends DataEvent {
-  MissionVariablesList variablesList;
+class MissionInfoSetup extends DataEvent {
+  MissionVariablesList packageModel;
+  String missionName;
 
-  SetVariablesListEvent({required this.variablesList});
-}
-
-class FirestoreUploaderEvent extends DataEvent {
-  MissionVariablesList variablesList;
-
-  FirestoreUploaderEvent({required this.variablesList});
+  MissionInfoSetup({required this.missionName, required this.packageModel});
 }
 
 class FirestoreDownloadEvent extends DataEvent {

@@ -19,3 +19,9 @@ class NewPackageParsedData extends DataState {
 class UsbConnectedState extends DataState {}
 
 class UsbDisconnectedState extends DataState {}
+
+class NewMissionNameValue extends DataState {
+  String missionName;
+  List<String> missionsNames;
+  NewMissionNameValue({required this.missionName, required this.missionsNames});
+}
