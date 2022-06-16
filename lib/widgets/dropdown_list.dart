@@ -1,39 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 
-class DropdownList extends StatefulWidget {
+class DropdownList extends StatelessWidget {
   final ValueChanged<String?> onChanged;
   final List<String> itemsList;
-  final String defaultValue;
 
   const DropdownList(
-      {Key? key,
-      required this.itemsList,
-      required this.defaultValue,
-      required this.onChanged})
+      {Key? key, required this.itemsList, required this.onChanged})
       : super(key: key);
 
   @override
-  _DropdownListState createState() => _DropdownListState();
-}
-
-class _DropdownListState extends State<DropdownList> {
-  late String _defaultValue;
-
-  @override
-  initState() {
-    super.initState();
-    _defaultValue = widget.defaultValue;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    String defaultValue = context.select((DataBloc bloc) => bloc.missionName);
+    if (!itemsList.contains(defaultValue)) {
+      itemsList.add(defaultValue);
+    }
     return Theme(
         data: Theme.of(context).copyWith(
           canvasColor: eerieBlack,
         ),
         child: DropdownButton<String>(
-          value: _defaultValue,
+          value: defaultValue,
           icon: const Icon(
             Icons.expand_more,
             color: white,
@@ -44,12 +33,9 @@ class _DropdownListState extends State<DropdownList> {
             color: white,
           ),
           onChanged: (String? newValue) {
-            setState(() {
-              _defaultValue = newValue!;
-            });
-            widget.onChanged(newValue);
+            onChanged(newValue);
           },
-          items: widget.itemsList.map<DropdownMenuItem<String>>((String value) {
+          items: itemsList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
