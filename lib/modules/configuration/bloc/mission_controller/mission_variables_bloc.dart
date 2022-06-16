@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/mission_variables_exceptions.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services_exceptions.dart';
 
 part 'mission_variables_state.dart';
 part 'mission_variables_event.dart';
@@ -14,6 +16,8 @@ class MissionVariablesBloc
     extends Bloc<MissionVariablesEvent, MissionVariablesState> {
   MissionVariablesList variablesList;
   DataBloc dataBloc;
+  FirestoreServices firestoreServices = FirestoreServices();
+
   MissionVariablesBloc(this.variablesList, this.dataBloc)
       : super(VariablesInitial(variablesList));
 
@@ -38,16 +42,22 @@ class MissionVariablesBloc
       variablesList.deleteVariable(event.variableIndex);
       yield VariablesChanged(variablesList);
     } else if (event is StartMissionEvent) {
+      if (event.missionName == "Nenhuma") {
+        yield MissionNameError(variablesList,
+            "'Nenhuma' não pode ser utilizado como nome de missão");
+      }
       try {
-        await variablesList.addMissionName(event.missionName);
-        dataBloc.add(SetVariablesListEvent(variablesList: variablesList));
-        dataBloc.add(FirestoreUploaderEvent(variablesList: variablesList));
+        await firestoreServices.checkMissionName(event.missionName);
+        dataBloc.add(MissionInfoSetup(
+            missionName: event.missionName, packageModel: variablesList));
       } on EmptyMissionNameException {
         yield MissionNameError(
             variablesList, "É necessário fornecer um nome para a missão");
       } on MissionNameAlreadyExistException {
         yield MissionNameError(
             variablesList, "Esse nome já foi utilizado em uma missão anterior");
+      } catch (e) {
+        print(e);
       }
     } else {
       print("Unknown event in Variables Bloc");
