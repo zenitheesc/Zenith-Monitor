@@ -70,7 +70,7 @@ class Application extends StatelessWidget {
                   '/signup': (context) => const SignUpScreen(),
                   '/forgotPwd': (context) => const ForgotMyPassword(),
                   '/map': (context) => const MapScreen(),
-                  '/configuration': (context) => const ConfigurationScreen(),
+                  '/configuration': (context) => ConfigurationScreen(),
                   '/terminal': (context) => const TerminalScreen(),
                 },
               );
