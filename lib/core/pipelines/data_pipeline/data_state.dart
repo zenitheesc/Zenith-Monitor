@@ -22,6 +22,6 @@ class UsbDisconnectedState extends DataState {}
 
 class NewMissionNameValue extends DataState {
   String missionName;
-  List<String> missionsNames;
+  Set<String> missionsNames;
   NewMissionNameValue({required this.missionName, required this.missionsNames});
 }

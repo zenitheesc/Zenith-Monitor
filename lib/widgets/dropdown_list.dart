@@ -5,7 +5,7 @@ import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 
 class DropdownList extends StatelessWidget {
   final ValueChanged<String?> onChanged;
-  final List<String> itemsList;
+  final Set<String> itemsList;
 
   const DropdownList(
       {Key? key, required this.itemsList, required this.onChanged})

@@ -32,11 +32,11 @@ class MapScreen extends StatelessWidget {
                   style: TextStyle(color: white)),
               backgroundColor: black.withOpacity(1),
               actions: <Widget>[
-                FutureBuilder<List<String>>(
+                FutureBuilder<Set<String>>(
                     future: FirestoreServices().getMissionNames(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<String>> snapshot) {
-                      List<String> missionNames = ["Nenhuma"];
+                        AsyncSnapshot<Set<String>> snapshot) {
+                      Set<String> missionNames = <String>{};
                       Widget finalWidget = const ZenithProgressIndicator(
                           size: 20, fileName: "z_icon_white.png");
                       if (snapshot.hasData && snapshot.data != null) {

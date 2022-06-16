@@ -81,10 +81,10 @@ class ConfigurationScreen extends StatelessWidget {
   }
 
   Widget missionSelection() {
-    return FutureBuilder<List<String>>(
+    return FutureBuilder<Set<String>>(
         future: FirestoreServices().getMissionNames(),
-        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-          List<String> missionNames;
+        builder: (BuildContext context, AsyncSnapshot<Set<String>> snapshot) {
+          Set<String> missionNames;
           Widget finalWidget = const ZenithProgressIndicator(
               size: 20, fileName: "z_icon_white.png");
           if (snapshot.hasData && snapshot.data != null) {
