@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services_exceptions.dart';
@@ -88,7 +87,7 @@ class FirestoreServices {
   ///
   /// e.g. {testVariable: {"type": variableType, "value": variableValue}}
   void createAndUploadMission(
-      MissionVariablesList _missionVariablesObject) async {
+      MissionVariablesList _missionVariablesObject, String missionName) async {
     if (_missionVariablesObject.getVariablesList().isEmpty) {
       throw EmptyMissionVariablesException();
     }
@@ -102,15 +101,10 @@ class FirestoreServices {
         _parseMissionVariables(missionVariablesList);
 
     // Adds the variables names and types
-    _missoes
-        .doc(_missionVariablesObject.getMissionName())
-        .set(mappedMissionVariables[0]);
+    _missoes.doc(missionName).set(mappedMissionVariables[0]);
 
     // Adds the 'logs' collection with an example document inside
-    _missoes
-        .doc(_missionVariablesObject.getMissionName())
-        .collection('logs')
-        .add(mappedMissionVariables[1]);
+    _missoes.doc(missionName).collection('logs').add(mappedMissionVariables[1]);
   }
 
   /// Parse the mission variables into a Map of type
@@ -206,7 +200,7 @@ class FirestoreServices {
   }
 
   /// Get all the mission names
-  /// 
+  ///
   /// Returns a List containing the mission names
   Future<List<String>> getMissionNames() async {
     List<String> _missionNames = [];
@@ -220,4 +214,39 @@ class FirestoreServices {
 
     return _missionNames;
   }
+
+  Future<void> checkMissionName(String? missionName) async {
+    if (missionName == null || missionName == "") {
+      throw EmptyMissionNameException();
+    }
+    List<String> missionNames = await getMissionNames();
+
+    for (String name in missionNames) {
+      if (missionName == name) {
+        throw MissionNameAlreadyExistException();
+      }
+    }
+  }
+/*
+  Future<void> addMissionName(String? missionName) async {
+    if (missionName == null || missionName == "") {
+      throw EmptyMissionNameException();
+    }
+
+    /// Implementacao da checagem no firebase se o nome da missao
+    /// ja existe. Pega a colecao de missoes e verifica os nome dos
+    /// documentos (id) com o nome da missao (missionName);
+    /// Se o nome existe ele joga a excecao `MissionNameAlreadyExistException`
+    Future<QuerySnapshot<Map<String, dynamic>>> _mainColReference =
+        FirebaseFirestore.instance.collection('missoes').get();
+
+    await _mainColReference.then((documents) async {
+      for (DocumentSnapshot eachDocument in documents.docs) {
+        if (eachDocument.id == missionName) {
+          throw MissionNameAlreadyExistException();
+        }
+      }
+    });
+
+  }*/
 }

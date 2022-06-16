@@ -6,7 +6,6 @@ import 'mission_variables_exceptions.dart';
 
 class MissionVariablesList {
   late List<MissionVariable> _list;
-  late String _missionName;
 
   MissionVariablesList() {
     _list = [];
@@ -59,32 +58,5 @@ class MissionVariablesList {
     if (index < 0 || index >= _list.length) return;
 
     _list.removeAt(index);
-  }
-
-  Future<void> addMissionName(String? missionName) async {
-    if (missionName == null || missionName == "") {
-      throw EmptyMissionNameException();
-    }
-
-    /// Implementacao da checagem no firebase se o nome da missao
-    /// ja existe. Pega a colecao de missoes e verifica os nome dos
-    /// documentos (id) com o nome da missao (missionName);
-    /// Se o nome existe ele joga a excecao `MissionNameAlreadyExistException`
-    Future<QuerySnapshot<Map<String, dynamic>>> _mainColReference =
-        FirebaseFirestore.instance.collection('missoes').get();
-
-    await _mainColReference.then((documents) async {
-      for (DocumentSnapshot eachDocument in documents.docs) {
-        if (eachDocument.id == missionName) {
-          throw MissionNameAlreadyExistException();
-        }
-      }
-    });
-
-    _missionName = missionName;
-  }
-
-  String getMissionName() {
-    return _missionName;
   }
 }
