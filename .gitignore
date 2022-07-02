@@ -47,3 +47,6 @@ app.*.map.json
 
 #Firebase google's service json is already ignored, this is a redunducy
 android/app/google-services.json
+
+#Maps API key
+android/local_maps.properties
