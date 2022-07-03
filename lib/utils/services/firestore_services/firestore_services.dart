@@ -1,12 +1,35 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variable.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services_exceptions.dart';
 
 class FirestoreServices {
-  final _statusStream = StreamController<int>();
-  late CollectionReference _subCollectionReference;
-  final _dataStream = StreamController<MissionVariablesList>();
+  final StreamController<int> _statusStream;
+  final StreamController<MissionVariablesList> _dataStream;
+
+  StreamSubscription<QuerySnapshot<Object?>>? _collectionSubscription;
+  MissionVariablesList? packageModel;
+
+  FirestoreServices()
+      : _statusStream = StreamController<int>(),
+        _dataStream = StreamController<MissionVariablesList>();
+
+  Future<MissionVariablesList> getPackageModel(String missionName) async {
+    MissionVariablesList model = MissionVariablesList();
+
+    Map<String, List<String>> _variables =
+        await _firestoreVariablesNames(missionName);
+    // Creates the variables
+    for (var i = 0; i < _variables['variables']!.length; i++) {
+      if (_variables['types']![i] != "Timestamp") {
+        model.addStandardVariable(
+            _variables['variables']![i], _variables['types']![i]);
+      }
+    }
+
+    return model;
+  }
 
   /// ---------------------------------- This part may migrate to the Mission Pipeline ----------------------------------
   /// A stream to listen to changes in a mission data
@@ -20,24 +43,34 @@ class FirestoreServices {
   /// Initialize a stream to be able to listen for changes in documents
   /// or new documents. To get the stream use the `recive()` method.
   Future<void> init(String missionName) async {
+    print("Tracking mission: " + missionName);
+    packageModel = await getPackageModel(missionName);
     _statusStream.add(1);
-    _subCollectionReference = FirebaseFirestore.instance
+    CollectionReference _subCollectionReference = FirebaseFirestore.instance
         .collection("missoes")
         .doc(missionName)
         .collection('logs');
 
     _statusStream.add(1);
 
+    /// If the tracked mission changes, the last
+    /// snapshot stream must be closed.
+    await _collectionSubscription?.cancel();
+
     /// Listen to the chages on the mission's logs
-    _subCollectionReference
+    _collectionSubscription = _subCollectionReference
         .snapshots(includeMetadataChanges: false)
         .listen((event) async {
-      for (var change in event.docChanges) {
-        //Parses the change into a missionVariablesList object
-        MissionVariablesList packet =
-            await _documentParser(change.doc, missionName);
-        _dataStream
-            .add(packet); // Adds the change (aka packet) to the data stream
+      if (!event.metadata.isFromCache) {
+        for (var change in event.docChanges) {
+          //Parses the change into a missionVariablesList object
+          if (change.type == DocumentChangeType.added) {
+            MissionVariablesList packet =
+                _documentParser(change.doc, missionName);
+            _dataStream
+                .add(packet); // Adds the change (aka packet) to the data stream
+          }
+        }
       }
     });
     _statusStream.add(10);
@@ -46,30 +79,24 @@ class FirestoreServices {
   /// Parses a document from firestore into a `MissionVariablesList` object
   ///
   /// Gets the variables names from firestore using the `_firestoreVariablesNames`
-  Future<MissionVariablesList> _documentParser(
-      DocumentSnapshot document, String missionName) async {
-    MissionVariablesList missionVariables = MissionVariablesList();
-
-    // Get variables names and types
-    Map<String, List<String>> _variables =
-        await _firestoreVariablesNames(missionName);
-
-    // Creates the variables
-    for (var i = 0; i < _variables['variables']!.length; i++) {
-      missionVariables.addStandardVariable(
-          _variables['variables']![i], _variables['types']![i]);
+  MissionVariablesList _documentParser(
+      DocumentSnapshot document, String missionName) {
+    if (packageModel == null) {
+      throw EmptyPackageModel();
     }
 
-    // Get individual variables to be able to assign the document
-    // values to them
-    List missionVariablesList = missionVariables.getVariablesList();
+    MissionVariablesList missionVariables = MissionVariablesList();
+    List<MissionVariable> variablesList = packageModel!.getVariablesList();
 
     // Adds the values into the variables
-    for (var i = 0; i < missionVariablesList.length; i++) {
-      missionVariablesList[i]
-          .addValue(document.get(missionVariablesList[i].getVariableName()));
+    for (var i = 0; i < variablesList.length; i++) {
+      String variableName = variablesList[i].getVariableName();
+      if (document.get(variableName)["value"] != null) {
+        variablesList[i].addValue(document.get(variableName)["value"]);
+      }
     }
 
+    missionVariables.setVariablesList(variablesList);
     return missionVariables;
   }
 
@@ -92,19 +119,58 @@ class FirestoreServices {
       throw EmptyMissionVariablesException();
     }
 
+    packageModel = _missionVariablesObject;
     CollectionReference _missoes =
         FirebaseFirestore.instance.collection('missoes');
 
     List missionVariablesList = _missionVariablesObject.getVariablesList();
 
-    List<Map<String, dynamic>> mappedMissionVariables =
-        _parseMissionVariables(missionVariablesList);
+    Map<String, dynamic> variablesTypesMap = {};
 
-    // Adds the variables names and types
-    _missoes.doc(missionName).set(mappedMissionVariables[0]);
+    // Default values for creation
+    for (var i = 0; i < missionVariablesList.length; i++) {
+      /// Add each variable type and a default value
+      switch (missionVariablesList[i].getVariableType()) {
+        case "Integer":
+          missionVariablesList[i].addValue(1);
+          break;
+        case "Double":
+          missionVariablesList[i].addValue(1.001);
+          break;
+        case "String":
+          missionVariablesList[i].addValue("1.0");
+          break;
+        default:
+      }
+
+      variablesTypesMap[missionVariablesList[i].getVariableName()] = {
+        "type": missionVariablesList[i].getVariableType(),
+        "index": i,
+      };
+    }
 
     // Adds the 'logs' collection with an example document inside
-    _missoes.doc(missionName).collection('logs').add(mappedMissionVariables[1]);
+    Map<String, dynamic> firstDocMap =
+        _parseMissionVariables(missionVariablesList);
+
+    _missoes.doc(missionName).collection('logs').add(firstDocMap);
+
+    variablesTypesMap["creation date"] = {
+      "date": firstDocMap["timestamp"]["value"],
+    };
+
+    // Adds the variables names and types
+    _missoes.doc(missionName).set(variablesTypesMap);
+  }
+
+  void uploadPackage(MissionVariablesList package, String missionName) {
+    CollectionReference _missoes =
+        FirebaseFirestore.instance.collection('missoes');
+
+    Map<String, dynamic> firebasePackage =
+        _parseMissionVariables(package.getVariablesList());
+
+    _missoes.doc(missionName).collection('logs').add(firebasePackage);
   }
 
   /// Parse the mission variables into a Map of type
@@ -112,53 +178,22 @@ class FirestoreServices {
   /// creation of a new mission in firestore
   ///
   /// Returns -> `Map<String, dynamic>`
-  List<Map<String, dynamic>> _parseMissionVariables(List missionVariables) {
-    Map<String, dynamic> variablesTypesMap = {}, firstDocMap = {};
-
-    dynamic valueToBeApplyed;
+  Map<String, dynamic> _parseMissionVariables(List missionVariables) {
+    Map<String, dynamic> variablesTypesMap = {};
 
     // Default values for creation
     for (var i = 0; i < missionVariables.length; i++) {
-      switch (missionVariables[i].getVariableType()) {
-        case "Integer":
-          valueToBeApplyed = 1;
-          break;
-        case "Double":
-          valueToBeApplyed = 1.001;
-          break;
-        case "String":
-          valueToBeApplyed = "1.0";
-          break;
-        default:
-      }
-
-      /// Add each variable type and a default value
-      /// ```
-      /// varName {
-      ///   "type": varType
-      ///   "value": defaultValue
-      /// }
-      /// ```
       variablesTypesMap[missionVariables[i].getVariableName()] = {
-        "type": missionVariables[i].getVariableType().toString(),
-        "value": valueToBeApplyed
+        "value": missionVariables[i].getVariableValue(),
       };
-
-      /// Add the variables values directly to the variable name
-      /// `varName: 1.0`
-      firstDocMap[missionVariables[i].getVariableName()] = valueToBeApplyed;
     }
 
     // Adding the timestamp variable to the variable types
     variablesTypesMap['timestamp'] = {
-      "type": "Timestamp",
-      "value": FieldValue.serverTimestamp()
+      "value": FieldValue.serverTimestamp(),
     };
 
-    // Adding the timestamp variable to the first document
-    firstDocMap['timestamp'] = FieldValue.serverTimestamp();
-
-    return [variablesTypesMap, firstDocMap];
+    return variablesTypesMap;
   }
 
   /// `Async` method, use with `await`.
@@ -180,17 +215,26 @@ class FirestoreServices {
               .get();
 
       if (_mainDocReference.exists) {
-        List<String> helper = [];
+        List<String> disorderedKeys = _mainDocReference.data()!.keys.toList();
+        int nVariables = disorderedKeys.length - 1;
+
+        List<String> types = List<String>.filled(nVariables, "");
+        List<String> names = List<String>.filled(nVariables, "");
 
         // Gets every type from the values inside a `MissionStartDoc` document
         // and appends it to an auxilary array.
+        int i = 0;
         for (var value in _mainDocReference.data()!.values) {
-          helper.add(value['type']);
+          if (disorderedKeys[i] != "creation date") {
+            types[value['index']] = value['type'];
+            names[value['index']] = disorderedKeys[i];
+          }
+          i++;
         }
 
         // Gets the variables names from a `MissionStartDoc`
-        variables['variables'] = _mainDocReference.data()!.keys.toList();
-        variables['types'] = helper;
+        variables['variables'] = names;
+        variables['types'] = types;
       }
     } on FirebaseException catch (e) {
       print(e.toString());
@@ -199,11 +243,10 @@ class FirestoreServices {
     return variables;
   }
 
-  /// Get all the mission names
-  ///
-  /// Returns a List containing the mission names
-  Future<List<String>> getMissionNames() async {
-    List<String> _missionNames = [];
+  /// Get all the mission names and returns
+  /// a Set<String> containing the mission names
+  Future<Set<String>> getMissionNames() async {
+    Set<String> _missionNames = <String>{};
 
     QuerySnapshot<Map<String, dynamic>> _mainCol =
         await FirebaseFirestore.instance.collection('missoes').get();
@@ -219,7 +262,7 @@ class FirestoreServices {
     if (missionName == null || missionName == "") {
       throw EmptyMissionNameException();
     }
-    List<String> missionNames = await getMissionNames();
+    Set<String> missionNames = await getMissionNames();
 
     for (String name in missionNames) {
       if (missionName == name) {
@@ -227,26 +270,4 @@ class FirestoreServices {
       }
     }
   }
-/*
-  Future<void> addMissionName(String? missionName) async {
-    if (missionName == null || missionName == "") {
-      throw EmptyMissionNameException();
-    }
-
-    /// Implementacao da checagem no firebase se o nome da missao
-    /// ja existe. Pega a colecao de missoes e verifica os nome dos
-    /// documentos (id) com o nome da missao (missionName);
-    /// Se o nome existe ele joga a excecao `MissionNameAlreadyExistException`
-    Future<QuerySnapshot<Map<String, dynamic>>> _mainColReference =
-        FirebaseFirestore.instance.collection('missoes').get();
-
-    await _mainColReference.then((documents) async {
-      for (DocumentSnapshot eachDocument in documents.docs) {
-        if (eachDocument.id == missionName) {
-          throw MissionNameAlreadyExistException();
-        }
-      }
-    });
-
-  }*/
 }

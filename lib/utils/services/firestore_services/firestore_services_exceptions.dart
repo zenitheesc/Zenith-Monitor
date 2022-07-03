@@ -25,3 +25,10 @@ class MissionNameAlreadyExistException implements Exception {
     return "Mission's name already exist";
   }
 }
+
+class EmptyPackageModel implements Exception {
+  @override
+  String toString() {
+    return "The packageModel variable is null";
+  }
+}
