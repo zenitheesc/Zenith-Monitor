@@ -5,6 +5,7 @@ import 'class_mission_variable.dart';
 import 'mission_variables_exceptions.dart';
 
 class MissionVariablesList {
+  //In the future, a Set should be used over a List type
   late List<MissionVariable> _list;
 
   MissionVariablesList() {

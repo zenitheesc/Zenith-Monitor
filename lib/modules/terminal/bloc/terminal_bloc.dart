@@ -57,6 +57,12 @@ class TerminalBloc extends Bloc<TerminalEvent, TerminalState> {
       }
     } else if (event is UsbConnectedEvent) {
       yield TerminalRow(message: "Usb conectado", color: mantisGreen);
+      if (dataBloc.usbManager.packageModel == null) {
+        yield TerminalRow(
+            message:
+                "As variáveis da missão ainda não foram definidas. Os pacotes não serão processados corretamente.",
+            color: lightCoral);
+      }
     } else if (event is UsbDisconnectedEvent) {
       yield TerminalRow(message: "Usb desconectado", color: lightCoral);
     }
