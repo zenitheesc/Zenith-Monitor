@@ -13,7 +13,11 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () => missionSelection(context));
+    String missionName = context.select((DataBloc bloc) => bloc.missionName);
+    if (missionName == "Nenhuma") {
+      Future.delayed(
+          const Duration(seconds: 2), () => missionSelection(context));
+    }
 
     return BlocProvider(
       create: (context) => MapBloc(BlocProvider.of<DataBloc>(context)),
@@ -25,10 +29,10 @@ class MapScreen extends StatelessWidget {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text("Selecao de missao",
+              title: const Text("Seleção de missão",
                   style: TextStyle(color: white)),
               content: const Text(
-                  "O seu aplicativo nao esta acompanhando nenhuma missao, selecione dentre as missoes que estao ocorrendo qual voce deseja acompanhar. Caso voce queria criar uma missao ou nao quer acompanhar nenhuma missao, basta deixar a opcao selecionada com 'Nenhuma'.",
+                  "Seu aplicativo não está rastreando nenhuma missão, selecione dentre as missões que estão ocorrendo qual você deseja rastrear. Se você quer criar uma missão ou não quer acompanhar nenhuma, basta deixar a opção marcada com 'Nenhuma'.",
                   style: TextStyle(color: white)),
               backgroundColor: black.withOpacity(1),
               actions: <Widget>[
