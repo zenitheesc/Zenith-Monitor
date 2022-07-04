@@ -45,11 +45,13 @@ class UsbManager {
     await _port!.write(Uint8List.fromList(data.codeUnits));
   }
 
-  void setPackageModel(MissionVariablesList newPackageModel) {
+  void setPackageModel(MissionVariablesList? newPackageModel) {
     packageModel = newPackageModel;
   }
 
   MissionVariablesList _makePackage(String line) {
+    if (packageModel == null) throw PackageModelNotDefined();
+
     List<String> splitedString = line.split(";");
 
     List<MissionVariable> packageList = packageModel!.getVariablesList();
@@ -108,10 +110,8 @@ class UsbManager {
         _port!.inputStream as Stream<Uint8List>, Uint8List.fromList([13, 10]));
 
     _subscription = _transaction!.stream.listen((String line) {
-      if (packageModel == null) {
-        throw PackageModelNotDefined();
-      }
       _rawData.add(line);
+
       MissionVariablesList data = _makePackage(line);
 
       _parsedData.add(data);

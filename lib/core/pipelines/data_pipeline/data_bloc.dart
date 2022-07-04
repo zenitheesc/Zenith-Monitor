@@ -8,7 +8,7 @@ part 'data_state.dart';
 part 'data_event.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
-  late MissionVariablesList packageModel;
+  MissionVariablesList? packageModel;
   final FirestoreServices fireServices = FirestoreServices();
   late UsbManager usbManager;
   late bool usbIsConnected;
@@ -75,6 +75,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         packageModel = await fireServices.getPackageModel(missionName);
         await fireServices.init(missionName);
 
+        usbManager.setPackageModel(packageModel);
+      } else {
+        packageModel = null;
         usbManager.setPackageModel(packageModel);
       }
       yield NewMissionNameValue(
