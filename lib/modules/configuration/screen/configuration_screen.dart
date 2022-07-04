@@ -49,12 +49,27 @@ class ConfigurationScreen extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         sectionsTitle("Conexões"),
-                        ConnectionDisplay(connections: [
-                          Connection("carlos", true),
-                          Connection("carlos", false),
-                          Connection("carlos", true),
-                          Connection("carlos", true)
-                        ]),
+                        BlocBuilder<MissionVariablesBloc,
+                            MissionVariablesState>(
+                          buildWhen: (previous, current) =>
+                              previous != current &&
+                              current is NewConnectionsState,
+                          builder: (context, state) {
+                            if (state is NewConnectionsState) {
+                              return ConnectionDisplay(connections: [
+                                for (MapEntry e in state.connections.entries)
+                                  Connection(e.key, e.value)
+                              ]);
+                            }
+                            Map<String, bool> c = context.select(
+                                (MissionVariablesBloc bloc) =>
+                                    bloc.connections);
+                            return ConnectionDisplay(connections: [
+                              for (MapEntry e in c.entries)
+                                Connection(e.key, e.value)
+                            ]);
+                          },
+                        ),
                         sectionsTitle('Criação de Missão'),
                         const MissionCreation(),
                         sectionsTitle('Seleção de Missão'),
