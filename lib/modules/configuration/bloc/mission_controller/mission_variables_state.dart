@@ -36,3 +36,10 @@ class MissionNameError extends MissionVariablesState {
     setVariablesList(variablesList);
   }
 }
+
+class NewConnectionsState extends MissionVariablesState {
+  late Map<String, bool> connections;
+  NewConnectionsState(MissionVariablesList variablesList, this.connections) {
+    setVariablesList(variablesList);
+  }
+}

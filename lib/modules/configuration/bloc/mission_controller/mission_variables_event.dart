@@ -21,3 +21,5 @@ class StartMissionEvent extends MissionVariablesEvent {
 
   StartMissionEvent({required this.missionName});
 }
+
+class ConnectionChanged extends MissionVariablesEvent {}
