@@ -9,3 +9,8 @@ class NewPackageState extends MapState {
 
   NewPackageState({required this.newVariablesList});
 }
+
+class MapError extends MapState {
+  String errorMessage;
+  MapError({required this.errorMessage});
+}

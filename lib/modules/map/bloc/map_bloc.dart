@@ -10,6 +10,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     dataBloc.stream.listen((state) {
       if (state is NewPackageParsedData) {
         add(NewPackageEvent(newPackage: state.newPackage));
+      } else if (state is UsbPackageNotDefined) {
+        add(UsbError());
       }
     });
   }
@@ -22,6 +24,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
       /// Removes the timestamp variable
       yield NewPackageState(newVariablesList: variablesList);
+    } else if (event is UsbError) {
+      yield MapError(
+          errorMessage:
+              "O dispositivo USB foi conectado, mas ainda não há modelo de pacote para o parser. Se novos pacotes chegarem, eles serão ignorados e perdidos. Para resolver isso, navegue até a página de configurações e escolha uma missão ou crie uma nova.");
     }
   }
 }

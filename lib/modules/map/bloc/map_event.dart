@@ -7,3 +7,5 @@ class NewPackageEvent extends MapEvent {
 
   NewPackageEvent({required this.newPackage});
 }
+
+class UsbError extends MapEvent {}
