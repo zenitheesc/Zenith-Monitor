@@ -23,6 +23,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     usbManager.attached().listen((event) {
       if (event) {
         usbIsConnected = true;
+        if (usbManager.packageModel == null) {
+          add(NoUsbPackageModel());
+        }
         add(UsbConnected());
       } else {
         usbIsConnected = false;
@@ -82,6 +85,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       }
       yield NewMissionNameValue(
           missionName: missionName, missionsNames: missionsNames);
+    } else if (event is NoUsbPackageModel) {
+      yield UsbPackageNotDefined();
     } else {
       print("Unknown event in Mission Bloc");
     }

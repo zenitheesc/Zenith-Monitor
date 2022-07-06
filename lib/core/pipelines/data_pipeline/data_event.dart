@@ -40,3 +40,5 @@ class SettingMissionName extends DataEvent {
   String missionName;
   SettingMissionName({required this.missionName});
 }
+
+class NoUsbPackageModel extends DataEvent {}
