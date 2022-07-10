@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class LocationManager {
-  late final Location _location = Location();
-  late final StreamController<int> _statusCtrl = StreamController();
+  final Location _location = Location();
+  final StreamController<int> _statusCtrl = StreamController();
+  final StreamController<LocationData> _locationController = StreamController();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
 
@@ -14,7 +14,7 @@ class LocationManager {
     _statusCtrl.add(0);
   }
 
-  Future<LocationData> init() async {
+  Future<void> init() async {
     if (!_serviceEnabled) {
       await _enable();
     }
@@ -24,14 +24,9 @@ class LocationManager {
     _location.changeSettings(
         accuracy: LocationAccuracy.high, distanceFilter: 50);
 
-    LocationData data = await _location.getLocation();
-
     _location.onLocationChanged.listen((event) {
-      printVariables(event);
+      _locationController.add(event);
     });
-
-    receive();
-    return data;
   }
 
   void printVariables(LocationData data) {
@@ -79,22 +74,16 @@ class LocationManager {
     }
   }
 
-  Stream<LatLng> receive() {
-    if (check()) {
-      print("receiving...");
-      return _location.onLocationChanged.asyncMap((LocationData event) {
-        return LatLng(event.latitude!, event.longitude!);
-      });
-    } else {
-      return const Stream.empty();
-    }
-  }
-
   Stream<int> status() {
     return _statusCtrl.stream;
   }
 
+  Stream<LocationData> locationStream() {
+    return _locationController.stream;
+  }
+
   void dispose() {
+    _locationController.close();
     _statusCtrl.close();
   }
 }
