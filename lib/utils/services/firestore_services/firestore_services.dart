@@ -153,7 +153,7 @@ class FirestoreServices {
     Map<String, dynamic> firstDocMap =
         _parseMissionVariables(missionVariablesList);
 
-    _missoes.doc(missionName).collection('logs').add(firstDocMap);
+    _missoes.doc(missionName).collection('logs').doc("-1").set(firstDocMap);
 
     variablesTypesMap["creation date"] = {
       "date": firstDocMap["timestamp"]["value"],
@@ -170,7 +170,11 @@ class FirestoreServices {
     Map<String, dynamic> firebasePackage =
         _parseMissionVariables(package.getVariablesList());
 
-    _missoes.doc(missionName).collection('logs').add(firebasePackage);
+    _missoes
+        .doc(missionName)
+        .collection('logs')
+        .doc(DateTime.now().microsecondsSinceEpoch.toString())
+        .set(firebasePackage);
   }
 
   /// Parse the mission variables into a Map of type
