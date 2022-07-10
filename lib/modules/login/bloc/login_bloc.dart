@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:zenith_monitor/modules/login/screen/login_screen.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/services/authentication/authentication.dart';
 import 'package:zenith_monitor/utils/services/authentication/email_password_auth.dart';
@@ -16,6 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitialState());
 
   late LocalUser _user;
+  late Authentication _auth;
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -24,6 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         await event.loginCall();
         _user = await event.getUser();
+        _auth = event.auth;
         yield LoginSuccess(_user);
       } on WrongPassword {
         yield LoginError(errorMessage: "Senha errada");
@@ -57,6 +61,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         print(e.toString());
         yield LoginError(errorMessage: "Erro desconhecido");
       }
+    } else if (event is SignOutEvent) {
+      await _auth.signOut();
+      Navigator.pushAndRemoveUntil(
+          event.context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const LoginScreen()),
+          ModalRoute.withName('/login'));
     }
   }
 }

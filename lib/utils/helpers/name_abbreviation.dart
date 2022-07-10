@@ -15,7 +15,7 @@ String nameAbbreviation(String name, double screenWidth, double fontSize) {
 
   var list = <String>[];
   list = finalName.split(" ");
-
+  list.removeWhere((item) => item == "");
   int i = list.length - 1;
 
   while (size.width > screenWidth * 0.8) {
@@ -32,6 +32,5 @@ String nameAbbreviation(String name, double screenWidth, double fontSize) {
     finalName = list.join(" ");
     size = calcTextSize(finalName, TextStyle(fontSize: fontSize));
   }
-
   return finalName;
 }

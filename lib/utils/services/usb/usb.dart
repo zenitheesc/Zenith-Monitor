@@ -4,6 +4,7 @@ import 'package:usb_serial/usb_serial.dart';
 import 'package:usb_serial/transaction.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variable.dart';
+import 'package:zenith_monitor/utils/services/usb/usb_exceptions.dart';
 
 class UsbManager {
   UsbPort? _port;
@@ -15,9 +16,9 @@ class UsbManager {
       StreamController<String>.broadcast();
   final StreamController<int> _status = StreamController<int>.broadcast();
   final StreamController<bool> _attatched = StreamController<bool>.broadcast();
-  MissionVariablesList packageModel;
+  MissionVariablesList? packageModel;
 
-  UsbManager({required this.packageModel}) {
+  UsbManager() {
     if (UsbSerial.usbEventStream == null) {
       return;
     }
@@ -44,10 +45,16 @@ class UsbManager {
     await _port!.write(Uint8List.fromList(data.codeUnits));
   }
 
-  MissionVariablesList makePackage(String line) {
+  void setPackageModel(MissionVariablesList? newPackageModel) {
+    packageModel = newPackageModel;
+  }
+
+  MissionVariablesList _makePackage(String line) {
+    if (packageModel == null) throw PackageModelNotDefined();
+
     List<String> splitedString = line.split(";");
 
-    List<MissionVariable> packageList = packageModel.getVariablesList();
+    List<MissionVariable> packageList = packageModel!.getVariablesList();
 
     for (int i = 0; i < packageList.length - 1; i++) {
       MissionVariable v = packageList[i + 1];
@@ -104,7 +111,8 @@ class UsbManager {
 
     _subscription = _transaction!.stream.listen((String line) {
       _rawData.add(line);
-      MissionVariablesList data = makePackage(line);
+
+      MissionVariablesList data = _makePackage(line);
 
       _parsedData.add(data);
     });
