@@ -48,6 +48,7 @@ dependencies:
   image_cropper: ^1.5.0
   firebase_storage: ^10.2.9
   usb_serial: ^0.3.0
+  connectivity_plus: ^2.3.5
 
 dev_dependencies:
   flutter_lints: ^1.0.4

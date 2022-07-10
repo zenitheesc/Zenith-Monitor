@@ -25,7 +25,7 @@ class InfoListView extends StatelessWidget {
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             ),
             child: BlocBuilder<MapBloc, MapState>(builder: (context, state) {
-              if (state is UserInfoState) {
+              if (state is NewPackageState) {
                 List scrollList = state.newVariablesList;
 
                 if (scrollList.isEmpty) {
@@ -79,7 +79,7 @@ class InfoListView extends StatelessWidget {
                                     .getVariableName()
                                     .toString(),
                                 variableValue: scrollList[index * 2]
-                                    .getVariableName()
+                                    .getVariableValue()
                                     .toString()),
                           );
                         }

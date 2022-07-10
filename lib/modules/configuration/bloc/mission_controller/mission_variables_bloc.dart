@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/mission_variables_exceptions.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services_exceptions.dart';
 
 part 'mission_variables_state.dart';
 part 'mission_variables_event.dart';
@@ -14,8 +17,40 @@ class MissionVariablesBloc
     extends Bloc<MissionVariablesEvent, MissionVariablesState> {
   MissionVariablesList variablesList;
   DataBloc dataBloc;
+  FirestoreServices firestoreServices = FirestoreServices();
+  Map<String, bool> connections;
+  final Connectivity _connectivity;
+
   MissionVariablesBloc(this.variablesList, this.dataBloc)
-      : super(VariablesInitial(variablesList));
+      : connections = <String, bool>{},
+        _connectivity = Connectivity(),
+        super(VariablesInitial(variablesList)) {
+    connections = {
+      "Dispositivo usb": dataBloc.usbIsConnected,
+      "Internet": false,
+      //  "Modelo de pacote": (dataBloc.packageModel == null) ? false : true,
+    };
+
+    _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      print("conexao de internet: " + result.toString());
+      print("Teste da variavel " +
+          variablesList.getVariablesList()[0].getVariableName());
+      connections["Internet"] =
+          (result == ConnectivityResult.none) ? false : true;
+
+      add(ConnectionChanged());
+    });
+
+    dataBloc.stream.listen((event) {
+      if (event is UsbDisconnectedState) {
+        connections["Dispositivo usb"] = false;
+        add(ConnectionChanged());
+      } else if (event is UsbConnectedState) {
+        connections["Dispositivo usb"] = true;
+        add(ConnectionChanged());
+      }
+    });
+  }
 
   @override
   Stream<MissionVariablesState> mapEventToState(
@@ -38,17 +73,25 @@ class MissionVariablesBloc
       variablesList.deleteVariable(event.variableIndex);
       yield VariablesChanged(variablesList);
     } else if (event is StartMissionEvent) {
+      if (event.missionName == "Nenhuma") {
+        yield MissionNameError(variablesList,
+            "'Nenhuma' não pode ser utilizado como nome de missão");
+      }
       try {
-        await variablesList.addMissionName(event.missionName);
-        dataBloc.add(SetVariablesListEvent(variablesList: variablesList));
-        dataBloc.add(FirestoreUploaderEvent(variablesList: variablesList));
+        await firestoreServices.checkMissionName(event.missionName);
+        dataBloc.add(MissionInfoSetup(
+            missionName: event.missionName, packageModel: variablesList));
       } on EmptyMissionNameException {
         yield MissionNameError(
             variablesList, "É necessário fornecer um nome para a missão");
       } on MissionNameAlreadyExistException {
         yield MissionNameError(
             variablesList, "Esse nome já foi utilizado em uma missão anterior");
+      } catch (e) {
+        print(e);
       }
+    } else if (event is ConnectionChanged) {
+      yield NewConnectionsState(variablesList, connections);
     } else {
       print("Unknown event in Variables Bloc");
     }

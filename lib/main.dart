@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/modules/configuration/screen/configuration_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/modules/terminal/screen/terminal_screen.dart';
 import 'firebase_options.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
+import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
@@ -27,13 +30,7 @@ class ZenithMonitor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     data.init();
-    return MaterialApp(
-      theme: ThemeData(
-        bottomSheetTheme:
-            BottomSheetThemeData(backgroundColor: Colors.black.withOpacity(0)),
-      ),
-      home: Application(),
-    );
+    return Application();
   }
 }
 
@@ -44,7 +41,11 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+          BlocProvider(create: (context) => LoginBloc()),
           BlocProvider(create: (context) => DataBloc()),
+          BlocProvider(
+              create: (context) =>
+                  TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
         ],
         child: FutureBuilder(
           future: _initialization,
@@ -59,6 +60,8 @@ class Application extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 title: 'Main Screen',
                 theme: ThemeData(
+                  bottomSheetTheme: BottomSheetThemeData(
+                      backgroundColor: Colors.black.withOpacity(0)),
                   primaryColor: Colors.black,
                 ),
                 initialRoute: '/login',
@@ -67,6 +70,7 @@ class Application extends StatelessWidget {
                   '/signup': (context) => const SignUpScreen(),
                   '/forgotPwd': (context) => const ForgotMyPassword(),
                   '/map': (context) => const MapScreen(),
+                  '/configuration': (context) => ConfigurationScreen(),
                   '/terminal': (context) => const TerminalScreen(),
                 },
               );

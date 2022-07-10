@@ -57,3 +57,8 @@ class FacebookLoginEvent extends AuthenticationEvent {
     return await auth.getUserAuthentication();
   }
 }
+
+class SignOutEvent extends LoginEvent {
+  BuildContext context;
+  SignOutEvent({required this.context});
+}

@@ -4,37 +4,10 @@ import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/utils/helpers/name_abbreviation.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
+import 'package:zenith_monitor/widgets/user_image.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({Key? key});
-
-  Widget profileChild(LocalUser user) {
-    double radius = 80.0;
-    Color color = eerieBlack;
-    String? link = user.getImageLink();
-
-    if (link == null) {
-      return CircleAvatar(
-        child: Text(
-          user.getFirstName()[0].toUpperCase(),
-          style: const TextStyle(
-            fontSize: 60.0,
-            color: white,
-          ),
-        ),
-        backgroundColor: color,
-        radius: radius,
-      );
-    }
-
-    return CircleAvatar(
-      backgroundImage: NetworkImage(
-        link,
-      ),
-      backgroundColor: color,
-      radius: radius,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +24,11 @@ class UserProfile extends StatelessWidget {
             : Column(
                 children: [
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 80.0, 0, 20.0),
-                      child: profileChild(user)),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 20.0),
+                      child: UserImage(
+                        user: user,
+                        radius: 80.0,
+                      )),
                   Text(
                     nameAbbreviation(user.getCompleteName(), screenWidth, 24.0),
                     style: const TextStyle(
