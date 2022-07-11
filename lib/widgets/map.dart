@@ -52,6 +52,7 @@ class BuildMap extends State<MapWidget> {
                     width: MediaQuery.of(context).size.width,
                     child: GoogleMap(
                       zoomControlsEnabled: false,
+                      myLocationEnabled: true,
                       mapType: _maptype,
                       initialCameraPosition: _kGooglePlex,
                       onMapCreated: (GoogleMapController controller) async {

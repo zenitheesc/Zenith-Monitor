@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
 import 'package:zenith_monitor/modules/configuration/screen/configuration_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/modules/terminal/screen/terminal_screen.dart';
+import 'package:zenith_monitor/utils/services/usb/usb.dart';
 import 'firebase_options.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
 import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
@@ -11,7 +13,6 @@ import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
-import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/modules/login/screen/login_screen.dart';
 
 void main() async {
@@ -19,17 +20,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ZenithMonitor());
+  runApp(const ZenithMonitor());
 }
 
 class ZenithMonitor extends StatelessWidget {
-  ZenithMonitor({Key? key}) : super(key: key);
-
-  final LocationManager data = LocationManager();
+  const ZenithMonitor({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    data.init();
     return Application();
   }
 }
@@ -39,10 +37,13 @@ class Application extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
+    UsbManager usbManager = UsbManager();
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => LoginBloc()),
-          BlocProvider(create: (context) => DataBloc()),
+          BlocProvider(create: (context) => DataBloc(usbManager: usbManager)),
+          BlocProvider(
+              create: (context) => MapDataBloc(usbManager: usbManager)),
           BlocProvider(
               create: (context) =>
                   TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),

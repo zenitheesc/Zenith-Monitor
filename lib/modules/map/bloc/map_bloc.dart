@@ -1,4 +1,7 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:bloc/bloc.dart';
 part 'map_state.dart';
@@ -6,7 +9,12 @@ part 'map_event.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   DataBloc dataBloc;
-  MapBloc(this.dataBloc) : super(MapInitialState()) {
+  MapDataBloc mapDataBloc;
+
+  MapBloc({required this.dataBloc, required this.mapDataBloc})
+      : super(MapInitialState()) {
+    mapDataBloc.stream.listen((event) {});
+
     dataBloc.stream.listen((state) {
       if (state is NewPackageParsedData) {
         add(NewPackageEvent(newPackage: state.newPackage));

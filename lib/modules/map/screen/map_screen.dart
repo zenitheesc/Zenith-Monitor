@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
 import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
@@ -48,7 +49,9 @@ class MapScreen extends StatelessWidget {
     }
 
     return BlocProvider(
-      create: (context) => MapBloc(BlocProvider.of<DataBloc>(context)),
+      create: (context) => MapBloc(
+          dataBloc: BlocProvider.of<DataBloc>(context),
+          mapDataBloc: BlocProvider.of<MapDataBloc>(context)),
       child: BlocListener<MapBloc, MapState>(
         listener: (context, state) {
           if (state is MapError) {
