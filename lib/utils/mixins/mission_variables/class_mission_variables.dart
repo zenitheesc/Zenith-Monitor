@@ -17,6 +17,7 @@ class MissionVariablesList {
   void addStandardVariable(String name, String type) {
     if (name.isEmpty || type.isEmpty) throw EmptyVariablesException();
 
+    name = name.trim();
     type = stringToPattern(type);
 
     if (contains(name)) throw VariableAlreadyExistsException();
@@ -59,5 +60,12 @@ class MissionVariablesList {
     if (index < 0 || index >= _list.length) return;
 
     _list.removeAt(index);
+  }
+
+  MissionVariable? getVariable(String variableName) {
+    for (var i = 0; i < _list.length; i++) {
+      if (_list[i].getVariableName() == variableName) return _list[i];
+    }
+    return null;
   }
 }
