@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
 import 'package:zenith_monitor/widgets/map_info_listview.dart';
 import 'package:zenith_monitor/widgets/map_theme_button.dart';
 import 'package:zenith_monitor/widgets/map_navigation_drawer.dart';
@@ -13,8 +15,9 @@ class MapWidget extends StatefulWidget {
 }
 
 class BuildMap extends State<MapWidget> {
-  Set<Marker> markers = {};
+  Marker? probeLocation;
   PolylinePoints polylinePoints = PolylinePoints();
+  MapDataBloc? mapDataBloc;
 
   int _polylineIdCounter = 1;
   final Completer<GoogleMapController> _controller = Completer();
@@ -26,46 +29,46 @@ class BuildMap extends State<MapWidget> {
   );
 
   @override
+  void dispose() {
+    super.dispose();
+
+    //Close the Stream Sink when the widget is disposed
+    mapDataBloc?.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     GoogleMapController _mapController;
 
-    markers.addAll([
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0123, -47.8908)),
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0135, -47.8908)),
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0135, -47.8928)),
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0139, -47.8930)),
-      const Marker(
-          markerId: MarkerId('value2'),
-          position: LatLng(-20.7333333, -48.5833333)),
-    ]);
+    MapDataBloc mapDataBloc = BlocProvider.of<MapDataBloc>(context);
+    mapDataBloc.stream.listen(((state) {
+      if (state is NewProbeLocation) {
+        _setProbeLocation(state.probeLocation);
+      }
+    }));
 
     return Scaffold(
       body: OrientationBuilder(
           builder: (context, orientation) => Align(
                 alignment: Alignment.bottomCenter,
                 child: Stack(children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: GoogleMap(
-                      zoomControlsEnabled: false,
-                      myLocationEnabled: true,
-                      mapType: _maptype,
-                      initialCameraPosition: _kGooglePlex,
-                      onMapCreated: (GoogleMapController controller) async {
-                        _mapController = controller;
-                        var style = await rootBundle
-                            .loadString('assets/maps/aubergine.json');
-                        _add();
-                        _mapController.setMapStyle(style);
-                        _controller.complete(controller);
-                      },
-                      markers: markers,
-                      polylines: Set<Polyline>.of(_buildMapolylines.values),
-                    ),
+                  GoogleMap(
+                    zoomControlsEnabled: false,
+                    myLocationEnabled: true,
+                    mapType: _maptype,
+                    initialCameraPosition: _kGooglePlex,
+                    onMapCreated: (GoogleMapController controller) async {
+                      _mapController = controller;
+                      var style = await rootBundle
+                          .loadString('assets/maps/aubergine.json');
+                      _add();
+                      _mapController.setMapStyle(style);
+                      _controller.complete(controller);
+                    },
+                    markers: {
+                      if (probeLocation != null) probeLocation!,
+                    },
+                    polylines: Set<Polyline>.of(_buildMapolylines.values),
                   ),
                   InfoListView(
                     orientation: orientation,
@@ -100,6 +103,15 @@ class BuildMap extends State<MapWidget> {
               )),
       drawer: NavigationDrawerWidget(),
     );
+  }
+
+  void _setProbeLocation(LatLng location) {
+    setState(() {
+      probeLocation = Marker(
+        markerId: const MarkerId('Probe'),
+        position: location,
+      );
+    });
   }
 
   double getLeftPositionForOrientation(Orientation orientation) {
