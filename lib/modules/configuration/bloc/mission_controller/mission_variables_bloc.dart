@@ -32,9 +32,6 @@ class MissionVariablesBloc
     };
 
     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      print("conexao de internet: " + result.toString());
-      print("Teste da variavel " +
-          variablesList.getVariablesList()[0].getVariableName());
       connections["Internet"] =
           (result == ConnectivityResult.none) ? false : true;
 
@@ -73,22 +70,27 @@ class MissionVariablesBloc
       variablesList.deleteVariable(event.variableIndex);
       yield VariablesChanged(variablesList);
     } else if (event is StartMissionEvent) {
-      if (event.missionName == "Nenhuma") {
+      if (!variablesList.contains("Latitude") ||
+          !variablesList.contains("Longitude")) {
+        yield MissionNameError(variablesList,
+            "Para que a sonda seja rastreada, é necessário ter uma variável chamada 'Latitude' e outra chamada 'Longitude', ambas do tipo real.");
+      } else if (event.missionName == "Nenhuma") {
         yield MissionNameError(variablesList,
             "'Nenhuma' não pode ser utilizado como nome de missão");
-      }
-      try {
-        await firestoreServices.checkMissionName(event.missionName);
-        dataBloc.add(MissionInfoSetup(
-            missionName: event.missionName, packageModel: variablesList));
-      } on EmptyMissionNameException {
-        yield MissionNameError(
-            variablesList, "É necessário fornecer um nome para a missão");
-      } on MissionNameAlreadyExistException {
-        yield MissionNameError(
-            variablesList, "Esse nome já foi utilizado em uma missão anterior");
-      } catch (e) {
-        print(e);
+      } else {
+        try {
+          await firestoreServices.checkMissionName(event.missionName);
+          dataBloc.add(MissionInfoSetup(
+              missionName: event.missionName, packageModel: variablesList));
+        } on EmptyMissionNameException {
+          yield MissionNameError(
+              variablesList, "É necessário fornecer um nome para a missão");
+        } on MissionNameAlreadyExistException {
+          yield MissionNameError(variablesList,
+              "Esse nome já foi utilizado em uma missão anterior");
+        } catch (e) {
+          print(e);
+        }
       }
     } else if (event is ConnectionChanged) {
       yield NewConnectionsState(variablesList, connections);
