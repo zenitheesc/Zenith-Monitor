@@ -7,7 +7,7 @@ class NewLocationData extends MapDataEvent {
   NewLocationData({required this.locationData});
 }
 
-class NewUsbCoordinate extends MapDataEvent {
-  MissionVariable latitude, longitude;
-  NewUsbCoordinate({required this.latitude, required this.longitude});
+class NewPackage extends MapDataEvent {
+  MissionVariablesList newPackage;
+  NewPackage({required this.newPackage});
 }

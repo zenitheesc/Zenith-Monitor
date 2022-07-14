@@ -9,12 +9,13 @@ part 'data_event.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
   MissionVariablesList? packageModel;
-  final FirestoreServices fireServices = FirestoreServices();
   UsbManager usbManager;
+  FirestoreServices fireServices;
   late bool usbIsConnected;
   late String missionName;
 
-  DataBloc({required this.usbManager}) : super(DataStateInitial()) {
+  DataBloc({required this.usbManager, required this.fireServices})
+      : super(DataStateInitial()) {
     missionName = "Nenhuma";
     usbIsConnected = false;
 

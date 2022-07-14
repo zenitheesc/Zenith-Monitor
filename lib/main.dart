@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
@@ -40,12 +41,16 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UsbManager usbManager = UsbManager();
+    FirestoreServices fireServices = FirestoreServices();
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => LoginBloc()),
-          BlocProvider(create: (context) => DataBloc(usbManager: usbManager)),
           BlocProvider(
-              create: (context) => MapDataBloc(usbManager: usbManager)),
+              create: (context) =>
+                  DataBloc(usbManager: usbManager, fireServices: fireServices)),
+          BlocProvider(
+              create: (context) => MapDataBloc(
+                  usbManager: usbManager, fireServices: fireServices)),
           BlocProvider(
               create: (context) =>
                   TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),

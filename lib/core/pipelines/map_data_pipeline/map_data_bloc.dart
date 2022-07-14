@@ -3,6 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:zenith_monitor/utils/mixins/class_map_data.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variable.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
+import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/utils/services/usb/usb.dart';
 import 'package:zenith_monitor/utils/helpers/routes_request.dart';
@@ -13,10 +15,12 @@ part 'map_data_event.dart';
 class MapDataBloc extends Bloc<MapDataEvent, MapDataState> {
   final LocationManager _selfLocationManager = LocationManager();
   UsbManager usbManager;
+  FirestoreServices fireServices;
   late bool usbIsConnected;
   LocationData? trackerLocation;
 
-  MapDataBloc({required this.usbManager}) : super(MapDataStateInitial()) {
+  MapDataBloc({required this.usbManager, required this.fireServices})
+      : super(MapDataStateInitial()) {
     usbIsConnected = false;
 
     _selfLocationManager.init();
@@ -31,10 +35,12 @@ class MapDataBloc extends Bloc<MapDataEvent, MapDataState> {
     });
 
     usbManager.parsedData().listen((event) {
-      MissionVariable? latitude = event.getVariable("Latitude");
-      MissionVariable? longitude = event.getVariable("Longitude");
-      if (latitude != null && longitude != null) {
-        add(NewUsbCoordinate(latitude: latitude, longitude: longitude));
+      add(NewPackage(newPackage: event));
+    });
+
+    fireServices.recive().listen((event) {
+      if (!usbIsConnected) {
+        add(NewPackage(newPackage: event));
       }
     });
   }
@@ -45,9 +51,19 @@ class MapDataBloc extends Bloc<MapDataEvent, MapDataState> {
       if (usbIsConnected) {
         //yield TrackerMoved();
       }
-    } else if (event is NewUsbCoordinate) {
-      LatLng probeLocation = LatLng(event.latitude.getVariableValue(),
-          event.longitude.getVariableValue());
+    } else if (event is NewPackage) {
+      MissionVariable? latitude = event.newPackage.getVariable("Latitude");
+      MissionVariable? longitude = event.newPackage.getVariable("Longitude");
+
+      if (latitude == null || longitude == null) {
+        yield PackageWoLocation();
+      }
+      LatLng probeLocation =
+          LatLng(latitude!.getVariableValue(), longitude!.getVariableValue());
+
+      if (!usbIsConnected) {
+        yield NewProbeLocation(probeLocation: probeLocation);
+      }
 
       MapData? mapData;
       if (trackerLocation != null &&

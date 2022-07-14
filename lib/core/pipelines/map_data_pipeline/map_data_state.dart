@@ -15,3 +15,5 @@ class NewMapData extends MapDataState {
   MapData mapData;
   NewMapData({required this.mapData});
 }
+
+class PackageWoLocation extends MapDataState {}
