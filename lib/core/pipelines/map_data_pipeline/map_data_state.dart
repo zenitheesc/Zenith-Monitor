@@ -10,3 +10,8 @@ class NewProbeLocation extends MapDataState {
   LatLng probeLocation;
   NewProbeLocation({required this.probeLocation});
 }
+
+class NewMapData extends MapDataState {
+  MapData mapData;
+  NewMapData({required this.mapData});
+}

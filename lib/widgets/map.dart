@@ -19,7 +19,6 @@ class BuildMap extends State<MapWidget> {
   PolylinePoints polylinePoints = PolylinePoints();
   MapDataBloc? mapDataBloc;
 
-  int _polylineIdCounter = 1;
   final Completer<GoogleMapController> _controller = Completer();
   final Map<PolylineId, Polyline> _buildMapolylines = {};
   MapType _maptype = MapType.normal;
@@ -44,6 +43,9 @@ class BuildMap extends State<MapWidget> {
     mapDataBloc.stream.listen(((state) {
       if (state is NewProbeLocation) {
         _setProbeLocation(state.probeLocation);
+      } else if (state is NewMapData) {
+        _setProbeLocation(state.mapData.probeLocation);
+        _setRoutePoints(state.mapData.routePoints);
       }
     }));
 
@@ -61,7 +63,6 @@ class BuildMap extends State<MapWidget> {
                       _mapController = controller;
                       var style = await rootBundle
                           .loadString('assets/maps/aubergine.json');
-                      _add();
                       _mapController.setMapStyle(style);
                       _controller.complete(controller);
                     },
@@ -114,6 +115,26 @@ class BuildMap extends State<MapWidget> {
     });
   }
 
+  void _setRoutePoints(List<LatLng> routePoints) {
+    //There will be only a polyline for routePoints,
+    //and _buildMapolylines will be cleaned every time,
+    // so polylineId dosent need to change
+    PolylineId polylineId = const PolylineId('polyline_id_');
+
+    final Polyline polyline = Polyline(
+      polylineId: polylineId,
+      consumeTapEvents: true,
+      color: Colors.red,
+      width: 5,
+      points: routePoints,
+    );
+
+    setState(() {
+      _buildMapolylines.clear();
+      _buildMapolylines[polylineId] = polyline;
+    });
+  }
+
   double getLeftPositionForOrientation(Orientation orientation) {
     if (orientation == Orientation.landscape) {
       return 0.92 * MediaQuery.of(context).size.width;
@@ -128,16 +149,6 @@ class BuildMap extends State<MapWidget> {
     return -0.3 * MediaQuery.of(context).size.height;
   }
 
-  List<LatLng> _createPoints() {
-    final List<LatLng> points = <LatLng>[];
-    points.add(const LatLng(-22.0123, -47.8908));
-    points.add(const LatLng(-22.0134, -47.8908));
-    points.add(const LatLng(-22.0134, -47.8912));
-    points.add(const LatLng(-22.0139, -47.8915));
-    points.add(const LatLng(-20.7333333, -48.5833333));
-    return points;
-  }
-
   void setMap() async {
     setState(() {
       if (_maptype == MapType.normal) {
@@ -145,23 +156,6 @@ class BuildMap extends State<MapWidget> {
       } else {
         _maptype = MapType.normal;
       }
-    });
-  }
-
-  Future<void> _add() async {
-    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
-    _polylineIdCounter++;
-    final PolylineId polylineId = PolylineId(polylineIdVal);
-    final Polyline polyline = Polyline(
-      polylineId: polylineId,
-      consumeTapEvents: true,
-      color: Colors.red,
-      width: 5,
-      points: _createPoints(),
-    );
-
-    setState(() {
-      _buildMapolylines[polylineId] = polyline;
     });
   }
 }
