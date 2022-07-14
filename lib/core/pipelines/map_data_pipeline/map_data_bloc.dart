@@ -57,27 +57,25 @@ class MapDataBloc extends Bloc<MapDataEvent, MapDataState> {
 
       if (latitude == null || longitude == null) {
         yield PackageWoLocation();
-      }
-      LatLng probeLocation =
-          LatLng(latitude!.getVariableValue(), longitude!.getVariableValue());
-
-      if (!usbIsConnected) {
-        yield NewProbeLocation(probeLocation: probeLocation);
-      }
-
-      MapData? mapData;
-      if (trackerLocation != null &&
-          trackerLocation!.latitude != null &&
-          trackerLocation!.longitude != null) {
-        mapData = await routesRequest(
-            LatLng(trackerLocation!.latitude!, trackerLocation!.longitude!),
-            probeLocation);
-      }
-
-      if (mapData != null) {
-        yield NewMapData(mapData: mapData);
       } else {
+        LatLng probeLocation =
+            LatLng(latitude.getVariableValue(), longitude.getVariableValue());
+
         yield NewProbeLocation(probeLocation: probeLocation);
+        if (usbIsConnected) {
+          MapData? mapData;
+          if (trackerLocation != null &&
+              trackerLocation!.latitude != null &&
+              trackerLocation!.longitude != null) {
+            mapData = await routesRequest(
+                LatLng(trackerLocation!.latitude!, trackerLocation!.longitude!),
+                probeLocation);
+          }
+
+          if (mapData != null) {
+            yield NewMapData(mapData: mapData);
+          }
+        }
       }
     }
   }
