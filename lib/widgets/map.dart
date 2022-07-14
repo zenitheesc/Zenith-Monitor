@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
+import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
 import 'package:zenith_monitor/widgets/map_info_listview.dart';
 import 'package:zenith_monitor/widgets/map_theme_button.dart';
 import 'package:zenith_monitor/widgets/map_navigation_drawer.dart';
@@ -16,11 +16,10 @@ class MapWidget extends StatefulWidget {
 
 class BuildMap extends State<MapWidget> {
   Marker? probeLocation;
-  PolylinePoints polylinePoints = PolylinePoints();
-  MapDataBloc? mapDataBloc;
+  MapBloc? mapBloc;
 
   final Completer<GoogleMapController> _controller = Completer();
-  final Map<PolylineId, Polyline> _buildMapolylines = {};
+  Map<PolylineId, Polyline> _polylinesMap = {};
   MapType _maptype = MapType.normal;
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-22.0123, -47.8908),
@@ -32,20 +31,23 @@ class BuildMap extends State<MapWidget> {
     super.dispose();
 
     //Close the Stream Sink when the widget is disposed
-    mapDataBloc?.close();
+    mapBloc?.close();
   }
 
   @override
   Widget build(BuildContext context) {
     GoogleMapController _mapController;
 
-    MapDataBloc mapDataBloc = BlocProvider.of<MapDataBloc>(context);
-    mapDataBloc.stream.listen(((state) {
-      if (state is NewProbeLocation) {
-        _setProbeLocation(state.probeLocation);
-      } else if (state is NewMapData) {
-        _setProbeLocation(state.mapData.probeLocation);
-        _setRoutePoints(state.mapData.routePoints);
+    MapBloc mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc.stream.listen(((state) {
+      if (state is NewPolyline) {
+        setState(() {
+          _polylinesMap = state.newPolyline;
+        });
+      } else if (state is NewMarker) {
+        setState(() {
+          probeLocation = state.probeIcon;
+        });
       }
     }));
 
@@ -69,7 +71,7 @@ class BuildMap extends State<MapWidget> {
                     markers: {
                       if (probeLocation != null) probeLocation!,
                     },
-                    polylines: Set<Polyline>.of(_buildMapolylines.values),
+                    polylines: Set<Polyline>.of(_polylinesMap.values),
                   ),
                   InfoListView(
                     orientation: orientation,
@@ -104,35 +106,6 @@ class BuildMap extends State<MapWidget> {
               )),
       drawer: NavigationDrawerWidget(),
     );
-  }
-
-  void _setProbeLocation(LatLng location) {
-    setState(() {
-      probeLocation = Marker(
-        markerId: const MarkerId('Probe'),
-        position: location,
-      );
-    });
-  }
-
-  void _setRoutePoints(List<LatLng> routePoints) {
-    //There will be only a polyline for routePoints,
-    //and _buildMapolylines will be cleaned every time,
-    // so polylineId dosent need to change
-    PolylineId polylineId = const PolylineId('polyline_id_');
-
-    final Polyline polyline = Polyline(
-      polylineId: polylineId,
-      consumeTapEvents: true,
-      color: Colors.red,
-      width: 5,
-      points: routePoints,
-    );
-
-    setState(() {
-      _buildMapolylines.clear();
-      _buildMapolylines[polylineId] = polyline;
-    });
   }
 
   double getLeftPositionForOrientation(Orientation orientation) {

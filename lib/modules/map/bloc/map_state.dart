@@ -14,3 +14,13 @@ class MapError extends MapState {
   String errorMessage;
   MapError({required this.errorMessage});
 }
+
+class NewPolyline extends MapState {
+  Map<PolylineId, Polyline> newPolyline;
+  NewPolyline({required this.newPolyline});
+}
+
+class NewMarker extends MapState {
+  Marker probeIcon;
+  NewMarker({required this.probeIcon});
+}
