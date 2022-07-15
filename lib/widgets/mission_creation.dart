@@ -137,6 +137,8 @@ class _MissionCreationState extends State<MissionCreation> {
         builder: (context, state) {
       message = (state is VariableInteractionError) ? state.errorMessage : "";
       List list = state.variablesList.getVariablesList();
+      print("como ta a lista ");
+      print(list);
       return Column(
         children: [
           Table(
@@ -149,12 +151,12 @@ class _MissionCreationState extends State<MissionCreation> {
             },
             children: [
               createTableRow("Nome", "Tipo", color: gray, isTop: true),
-              for (var variable in list)
+              for (int i = 1; i < list.length; i++)
                 createTableRow(
-                    variable.getVariableName(), variable.getVariableType(),
-                    rowIndice: list.indexOf(variable),
-                    isBottom: variable == list.last ? true : false),
-              if (list.isEmpty) createTableRow("", "", isBottom: true)
+                    list[i].getVariableName(), list[i].getVariableType(),
+                    rowIndice: i,
+                    isBottom: i == list.length - 1 ? true : false),
+              if (list.length == 1) createTableRow("", "", isBottom: true)
             ],
           ),
           Padding(
