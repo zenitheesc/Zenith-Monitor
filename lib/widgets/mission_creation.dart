@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/mission_variables_bloc.dart';
+import 'package:zenith_monitor/utils/helpers/show_dialog_function.dart';
 
 class MissionCreation extends StatefulWidget {
   const MissionCreation({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class _MissionCreationState extends State<MissionCreation> {
   TextEditingController variableNameController = TextEditingController();
   TextEditingController variableTypeController = TextEditingController();
   TextEditingController missionNameController = TextEditingController();
+
+  MissionVariablesBloc? _missionVariablesBloc;
 
   TextField textField(String hintText, TextEditingController controller) {
     return TextField(
@@ -136,9 +139,8 @@ class _MissionCreationState extends State<MissionCreation> {
     return BlocBuilder<MissionVariablesBloc, MissionVariablesState>(
         builder: (context, state) {
       message = (state is VariableInteractionError) ? state.errorMessage : "";
-      List list = state.variablesList.getVariablesList();
-      print("como ta a lista ");
-      print(list);
+      List list = context.select(
+          (MissionVariablesBloc bloc) => bloc.variablesList.getVariablesList());
       return Column(
         children: [
           Table(
@@ -191,8 +193,9 @@ class _MissionCreationState extends State<MissionCreation> {
               borderRadius: BorderRadius.circular(8.0),
             ))),
         onPressed: () {
-          BlocProvider.of<MissionVariablesBloc>(context)
-              .add(StartMissionEvent(missionName: missionNameController.text));
+          BlocProvider.of<MissionVariablesBloc>(context).add(StartMissionEvent(
+              missionName: missionNameController.text,
+              ignoreLocationVar: false));
         },
         child: const Text(
           "Iniciar Missão",
@@ -232,6 +235,40 @@ class _MissionCreationState extends State<MissionCreation> {
 
   @override
   Widget build(BuildContext context) {
+    _missionVariablesBloc = BlocProvider.of<MissionVariablesBloc>(context);
+    _missionVariablesBloc?.stream.listen(((event) {
+      if (event is PackageWoLocationVar) {
+        showDialogFunction(
+            context,
+            "Erro",
+            "Para rastrear a sonda, é necessário ter uma variável chamada 'Latitude' e outra chamada 'Longitude'.",
+            [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                      onPressed: (() {
+                        _missionVariablesBloc?.add(StartMissionEvent(
+                            missionName: event.missionName,
+                            ignoreLocationVar: true));
+                        missionNameController.clear();
+                        Navigator.pop(context);
+                      }),
+                      child: const Text("Manter sem as variaveis",
+                          style: TextStyle(color: white))),
+                  TextButton(
+                      onPressed: (() {
+                        missionNameController.clear();
+                        Navigator.pop(context);
+                      }),
+                      child: const Text("Ok, irei adicionar",
+                          style: TextStyle(color: white)))
+                ],
+              )
+            ]);
+      }
+    }));
+
     return Column(
       children: [
         Container(

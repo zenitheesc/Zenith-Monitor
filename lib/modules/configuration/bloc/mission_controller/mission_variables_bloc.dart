@@ -24,7 +24,7 @@ class MissionVariablesBloc
   MissionVariablesBloc(this.variablesList, this.dataBloc)
       : connections = <String, bool>{},
         _connectivity = Connectivity(),
-        super(VariablesInitial(variablesList)) {
+        super(VariablesInitial()) {
     connections = {
       "Dispositivo usb": dataBloc.usbIsConnected,
       "Internet": false,
@@ -56,44 +56,45 @@ class MissionVariablesBloc
       try {
         variablesList.addStandardVariable(
             event.variableName, event.variableType);
-        yield VariablesChanged(variablesList);
+        yield VariablesChanged();
       } on VariableAlreadyExistsException {
-        yield VariableInteractionError(variablesList, "Variável já existe");
+        yield VariableInteractionError("Variável já existe");
       } on VariableTypeUnknownException {
-        yield VariableInteractionError(variablesList,
+        yield VariableInteractionError(
             "O tipo da variável é desconhecido, tente algo como string, int ou float");
       } on EmptyVariablesException {
-        yield VariableInteractionError(variablesList,
+        yield VariableInteractionError(
             "É necessário fornecer um nome e um tipo para a variável");
       }
     } else if (event is DeleteVariable) {
       variablesList.deleteVariable(event.variableIndex);
-      yield VariablesChanged(variablesList);
+      yield VariablesChanged();
     } else if (event is StartMissionEvent) {
-      if (!variablesList.contains("Latitude") ||
-          !variablesList.contains("Longitude")) {
-        yield MissionNameError(variablesList,
-            "Para que a sonda seja rastreada, é necessário ter uma variável chamada 'Latitude' e outra chamada 'Longitude', ambas do tipo real.");
-      } else if (event.missionName == "Nenhuma") {
-        yield MissionNameError(variablesList,
-            "'Nenhuma' não pode ser utilizado como nome de missão");
+      if (event.missionName == "Nenhuma") {
+        yield MissionNameError(
+            "'Nenhuma' não pode ser utilizado como nome de missão.");
+      } else if (event.missionName.isEmpty) {
+        yield MissionNameError("É necessário fornecer um nome para a missão.");
+      } else if (!event.ignoreLocationVar &&
+          (!variablesList.contains("Latitude") ||
+              !variablesList.contains("Longitude"))) {
+        yield PackageWoLocationVar(missionName: event.missionName);
       } else {
         try {
           await firestoreServices.checkMissionName(event.missionName);
           dataBloc.add(MissionInfoSetup(
               missionName: event.missionName, packageModel: variablesList));
         } on EmptyMissionNameException {
-          yield MissionNameError(
-              variablesList, "É necessário fornecer um nome para a missão");
+          yield MissionNameError("É necessário fornecer um nome para a missão");
         } on MissionNameAlreadyExistException {
-          yield MissionNameError(variablesList,
+          yield MissionNameError(
               "Esse nome já foi utilizado em uma missão anterior");
         } catch (e) {
           print(e);
         }
       }
     } else if (event is ConnectionChanged) {
-      yield NewConnectionsState(variablesList, connections);
+      yield NewConnectionsState(connections);
     } else {
       print("Unknown event in Variables Bloc");
     }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
 import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
 import 'package:zenith_monitor/widgets/map_info_listview.dart';
 import 'package:zenith_monitor/widgets/map_theme_button.dart';
