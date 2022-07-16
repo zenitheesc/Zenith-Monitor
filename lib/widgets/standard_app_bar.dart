@@ -13,7 +13,7 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
         toolbarHeight: 80,
-        backgroundColor: raisingBlack,
+        backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(title, style: const TextStyle(color: white, fontSize: 20)),
         leading: IconButton(

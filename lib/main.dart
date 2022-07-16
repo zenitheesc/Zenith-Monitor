@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
+import 'package:zenith_monitor/widgets/not_found_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
@@ -80,6 +81,7 @@ class Application extends StatelessWidget {
                   '/map': (context) => const MapScreen(),
                   '/configuration': (context) => ConfigurationScreen(),
                   '/terminal': (context) => const TerminalScreen(),
+                  '/404': (context) => NotFoundScreen(),
                 },
               );
             }
