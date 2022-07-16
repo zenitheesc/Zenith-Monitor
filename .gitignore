@@ -50,3 +50,6 @@ android/app/google-services.json
 
 #Maps API key
 android/local_maps.properties
+
+#.env file
+.env

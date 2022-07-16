@@ -13,7 +13,7 @@ class FirestoreServices {
 
   FirestoreServices()
       : _statusStream = StreamController<int>(),
-        _dataStream = StreamController<MissionVariablesList>();
+        _dataStream = StreamController<MissionVariablesList>.broadcast();
 
   Future<MissionVariablesList> getPackageModel(String missionName) async {
     MissionVariablesList model = MissionVariablesList();

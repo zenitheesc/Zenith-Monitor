@@ -9,3 +9,13 @@ class NewPackageEvent extends MapEvent {
 }
 
 class UsbError extends MapEvent {}
+
+class BuildNewPolyline extends MapEvent {
+  MapData mapData;
+  BuildNewPolyline({required this.mapData});
+}
+
+class BuildNewMarker extends MapEvent {
+  LatLng probeLocation;
+  BuildNewMarker({required this.probeLocation});
+}

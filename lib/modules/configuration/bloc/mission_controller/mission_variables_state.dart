@@ -1,45 +1,29 @@
 part of 'mission_variables_bloc.dart';
 
-abstract class MissionVariablesState {
-  late MissionVariablesList variablesList;
+abstract class MissionVariablesState {}
 
-  void setVariablesList(MissionVariablesList variablesList) {
-    this.variablesList = variablesList;
-  }
-}
+class VariablesInitial extends MissionVariablesState {}
 
-class VariablesInitial extends MissionVariablesState {
-  VariablesInitial(MissionVariablesList variablesList) {
-    setVariablesList(variablesList);
-  }
-}
-
-class VariablesChanged extends MissionVariablesState {
-  VariablesChanged(MissionVariablesList variablesList) {
-    setVariablesList(variablesList);
-  }
-}
+class VariablesChanged extends MissionVariablesState {}
 
 class VariableInteractionError extends MissionVariablesState {
   late String errorMessage;
 
-  VariableInteractionError(
-      MissionVariablesList variablesList, this.errorMessage) {
-    setVariablesList(variablesList);
-  }
+  VariableInteractionError(this.errorMessage);
 }
 
 class MissionNameError extends MissionVariablesState {
   late String errorMessage;
 
-  MissionNameError(MissionVariablesList variablesList, this.errorMessage) {
-    setVariablesList(variablesList);
-  }
+  MissionNameError(this.errorMessage);
 }
 
 class NewConnectionsState extends MissionVariablesState {
   late Map<String, bool> connections;
-  NewConnectionsState(MissionVariablesList variablesList, this.connections) {
-    setVariablesList(variablesList);
-  }
+  NewConnectionsState(this.connections);
+}
+
+class PackageWoLocationVar extends MissionVariablesState {
+  String missionName;
+  PackageWoLocationVar({required this.missionName});
 }

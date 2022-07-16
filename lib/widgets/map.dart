@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
 import 'package:zenith_monitor/widgets/map_info_listview.dart';
 import 'package:zenith_monitor/widgets/map_theme_button.dart';
 import 'package:zenith_monitor/widgets/map_navigation_drawer.dart';
@@ -13,12 +14,11 @@ class MapWidget extends StatefulWidget {
 }
 
 class BuildMap extends State<MapWidget> {
-  Set<Marker> markers = {};
-  PolylinePoints polylinePoints = PolylinePoints();
+  Marker? probeLocation;
+  MapBloc? mapBloc;
 
-  int _polylineIdCounter = 1;
   final Completer<GoogleMapController> _controller = Completer();
-  final Map<PolylineId, Polyline> _buildMapolylines = {};
+  Map<PolylineId, Polyline> _polylinesMap = {};
   MapType _maptype = MapType.normal;
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-22.0123, -47.8908),
@@ -26,45 +26,51 @@ class BuildMap extends State<MapWidget> {
   );
 
   @override
+  void dispose() {
+    super.dispose();
+
+    //Close the Stream Sink when the widget is disposed
+    mapBloc?.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     GoogleMapController _mapController;
 
-    markers.addAll([
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0123, -47.8908)),
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0135, -47.8908)),
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0135, -47.8928)),
-      const Marker(
-          markerId: MarkerId('value'), position: LatLng(-22.0139, -47.8930)),
-      const Marker(
-          markerId: MarkerId('value2'),
-          position: LatLng(-20.7333333, -48.5833333)),
-    ]);
+    MapBloc mapBloc = BlocProvider.of<MapBloc>(context);
+    mapBloc.stream.listen(((state) {
+      if (state is NewPolyline) {
+        setState(() {
+          _polylinesMap = state.newPolyline;
+        });
+      } else if (state is NewMarker) {
+        setState(() {
+          probeLocation = state.probeIcon;
+        });
+      }
+    }));
 
     return Scaffold(
       body: OrientationBuilder(
           builder: (context, orientation) => Align(
                 alignment: Alignment.bottomCenter,
                 child: Stack(children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: GoogleMap(
-                      zoomControlsEnabled: false,
-                      mapType: _maptype,
-                      initialCameraPosition: _kGooglePlex,
-                      onMapCreated: (GoogleMapController controller) async {
-                        _mapController = controller;
-                        var style = await rootBundle
-                            .loadString('assets/maps/aubergine.json');
-                        _add();
-                        _mapController.setMapStyle(style);
-                        _controller.complete(controller);
-                      },
-                      markers: markers,
-                      polylines: Set<Polyline>.of(_buildMapolylines.values),
-                    ),
+                  GoogleMap(
+                    zoomControlsEnabled: false,
+                    myLocationEnabled: true,
+                    mapType: _maptype,
+                    initialCameraPosition: _kGooglePlex,
+                    onMapCreated: (GoogleMapController controller) async {
+                      _mapController = controller;
+                      var style = await rootBundle
+                          .loadString('assets/maps/aubergine.json');
+                      _mapController.setMapStyle(style);
+                      _controller.complete(controller);
+                    },
+                    markers: {
+                      if (probeLocation != null) probeLocation!,
+                    },
+                    polylines: Set<Polyline>.of(_polylinesMap.values),
                   ),
                   InfoListView(
                     orientation: orientation,
@@ -115,16 +121,6 @@ class BuildMap extends State<MapWidget> {
     return -0.3 * MediaQuery.of(context).size.height;
   }
 
-  List<LatLng> _createPoints() {
-    final List<LatLng> points = <LatLng>[];
-    points.add(const LatLng(-22.0123, -47.8908));
-    points.add(const LatLng(-22.0134, -47.8908));
-    points.add(const LatLng(-22.0134, -47.8912));
-    points.add(const LatLng(-22.0139, -47.8915));
-    points.add(const LatLng(-20.7333333, -48.5833333));
-    return points;
-  }
-
   void setMap() async {
     setState(() {
       if (_maptype == MapType.normal) {
@@ -132,23 +128,6 @@ class BuildMap extends State<MapWidget> {
       } else {
         _maptype = MapType.normal;
       }
-    });
-  }
-
-  Future<void> _add() async {
-    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
-    _polylineIdCounter++;
-    final PolylineId polylineId = PolylineId(polylineIdVal);
-    final Polyline polyline = Polyline(
-      polylineId: polylineId,
-      consumeTapEvents: true,
-      color: Colors.red,
-      width: 5,
-      points: _createPoints(),
-    );
-
-    setState(() {
-      _buildMapolylines[polylineId] = polyline;
     });
   }
 }

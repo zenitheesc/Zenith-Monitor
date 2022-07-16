@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
+import 'package:zenith_monitor/core/pipelines/map_data_pipeline/map_data_bloc.dart';
 import 'package:zenith_monitor/modules/map/bloc/map_bloc.dart';
+import 'package:zenith_monitor/utils/helpers/show_dialog_function.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/widgets/dropdown_list.dart';
@@ -17,7 +19,7 @@ class MapScreen extends StatelessWidget {
     if (missionName == "Nenhuma") {
       Future.delayed(
           const Duration(seconds: 2),
-          () => errorMessage(
+          () => showDialogFunction(
                   context,
                   "Seleção de missão",
                   "Seu aplicativo não está rastreando nenhuma missão, selecione dentre as missões que estão ocorrendo qual você deseja rastrear. Se você quer criar uma missão ou não quer acompanhar nenhuma, basta deixar a opção marcada com 'Nenhuma'.",
@@ -48,11 +50,13 @@ class MapScreen extends StatelessWidget {
     }
 
     return BlocProvider(
-      create: (context) => MapBloc(BlocProvider.of<DataBloc>(context)),
+      create: (context) => MapBloc(
+          dataBloc: BlocProvider.of<DataBloc>(context),
+          mapDataBloc: BlocProvider.of<MapDataBloc>(context)),
       child: BlocListener<MapBloc, MapState>(
         listener: (context, state) {
           if (state is MapError) {
-            errorMessage(context, "Erro", state.errorMessage, [
+            showDialogFunction(context, "Erro", state.errorMessage, [
               TextButton(
                   onPressed: () =>
                       Navigator.pushNamed(context, '/configuration'),
@@ -66,17 +70,5 @@ class MapScreen extends StatelessWidget {
         child: MapWidget(),
       ),
     );
-  }
-
-  void errorMessage(BuildContext context, String title, String errorMessage,
-      List<Widget> actions) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(title, style: const TextStyle(color: white)),
-              content: Text(errorMessage, style: const TextStyle(color: white)),
-              backgroundColor: black.withOpacity(1),
-              actions: actions,
-            ));
   }
 }

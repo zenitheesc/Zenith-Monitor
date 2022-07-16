@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
@@ -60,14 +61,27 @@ class ConfigurationScreen extends StatelessWidget {
                                 for (MapEntry e in state.connections.entries)
                                   Connection(e.key, e.value)
                               ]);
+                            } else {
+                              Map<String, bool> c = context.select(
+                                  (MissionVariablesBloc bloc) =>
+                                      bloc.connections);
+                              return FutureBuilder<ConnectivityResult>(
+                                  future: Connectivity().checkConnectivity(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<ConnectivityResult>
+                                          snapshot) {
+                                    if (snapshot.hasData) {
+                                      c["Internet"] = (snapshot.data ==
+                                              ConnectivityResult.none)
+                                          ? false
+                                          : true;
+                                    }
+                                    return ConnectionDisplay(connections: [
+                                      for (MapEntry e in c.entries)
+                                        Connection(e.key, e.value)
+                                    ]);
+                                  });
                             }
-                            Map<String, bool> c = context.select(
-                                (MissionVariablesBloc bloc) =>
-                                    bloc.connections);
-                            return ConnectionDisplay(connections: [
-                              for (MapEntry e in c.entries)
-                                Connection(e.key, e.value)
-                            ]);
                           },
                         ),
                         sectionsTitle('Criação de Missão'),

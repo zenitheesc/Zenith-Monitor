@@ -18,8 +18,10 @@ class DeleteVariable extends MissionVariablesEvent {
 
 class StartMissionEvent extends MissionVariablesEvent {
   String missionName;
+  bool ignoreLocationVar;
 
-  StartMissionEvent({required this.missionName});
+  StartMissionEvent(
+      {required this.missionName, required this.ignoreLocationVar});
 }
 
 class ConnectionChanged extends MissionVariablesEvent {}

@@ -23,9 +23,9 @@ class NavigationDrawerWidget extends StatelessWidget {
     const Map<String, String> map = {
       'Terminal': '/terminal',
       'Configurações': '/configuration',
-      'Estatísticas': '/configuration',
-      'Missões': '/configuration',
-      'Sobre nós': '/configuration'
+      'Estatísticas': '/404',
+      'Missões': '/404',
+      'Sobre nós': '/404'
     };
     return OrientationBuilder(
         builder: (context, orientation) => (Stack(
