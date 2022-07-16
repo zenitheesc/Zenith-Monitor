@@ -69,9 +69,9 @@ class MissionVariablesBloc
       variablesList.deleteVariable(event.variableIndex);
       yield VariablesChanged();
     } else if (event is StartMissionEvent) {
-      if (event.missionName == "Nenhuma") {
+      if (event.missionName == "Nenhuma" || event.missionName == "-1") {
         yield MissionNameError(
-            "'Nenhuma' não pode ser utilizado como nome de missão.");
+            event.missionName + " não pode ser utilizado como nome de missão.");
       } else if (event.missionName.isEmpty) {
         yield MissionNameError("É necessário fornecer um nome para a missão.");
       } else if (!event.ignoreLocationVar &&

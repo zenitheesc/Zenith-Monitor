@@ -256,7 +256,9 @@ class FirestoreServices {
         await FirebaseFirestore.instance.collection('missoes').get();
 
     for (var document in _mainCol.docs) {
-      _missionNames.add(document.id);
+      if (document.id != "-1") {
+        _missionNames.add(document.id);
+      }
     }
 
     return _missionNames;
