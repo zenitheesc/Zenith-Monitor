@@ -28,7 +28,6 @@ class MissionVariablesBloc
     connections = {
       "Dispositivo usb": dataBloc.usbIsConnected,
       "Internet": false,
-      //  "Modelo de pacote": (dataBloc.packageModel == null) ? false : true,
     };
 
     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
