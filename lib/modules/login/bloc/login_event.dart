@@ -25,9 +25,14 @@ class EmailLoginEvent extends AuthenticationEvent {
 
   @override
   Future<LocalUser> getUser() async {
-    await UserStorage().uploadImage();
+    UserDocument userDocument = UserDocument(authMethod: auth);
+    DocumentSnapshot? userDocSnap =
+        await userDocument.getUserFirebaseDocument();
+    if (userDocSnap == null) {
+      await UserStorage().uploadImage();
+    }
 
-    return await UserDocument().getUserFirestore(auth);
+    return await userDocument.getUserFirestore(userDocSnap);
   }
 }
 
@@ -41,7 +46,10 @@ class GoogleLoginEvent extends AuthenticationEvent {
 
   @override
   Future<LocalUser> getUser() async {
-    return await UserDocument().getUserFirestore(auth);
+    UserDocument userDocument = UserDocument(authMethod: auth);
+    DocumentSnapshot? userDocSnap =
+        await userDocument.getUserFirebaseDocument();
+    return await userDocument.getUserFirestore(userDocSnap);
   }
 }
 

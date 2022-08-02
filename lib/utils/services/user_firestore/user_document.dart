@@ -8,14 +8,11 @@ class UserDocument {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('users');
+  final Authentication authMethod;
 
-  Future<LocalUser> getUserFirestore(Authentication authMethod) async {
-    if (_auth.currentUser == null) throw NullUser();
+  UserDocument({required this.authMethod});
 
-    if (authMethod.type == "Email and Password" &&
-        !(_auth.currentUser!.emailVerified)) throw EmailNotVerified();
-    DocumentSnapshot? userDoc = await _getUserFirebaseDocument();
-
+  Future<LocalUser> getUserFirestore(DocumentSnapshot? userDoc) async {
     LocalUser? newUser = await authMethod.userCreationConditions(userDoc);
 
     if (newUser != null) {
@@ -23,7 +20,6 @@ class UserDocument {
     }
 
     LocalUser user = _firebaseDocToLocalUser(userDoc!);
-    print(user.getAccessLevel());
     return user;
   }
 
@@ -45,7 +41,7 @@ class UserDocument {
       throw FirebaseProblem(isFirebaseException: false, errorMsg: e.toString());
     }
 
-    DocumentSnapshot? userDoc = await _getUserFirebaseDocument();
+    DocumentSnapshot? userDoc = await getUserFirebaseDocument();
     if (userDoc == null || !(userDoc.exists)) {
       throw FirebaseProblem(
           isFirebaseException: false,
@@ -76,7 +72,12 @@ class UserDocument {
     return user;
   }
 
-  Future<DocumentSnapshot?> _getUserFirebaseDocument() async {
+  Future<DocumentSnapshot?> getUserFirebaseDocument() async {
+    if (_auth.currentUser == null) throw NullUser();
+
+    if (authMethod.type == "Email and Password" &&
+        !(_auth.currentUser!.emailVerified)) throw EmailNotVerified();
+
     DocumentSnapshot userDoc;
     try {
       userDoc = await _usersCollection.doc(_auth.currentUser!.uid).get();

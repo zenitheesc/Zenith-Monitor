@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:zenith_monitor/modules/login/screen/login_screen.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
