@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/modules/configuration/bloc/mission_controller/mission_variables_bloc.dart';
 import 'package:zenith_monitor/utils/helpers/show_dialog_function.dart';
+import 'package:zenith_monitor/widgets/configuration_table.dart';
 
 class MissionCreation extends StatefulWidget {
   const MissionCreation({Key? key}) : super(key: key);
@@ -71,110 +72,6 @@ class _MissionCreationState extends State<MissionCreation> {
         )
       ]),
     ]);
-  }
-
-  TableRow createTableRow(String name, String type,
-      {Color color = raisingBlack,
-      bool isTop = false,
-      bool isBottom = false,
-      int rowIndice = -1}) {
-    return TableRow(
-        decoration: BoxDecoration(
-          borderRadius: isTop
-              ? const BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10))
-              : isBottom
-                  ? const BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10))
-                  : null,
-          color: color,
-        ),
-        children: [
-          GestureDetector(
-            onDoubleTap: () {
-              if (rowIndice != -1) {
-                BlocProvider.of<MissionVariablesBloc>(context)
-                    .add(DeleteVariable(variableIndex: rowIndice));
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 7.5, 12, 7.5),
-              child: Text(
-                name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: white,
-                  fontFamily: 'DMSans',
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onDoubleTap: () {
-              if (rowIndice != -1) {
-                BlocProvider.of<MissionVariablesBloc>(context)
-                    .add(DeleteVariable(variableIndex: rowIndice));
-              }
-            },
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(7.5),
-                child: Text(
-                  type,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w200,
-                    color: white,
-                    fontFamily: 'DMSans',
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ]);
-  }
-
-  BlocBuilder variablesTable() {
-    late String message;
-    return BlocBuilder<MissionVariablesBloc, MissionVariablesState>(
-        builder: (context, state) {
-      message = (state is VariableInteractionError) ? state.errorMessage : "";
-      List list = context.select(
-          (MissionVariablesBloc bloc) => bloc.variablesList.getVariablesList());
-      return Column(
-        children: [
-          Table(
-            border: const TableBorder(
-                verticalInside: BorderSide(
-                    width: 1, color: gray, style: BorderStyle.solid)),
-            columnWidths: const {
-              0: FractionColumnWidth(2 / 3),
-              1: FractionColumnWidth(1 / 3),
-            },
-            children: [
-              createTableRow("Nome", "Tipo", color: gray, isTop: true),
-              for (int i = 1; i < list.length; i++)
-                createTableRow(
-                    list[i].getVariableName(), list[i].getVariableType(),
-                    rowIndice: i,
-                    isBottom: i == list.length - 1 ? true : false),
-              if (list.length == 1) createTableRow("", "", isBottom: true)
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 7),
-            child: Container(
-              height: 32,
-              child: Text(
-                message,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: lightCoral),
-              ),
-            ),
-          )
-        ],
-      );
-    });
   }
 
   Widget startMissionButton() {
@@ -277,7 +174,29 @@ class _MissionCreationState extends State<MissionCreation> {
             children: [
               textInputs(),
               const SizedBox(height: 20),
-              variablesTable(),
+              const ConfigurationTable(
+                  updateByState: VariablesChanged,
+                  titleLeft: "Nome",
+                  titleRight: "Tipo",
+                  eventBygesture: DeleteVariable),
+              Padding(
+                padding: const EdgeInsets.only(top: 7),
+                child: Container(
+                  height: 32,
+                  child:
+                      BlocBuilder<MissionVariablesBloc, MissionVariablesState>(
+                    builder: (context, state) {
+                      return Text(
+                        (state is VariableInteractionError)
+                            ? state.errorMessage
+                            : "",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: lightCoral),
+                      );
+                    },
+                  ),
+                ),
+              ),
               const SizedBox(height: 5),
               missionNameInput(),
               const SizedBox(height: 15),

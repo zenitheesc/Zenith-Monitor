@@ -8,6 +8,7 @@ import 'package:zenith_monitor/utils/mixins/class_connection.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
+import 'package:zenith_monitor/widgets/configuration_bluetooth_devices.dart';
 import 'package:zenith_monitor/widgets/connections.dart';
 import 'package:zenith_monitor/widgets/dropdown_list.dart';
 import 'package:zenith_monitor/widgets/mission_creation.dart';
@@ -97,6 +98,8 @@ class ConfigurationScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        sectionsTitle('Dispositivos Bluetooth'),
+                        const BluetoothDevicesList(),
                       ],
                     ),
                   ),

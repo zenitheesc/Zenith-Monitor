@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variable.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/mission_variables_exceptions.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
+import 'package:zenith_monitor/utils/services/bluetooth/bluetooth.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services_exceptions.dart';
 
@@ -18,6 +21,7 @@ class MissionVariablesBloc
   MissionVariablesList variablesList;
   DataBloc dataBloc;
   FirestoreServices firestoreServices = FirestoreServices();
+  Bluetooth bluetoothService = Bluetooth();
   Map<String, bool> connections;
   final Connectivity _connectivity;
 
@@ -55,7 +59,7 @@ class MissionVariablesBloc
       try {
         variablesList.addStandardVariable(
             event.variableName, event.variableType);
-        yield VariablesChanged();
+        yield VariablesChanged(missionVariablesList: variablesList);
       } on VariableAlreadyExistsException {
         yield VariableInteractionError("Variável já existe");
       } on VariableTypeUnknownException {
@@ -66,8 +70,8 @@ class MissionVariablesBloc
             "É necessário fornecer um nome e um tipo para a variável");
       }
     } else if (event is DeleteVariable) {
-      variablesList.deleteVariable(event.variableIndex);
-      yield VariablesChanged();
+      variablesList.deleteVariable(event.index);
+      yield VariablesChanged(missionVariablesList: variablesList);
     } else if (event is StartMissionEvent) {
       if (event.missionName == "Nenhuma" || event.missionName == "-1") {
         yield MissionNameError(
@@ -94,6 +98,10 @@ class MissionVariablesBloc
       }
     } else if (event is ConnectionChanged) {
       yield NewConnectionsState(connections);
+    } else if (event is SearchBluetoothDevices) {
+      List<BluetoothDevice> bluetoothDevices =
+          await bluetoothService.getDevices();
+      yield NewBluetoothDevices(bluetoothDevices: bluetoothDevices);
     } else {
       print("Unknown event in Variables Bloc");
     }

@@ -4,7 +4,34 @@ abstract class MissionVariablesState {}
 
 class VariablesInitial extends MissionVariablesState {}
 
-class VariablesChanged extends MissionVariablesState {}
+class TableUpdate extends MissionVariablesState {
+  Map<String, String>? map;
+  //TableUpdate({required this.map});
+}
+
+class VariablesChanged extends TableUpdate {
+  MissionVariablesList missionVariablesList;
+  VariablesChanged({required this.missionVariablesList}) {
+    map = {};
+    List<MissionVariable> list = missionVariablesList.getVariablesList();
+    for (int i = 1; i < list.length; i++) {
+      map![list[i].getVariableName()] = list[i].getVariableType();
+    }
+  }
+}
+
+class NewBluetoothDevices extends TableUpdate {
+  List<BluetoothDevice> bluetoothDevices;
+  NewBluetoothDevices({required this.bluetoothDevices}) {
+    map = {};
+    for (BluetoothDevice device in bluetoothDevices) {
+      map!.addAll({
+        device.name ?? device.address:
+            device.isConnected ? "Conectado" : "Desconectado"
+      });
+    }
+  }
+}
 
 class VariableInteractionError extends MissionVariablesState {
   late String errorMessage;

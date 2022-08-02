@@ -10,10 +10,17 @@ class AddStandardVariableEvent extends MissionVariablesEvent {
       {required this.variableName, required this.variableType});
 }
 
-class DeleteVariable extends MissionVariablesEvent {
-  int variableIndex;
+class TableGesture extends MissionVariablesEvent {
+  int index;
+  TableGesture({required this.index});
+}
 
-  DeleteVariable({required this.variableIndex});
+class DeleteVariable extends TableGesture {
+  DeleteVariable(int index) : super(index: index);
+}
+
+class ConnectToDevice extends TableGesture {
+  ConnectToDevice(int index) : super(index: index);
 }
 
 class StartMissionEvent extends MissionVariablesEvent {
@@ -25,3 +32,5 @@ class StartMissionEvent extends MissionVariablesEvent {
 }
 
 class ConnectionChanged extends MissionVariablesEvent {}
+
+class SearchBluetoothDevices extends MissionVariablesEvent {}
