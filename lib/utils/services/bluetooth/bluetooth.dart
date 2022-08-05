@@ -18,6 +18,10 @@ class Bluetooth {
     return await flutterBluetoothSerial.getBondedDevices();
   }
 
+  Stream<BluetoothDiscoveryResult> getDevicesStream() {
+    return flutterBluetoothSerial.startDiscovery();
+  }
+
   Stream<MissionVariablesList> parsedData() {
     return _parsedData.stream;
   }

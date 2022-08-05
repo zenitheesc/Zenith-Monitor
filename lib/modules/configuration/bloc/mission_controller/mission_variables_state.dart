@@ -21,7 +21,7 @@ class VariablesChanged extends TableUpdate {
 }
 
 class NewBluetoothDevices extends TableUpdate {
-  List<BluetoothDevice> bluetoothDevices;
+  Iterable<BluetoothDevice> bluetoothDevices;
   NewBluetoothDevices({required this.bluetoothDevices}) {
     map = {};
     for (BluetoothDevice device in bluetoothDevices) {
@@ -54,3 +54,7 @@ class PackageWoLocationVar extends MissionVariablesState {
   String missionName;
   PackageWoLocationVar({required this.missionName});
 }
+
+class DiscoveringBluetoothDevices extends MissionVariablesState {}
+
+class BluetoothDiscoveryFinished extends MissionVariablesState {}

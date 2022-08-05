@@ -166,48 +166,43 @@ class _MissionCreationState extends State<MissionCreation> {
       }
     }));
 
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.83,
-          child: Column(
-            children: [
-              textInputs(),
-              const SizedBox(height: 20),
-              const ConfigurationTable(
-                  updateByState: VariablesChanged,
-                  titleLeft: "Nome",
-                  titleRight: "Tipo",
-                  eventBygesture: DeleteVariable),
-              Padding(
-                padding: const EdgeInsets.only(top: 7),
-                child: Container(
-                  height: 32,
-                  child:
-                      BlocBuilder<MissionVariablesBloc, MissionVariablesState>(
-                    builder: (context, state) {
-                      return Text(
-                        (state is VariableInteractionError)
-                            ? state.errorMessage
-                            : "",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: lightCoral),
-                      );
-                    },
-                  ),
-                ),
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.83,
+      child: Column(
+        children: [
+          textInputs(),
+          const SizedBox(height: 20),
+          const ConfigurationTable(
+              updateByState: VariablesChanged,
+              titleLeft: "Nome",
+              titleRight: "Tipo",
+              eventBygesture: DeleteVariable),
+          Padding(
+            padding: const EdgeInsets.only(top: 7),
+            child: Container(
+              height: 32,
+              child: BlocBuilder<MissionVariablesBloc, MissionVariablesState>(
+                builder: (context, state) {
+                  return Text(
+                    (state is VariableInteractionError)
+                        ? state.errorMessage
+                        : "",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: lightCoral),
+                  );
+                },
               ),
-              const SizedBox(height: 5),
-              missionNameInput(),
-              const SizedBox(height: 15),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: startMissionButton(),
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 5),
+          missionNameInput(),
+          const SizedBox(height: 15),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: startMissionButton(),
+          ),
+        ],
+      ),
     );
   }
 }

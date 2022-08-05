@@ -34,3 +34,7 @@ class StartMissionEvent extends MissionVariablesEvent {
 class ConnectionChanged extends MissionVariablesEvent {}
 
 class SearchBluetoothDevices extends MissionVariablesEvent {}
+
+class BluetoothDeviceDiscovered extends MissionVariablesEvent {}
+
+class DiscoveryFinished extends MissionVariablesEvent {}

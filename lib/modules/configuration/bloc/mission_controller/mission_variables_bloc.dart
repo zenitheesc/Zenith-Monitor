@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -24,10 +26,13 @@ class MissionVariablesBloc
   Bluetooth bluetoothService = Bluetooth();
   Map<String, bool> connections;
   final Connectivity _connectivity;
+  final Set<BluetoothDevice> _bluetoothDevices;
+  StreamSubscription<BluetoothDiscoveryResult>? _devicesStream;
 
   MissionVariablesBloc(this.variablesList, this.dataBloc)
       : connections = <String, bool>{},
         _connectivity = Connectivity(),
+        _bluetoothDevices = {},
         super(VariablesInitial()) {
     connections = {
       "Dispositivo usb": dataBloc.usbIsConnected,
@@ -50,6 +55,7 @@ class MissionVariablesBloc
         add(ConnectionChanged());
       }
     });
+    add(SearchBluetoothDevices());
   }
 
   @override
@@ -98,10 +104,26 @@ class MissionVariablesBloc
       }
     } else if (event is ConnectionChanged) {
       yield NewConnectionsState(connections);
+    } else if (event is BluetoothDeviceDiscovered) {
+      yield NewBluetoothDevices(bluetoothDevices: _bluetoothDevices);
     } else if (event is SearchBluetoothDevices) {
-      List<BluetoothDevice> bluetoothDevices =
-          await bluetoothService.getDevices();
-      yield NewBluetoothDevices(bluetoothDevices: bluetoothDevices);
+      yield DiscoveringBluetoothDevices();
+      if (_devicesStream != null) {
+        await _devicesStream!.cancel();
+      }
+      _bluetoothDevices.clear();
+      add(BluetoothDeviceDiscovered());
+      _devicesStream = bluetoothService.getDevicesStream().listen((result) {
+        BluetoothDevice device = result.device;
+        if (_bluetoothDevices.add(device)) {
+          add(BluetoothDeviceDiscovered());
+        }
+      });
+      _devicesStream!.onDone(() {
+        add(DiscoveryFinished());
+      });
+    } else if (event is DiscoveryFinished) {
+      yield BluetoothDiscoveryFinished();
     } else {
       print("Unknown event in Variables Bloc");
     }
