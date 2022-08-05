@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -124,6 +124,25 @@ class MissionVariablesBloc
       });
     } else if (event is DiscoveryFinished) {
       yield BluetoothDiscoveryFinished();
+    } else if (event is ConnectToDevice) {
+      BluetoothDevice device = _bluetoothDevices.elementAt(event.index - 1);
+
+      print("vai tentar conectar com o index: " +
+          event.index.toString() +
+          " " +
+          (device.name ?? device.address));
+      BluetoothConnection? connection =
+          await bluetoothService.connectToDevice(device);
+      if (connection == null) {
+        print("deu ruim a conexao");
+      } else if (connection.input != null) {
+        print("deu certo: " + connection.isConnected.toString());
+        connection.input!.listen((Uint8List data) {
+          print("pacote chegando: " + data.toString());
+        }).onDone(() {
+          print('Disconnected by remote request');
+        });
+      }
     } else {
       print("Unknown event in Variables Bloc");
     }

@@ -14,8 +14,14 @@ class Bluetooth {
   final FlutterBluetoothSerial flutterBluetoothSerial =
       FlutterBluetoothSerial.instance;
 
-  Future<List<BluetoothDevice>> getDevices() async {
-    return await flutterBluetoothSerial.getBondedDevices();
+  Future<BluetoothConnection?> connectToDevice(BluetoothDevice device) async {
+    BluetoothConnection? bluetoothConnection;
+    try {
+      bluetoothConnection = await BluetoothConnection.toAddress(device.address);
+    } catch (e) {
+      print("deu um erro na hora de conectar: " + e.toString());
+    }
+    return bluetoothConnection;
   }
 
   Stream<BluetoothDiscoveryResult> getDevicesStream() {
