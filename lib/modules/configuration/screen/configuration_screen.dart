@@ -31,8 +31,7 @@ class ConfigurationScreen extends StatelessWidget {
         appBar: const StandardAppBar(title: "Configurações"),
         body: CustomScrollView(
           slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
+            SliverToBoxAdapter(
               child: Column(
                 children: <Widget>[
                   const UserProfile(),
