@@ -27,3 +27,11 @@ class NewMissionNameValue extends DataState {
 }
 
 class UsbPackageNotDefined extends DataState {}
+
+class BluetoothConnectedState extends DataState {
+  final String name;
+  final double rssi;
+
+  BluetoothConnectedState(this.name, this.rssi);
+}
+class BluetoothDisconnectedState extends DataState {}

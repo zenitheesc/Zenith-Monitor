@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:zenith_monitor/utils/mixins/class_map_data.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variable.dart';
 import 'package:zenith_monitor/utils/mixins/mission_variables/class_mission_variables.dart';
+import 'package:zenith_monitor/utils/services/bluetooth/bluetooth.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/utils/services/location/location.dart';
 import 'package:zenith_monitor/utils/services/usb/usb.dart';
@@ -17,9 +18,10 @@ class MapDataBloc extends Bloc<MapDataEvent, MapDataState> {
   UsbManager usbManager;
   FirestoreServices fireServices;
   late bool usbIsConnected;
+  Bluetooth bluetoothManager;
   LocationData? trackerLocation;
 
-  MapDataBloc({required this.usbManager, required this.fireServices})
+  MapDataBloc({required this.usbManager, required this.fireServices, required this.bluetoothManager})
       : super(MapDataStateInitial()) {
     usbIsConnected = false;
 
@@ -37,6 +39,15 @@ class MapDataBloc extends Bloc<MapDataEvent, MapDataState> {
     usbManager.parsedData().listen((event) {
       add(NewPackage(newPackage: event));
     });
+
+    bluetoothManager.connected().listen((event) { 
+      usbIsConnected = event;
+    });
+    
+    bluetoothManager.parsedData().listen((event) {
+      add(NewPackage(newPackage: event));
+    });
+
 
     fireServices.recive().listen((event) {
       if (!usbIsConnected) {

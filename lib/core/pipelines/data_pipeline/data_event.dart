@@ -42,3 +42,10 @@ class SettingMissionName extends DataEvent {
 }
 
 class NoUsbPackageModel extends DataEvent {}
+
+class BluetoothConnected extends DataEvent {
+  String device;
+  double rssi;
+  BluetoothConnected({required this.device, required this.rssi});
+}
+class BluetoothDisconnected extends DataEvent {}
