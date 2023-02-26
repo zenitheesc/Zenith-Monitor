@@ -50,7 +50,8 @@ dependencies:
   usb_serial: ^0.3.0
   connectivity_plus: ^2.3.5
   flutter_dotenv: ^5.0.2
-  flutter_bluetooth_serial: ^0.4.0
+  flutter_bluetooth_serial: 0.4.0
+  share_plus: 6.0.1
 
 dev_dependencies:
   flutter_lints: ^1.0.4
