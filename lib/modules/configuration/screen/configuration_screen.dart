@@ -97,8 +97,6 @@ class ConfigurationScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        sectionsTitle('Dispositivos Bluetooth'),
-                        const BluetoothDevicesList(),
                       ],
                     ),
                   ),
