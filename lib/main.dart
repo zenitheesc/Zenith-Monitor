@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:zenith_monitor/utils/services/bluetooth/bluetooth.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/widgets/not_found_screen.dart';
 import 'firebase_options.dart';
@@ -42,16 +43,17 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UsbManager usbManager = UsbManager();
+    Bluetooth bluetoothManager = Bluetooth();
     FirestoreServices fireServices = FirestoreServices();
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => LoginBloc()),
           BlocProvider(
               create: (context) =>
-                  DataBloc(usbManager: usbManager, fireServices: fireServices)),
+                  DataBloc(usbManager: usbManager, fireServices: fireServices, bluetoothManager: bluetoothManager)),
           BlocProvider(
               create: (context) => MapDataBloc(
-                  usbManager: usbManager, fireServices: fireServices)),
+                  usbManager: usbManager, fireServices: fireServices, bluetoothManager: bluetoothManager)),
           BlocProvider(
               create: (context) =>
                   TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
