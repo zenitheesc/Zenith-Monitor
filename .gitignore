@@ -53,3 +53,6 @@ android/local_maps.properties
 
 #.env file
 .env
+
+#Firebase options file
+lib/firebase_options.dart
