@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:zenith_monitor/constants/colors_constants.dart';
 import 'package:zenith_monitor/utils/mixins/class_local_user.dart';
 import 'package:zenith_monitor/utils/mixins/class_user_file.dart';
 import 'package:zenith_monitor/utils/services/user_firestore/user_document_exceptions.dart';
@@ -64,19 +62,19 @@ class UserStorage {
 
   Future<File?> cropImage(File image) async {
     try {
-      File? cropped = await ImageCropper().cropImage(
+      File? cropped = (await ImageCropper().cropImage(
         sourcePath: image.path,
-        cropStyle: CropStyle.circle,
+        // cropStyle: CropStyle.circle,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         compressQuality: 100,
         maxHeight: 700,
         maxWidth: 700,
-        androidUiSettings: const AndroidUiSettings(
-          toolbarColor: Colors.black,
-          toolbarWidgetColor: white,
-          hideBottomControls: true,
-        ),
-      );
+        // androidUiSettings: const AndroidUiSettings(
+        //   toolbarColor: Colors.black,
+        //   toolbarWidgetColor: white,
+        //   hideBottomControls: true,
+        // ),
+      )) as File?;
       return cropped;
     } catch (e) {
       print(e.toString());

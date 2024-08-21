@@ -1,13 +1,15 @@
 part of 'login_bloc.dart';
 
 abstract class LoginState {
-  LocalUser? user;
+  late final LocalUser? user;
+
+  LoginState({this.user});
 }
 
 class LoginInitialState extends LoginState {}
 
 class LoginError extends LoginState {
-  String errorMessage;
+  final String errorMessage;
 
   LoginError({required this.errorMessage});
 }
@@ -15,7 +17,5 @@ class LoginError extends LoginState {
 class LoadingState extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  LoginSuccess(LocalUser newUser) {
-    user = newUser;
-  }
+  LoginSuccess(LocalUser newUser) : super(user: newUser);
 }

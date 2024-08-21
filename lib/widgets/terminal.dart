@@ -20,9 +20,7 @@ class Terminal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (WidgetsBinding.instance != null) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToEnd());
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(

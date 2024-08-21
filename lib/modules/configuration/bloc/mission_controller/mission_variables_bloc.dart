@@ -35,7 +35,7 @@ class MissionVariablesBloc
           (result == ConnectivityResult.none) ? false : true;
 
       add(ConnectionChanged());
-    });
+    } as void Function(List<ConnectivityResult> event)?);
 
     dataBloc.stream.listen((event) {
       if (event is UsbDisconnectedState) {
@@ -48,7 +48,6 @@ class MissionVariablesBloc
     });
   }
 
-  @override
   Stream<MissionVariablesState> mapEventToState(
       MissionVariablesEvent event) async* {
     if (event is AddStandardVariableEvent) {

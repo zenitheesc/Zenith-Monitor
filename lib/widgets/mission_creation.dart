@@ -182,13 +182,13 @@ class _MissionCreationState extends State<MissionCreation> {
       height: 30,
       child: ElevatedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.pressed)) return Colors.green;
+            backgroundColor: WidgetStateProperty.resolveWith<Color>(
+              (Set<WidgetState> states) {
+                if (states.contains(WidgetState.pressed)) return Colors.green;
                 return mantisGreen;
               },
             ),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ))),

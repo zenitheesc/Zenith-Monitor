@@ -66,7 +66,9 @@ class ConfigurationScreen extends StatelessWidget {
                                   (MissionVariablesBloc bloc) =>
                                       bloc.connections);
                               return FutureBuilder<ConnectivityResult>(
-                                  future: Connectivity().checkConnectivity(),
+                                  future: Connectivity()
+                                      .checkConnectivity()
+                                      .then((results) => results.first),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<ConnectivityResult>
                                           snapshot) {

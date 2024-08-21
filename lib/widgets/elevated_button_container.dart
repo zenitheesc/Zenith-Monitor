@@ -35,8 +35,8 @@ class ElevatedButtonContainer extends StatelessWidget {
           )),
           onPressed: buttonFunction,
           style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-              onPrimary: Colors.grey,
+              // primary: buttonColor,
+              // onPrimary: Colors.grey,
               shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.all(Radius.circular(borderRadius))),

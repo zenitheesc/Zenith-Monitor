@@ -5,12 +5,12 @@ import 'package:zenith_monitor/widgets/standard_app_bar.dart';
 class NotFoundScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: eerieBlack,
-      appBar: const StandardAppBar(title: "404"),
+      appBar: StandardAppBar(title: "404"),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
+        children: [
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
