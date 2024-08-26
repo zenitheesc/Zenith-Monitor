@@ -52,7 +52,7 @@ android/app/google-services.json
 android/local_maps.properties
 
 #.env file
-.env
+*.env
 
 #Firebase options file
 lib/firebase_options.dart

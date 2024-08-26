@@ -2,38 +2,44 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
-	id "com.google.gms.google-services"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
-	def localPropertiesFile = rootProject.file('local.properties')
-	if (localPropertiesFile.exists()) {
-		localPropertiesFile.withReader('UTF-8') { reader ->
-			localProperties.load(reader)
-		}
-	}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-	flutterVersionCode = '1'
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
 }
 
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-	flutterVersionName = '1.0'
+// Carregar variáveis do arquivo .env
+def dotenvPropertiesFile = rootProject.file('.env')
+if (dotenvPropertiesFile.exists()) {
+    dotenvPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
 }
 
+// Obter a chave da API do Maps do local.properties ou .env
+def mapsApiKey = localProperties.getProperty('MAPS_API_KEY')
+if (mapsApiKey == null) {
+    throw new GradleException("MAPS_API_KEY not found. Please define it in your .env or local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode', '1')
+def flutterVersionName = localProperties.getProperty('flutter.versionName', '1.0')
 
 android {
 
 	namespace 'com.zenithaerospace.monitor'
 
-	compileSdkVersion 34
+    compileSdkVersion 34
     ndkVersion "25.2.9519653"
 
-		sourceSets {
-			main.java.srcDirs += 'src/main/kotlin'
-		}
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 
     defaultConfig {
         applicationId "com.zenithaerospace.monitor"
@@ -42,13 +48,11 @@ android {
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-//        manifestPlaceholders = [MAPS_API_KEY: mapsApiKey]
+        manifestPlaceholders = [MAPS_API_KEY: mapsApiKey]
     }
 
     buildTypes {
         release {
-            // Configuração de assinatura para o build de release
-            // (Substitua com sua própria configuração de assinatura)
             signingConfig signingConfigs.debug
         }
     }

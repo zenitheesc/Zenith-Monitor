@@ -36,7 +36,7 @@ dependencies:
   path_provider: ^2.0.3
   http_parser: ^4.0.2
   google_sign_in: ^6.2.1
-  firebase_auth: ^5.1.2
+  firebase_auth: ^5.1.4
   firebase_core: ^3.2.0
   cloud_firestore: ^5.1.0
   google_maps_flutter: ^2.2.5
@@ -48,7 +48,7 @@ dependencies:
   firebase_storage: ^12.1.1
   usb_serial: ^0.5.2
   connectivity_plus: ^6.0.3
-  flutter_dotenv: ^5.0.2
+  flutter_dotenv: ^5.1.0
   cloud_firestore_platform_interface: ^6.2.9
   equatable: ^2.0.5
 

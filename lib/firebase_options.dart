@@ -53,10 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAeOmRf75mRRVoXO1g4cm6wqVUoOuUf97I',
-    appId: '1:767599767515:android:f96dbb868c7ca38e1e81fe',
-    messagingSenderId: '767599767515',
-    projectId: 'teste-firebase-zenith',
-    storageBucket: 'teste-firebase-zenith.appspot.com',
+    apiKey: 'AIzaSyCyuxwGpTVrR_rjAxqZoOFc1I-41GtzNaU',
+    appId: '1:187164656992:android:967f7a157146fd37fb8a05',
+    messagingSenderId: '187164656992',
+    projectId: 'zenith-monitor-dev-a8116',
+    storageBucket: 'zenith-monitor-dev-a8116.appspot.com',
   );
 }
