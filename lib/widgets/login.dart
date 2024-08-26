@@ -41,7 +41,7 @@ class LoginWidgetState extends State<LoginWidget> {
         body: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              Navigator.popAndPushNamed(context, '/map');
+              Navigator.popAndPushNamed(context, '/home');
             }
           },
           builder: (context, state) {

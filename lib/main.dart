@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:zenith_monitor/modules/home_page/screen/home_screen.dart';
 import 'package:zenith_monitor/utils/services/authentication/google_auth.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/widgets/not_found_screen.dart';
@@ -79,6 +80,7 @@ class Application extends StatelessWidget {
                   '/login': (context) => const LoginScreen(),
                   '/signup': (context) => const SignUpScreen(),
                   // '/forgotPwd': (context) => const ForgotMyPassword(),
+                  '/home': (context) => HomeScreen(),
                   '/map': (context) => const MapScreen(),
                   '/configuration': (context) => ConfigurationScreen(),
                   '/terminal': (context) => const TerminalScreen(),
