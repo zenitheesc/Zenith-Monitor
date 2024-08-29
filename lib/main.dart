@@ -13,7 +13,6 @@ import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/modules/terminal/screen/terminal_screen.dart';
 import 'package:zenith_monitor/utils/services/usb/usb.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
-import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
 import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';

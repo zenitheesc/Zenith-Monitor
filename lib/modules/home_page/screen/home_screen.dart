@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:zenith_monitor/modules/bluetooth/bluetooth_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
+    return MaterialApp(
+      title: 'Flutter Bluetooth App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      body: const Center(
-        child: Text('Welcome to the Home Screen!'),
-      ),
+      home: BluetoothScreen(),  // Defina a tela inicial como BluetoothScreen
     );
   }
 }

@@ -21,10 +21,9 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter: 
+  flutter:
     sdk: flutter
   get: ^4.3.8
-  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,6 +50,9 @@ dependencies:
   flutter_dotenv: ^5.1.0
   cloud_firestore_platform_interface: ^6.2.9
   equatable: ^2.0.5
+  flutter_blue_plus: ^1.32.12
+  flutter_bluetooth_serial: ^0.4.0
+  scoped_model: ^2.0.0
 
 dependency_overrides:
   firebase_core_platform_interface: 5.1.0
@@ -70,7 +72,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  
   assets:
     - assets/images/
     - assets/maps/
@@ -109,4 +110,3 @@ flutter:
         - asset: assets/fonts/DM_Sans/DMSans-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
