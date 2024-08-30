@@ -11,26 +11,26 @@ class ChatPage extends StatefulWidget {
   const ChatPage({required this.server});
 
   @override
-  _ChatPage createState() => new _ChatPage();
+  ChatPageState createState() => ChatPageState();
 }
 
-class _Message {
+class Message {
   int whom;
   String text;
 
-  _Message(this.whom, this.text);
+  Message(this.whom, this.text);
 }
 
-class _ChatPage extends State<ChatPage> {
-  static final clientID = 0;
+class ChatPageState extends State<ChatPage> {
+  static const clientID = 0;
   BluetoothConnection? connection;
 
-  List<_Message> messages = List<_Message>.empty(growable: true);
+  List<Message> messages = List<Message>.empty(growable: true);
   String _messageBuffer = '';
 
   final TextEditingController textEditingController =
       new TextEditingController();
-  final ScrollController listScrollController = new ScrollController();
+  final ScrollController listScrollController = ScrollController();
 
   bool isConnecting = true;
   bool get isConnected => (connection?.isConnected ?? false);
@@ -87,25 +87,25 @@ class _ChatPage extends State<ChatPage> {
   Widget build(BuildContext context) {
     final List<Row> list = messages.map((_message) {
       return Row(
+        mainAxisAlignment: _message.whom == clientID
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: <Widget>[
           Container(
-            child: Text(
-                (text) {
-                  return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
-                }(_message.text.trim()),
-                style: TextStyle(color: Colors.white)),
-            padding: EdgeInsets.all(12.0),
-            margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
+            padding: const EdgeInsets.all(12.0),
+            margin: const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
             width: 222.0,
             decoration: BoxDecoration(
                 color:
                     _message.whom == clientID ? Colors.blueAccent : Colors.grey,
                 borderRadius: BorderRadius.circular(7.0)),
+            child: Text(
+                (text) {
+                  return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
+                }(_message.text.trim()),
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
-        mainAxisAlignment: _message.whom == clientID
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
       );
     }).toList();
 
@@ -165,11 +165,11 @@ class _ChatPage extends State<ChatPage> {
   void _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
     int backspacesCounter = 0;
-    data.forEach((byte) {
+    for (var byte in data) {
       if (byte == 8 || byte == 127) {
         backspacesCounter++;
       }
-    });
+    }
     Uint8List buffer = Uint8List(data.length - backspacesCounter);
     int bufferIndex = buffer.length;
 
@@ -193,7 +193,7 @@ class _ChatPage extends State<ChatPage> {
     if (~index != 0) {
       setState(() {
         messages.add(
-          _Message(
+          Message(
             1,
             backspacesCounter > 0
                 ? _messageBuffer.substring(
@@ -215,19 +215,19 @@ class _ChatPage extends State<ChatPage> {
     text = text.trim();
     textEditingController.clear();
 
-    if (text.length > 0) {
+    if (text.isNotEmpty) {
       try {
         connection!.output.add(Uint8List.fromList(utf8.encode(text + "\r\n")));
         await connection!.output.allSent;
 
         setState(() {
-          messages.add(_Message(clientID, text));
+          messages.add(Message(clientID, text));
         });
 
-        Future.delayed(Duration(milliseconds: 333)).then((_) {
+        Future.delayed(const Duration(milliseconds: 333)).then((_) {
           listScrollController.animateTo(
               listScrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 333),
+              duration: const Duration(milliseconds: 333),
               curve: Curves.easeOut);
         });
       } catch (e) {
