@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatPage extends StatefulWidget {
   final BluetoothDevice server;
@@ -17,8 +18,10 @@ class ChatPage extends StatefulWidget {
 class Message {
   int whom;
   String text;
+  double? latitude;
+  double? longitude;
 
-  Message(this.whom, this.text);
+  Message(this.whom, this.text, {this.latitude, this.longitude});
 }
 
 class ChatPageState extends State<ChatPage> {
@@ -28,8 +31,7 @@ class ChatPageState extends State<ChatPage> {
   List<Message> messages = List<Message>.empty(growable: true);
   String _messageBuffer = '';
 
-  final TextEditingController textEditingController =
-      new TextEditingController();
+  final TextEditingController textEditingController = TextEditingController();
   final ScrollController listScrollController = ScrollController();
 
   bool isConnecting = true;
@@ -99,11 +101,27 @@ class ChatPageState extends State<ChatPage> {
                 color:
                     _message.whom == clientID ? Colors.blueAccent : Colors.grey,
                 borderRadius: BorderRadius.circular(7.0)),
-            child: Text(
-                (text) {
-                  return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
-                }(_message.text.trim()),
-                style: const TextStyle(color: Colors.white)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (text) {
+                    return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
+                  }(_message.text.trim()),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                if (_message.longitude != null &&
+                    _message.latitude != null) ...[
+                  const SizedBox(height: 8.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      openGoogleMaps(_message.latitude!, _message.longitude!);
+                    },
+                    child: const Text('Abrir endereço no Google Maps'),
+                  ),
+                ],
+              ],
+            ),
           ),
         ],
       );
@@ -113,10 +131,10 @@ class ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
           title: (isConnecting
-              ? Text('Connecting chat to ' + serverName + '...')
+              ? Text('Connecting chat to $serverName...')
               : isConnected
-                  ? Text('Live chat with ' + serverName)
-                  : Text('Chat log with ' + serverName))),
+                  ? Text('Live chat with $serverName')
+                  : Text('Chat log with $serverName'))),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -162,6 +180,17 @@ class ChatPageState extends State<ChatPage> {
     );
   }
 
+  Future<void> openGoogleMaps(double latitude, double longitude) async {
+    final Uri googleMapsUrl = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+
+    if (await canLaunchUrl(googleMapsUrl)) {
+      await launchUrl(googleMapsUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
   void _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
     int backspacesCounter = 0;
@@ -187,8 +216,23 @@ class ChatPageState extends State<ChatPage> {
       }
     }
 
-    // Create message if there is new line character
+    // Cria uma string a partir do buffer
     String dataString = String.fromCharCodes(buffer);
+
+    // Divide a string em partes usando ponto e vírgula como delimitador
+    List<String> parts = dataString.split(';');
+    String message = dataString; // Mensagem original
+    double? longitude;
+    double? latitude;
+
+    if (parts.length >= 3) {
+      // Extrai longitude e latitude (segundo e terceiro valores)
+      longitude = double.tryParse(parts[1].trim());
+      latitude = double.tryParse(parts[2].trim());
+    }
+
+    // Create message if there is new line character
+    // String dataString = String.fromCharCodes(buffer);
     int index = buffer.indexOf(13);
     if (~index != 0) {
       setState(() {
@@ -199,6 +243,8 @@ class ChatPageState extends State<ChatPage> {
                 ? _messageBuffer.substring(
                     0, _messageBuffer.length - backspacesCounter)
                 : _messageBuffer + dataString.substring(0, index),
+            longitude: longitude,
+            latitude: latitude,
           ),
         );
         _messageBuffer = dataString.substring(index);
@@ -217,7 +263,7 @@ class ChatPageState extends State<ChatPage> {
 
     if (text.isNotEmpty) {
       try {
-        connection!.output.add(Uint8List.fromList(utf8.encode(text + "\r\n")));
+        connection!.output.add(Uint8List.fromList(utf8.encode("$text\r\n")));
         await connection!.output.allSent;
 
         setState(() {

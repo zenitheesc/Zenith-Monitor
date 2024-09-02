@@ -9,6 +9,7 @@ import './BackgroundCollectingTask.dart';
 import './ChatPage.dart';
 import './DiscoveryPage.dart';
 import './SelectBondedDevicePage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // import './helpers/LineChart.dart';
 
@@ -112,6 +113,12 @@ class MainPageState extends State<MainPage> {
               future().then((_) {
                 setState(() {});
               });
+            },
+          ),
+          ListTile(
+            title: const Text("Teste google maps"),
+            onTap: () async {
+              await openGoogleMaps(48.8584, 2.2945);
             },
           ),
           ListTile(
@@ -321,6 +328,17 @@ class MainPageState extends State<MainPage> {
         },
       ),
     );
+  }
+
+  Future<void> openGoogleMaps(double latitude, double longitude) async {
+    final Uri googleMapsUrl = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+
+    if (await canLaunchUrl(googleMapsUrl)) {
+      await launchUrl(googleMapsUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
   }
 
   Future<void> _startBackgroundTask(

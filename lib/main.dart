@@ -19,6 +19,7 @@ import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/modules/login/screen/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,20 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load(fileName: ".env");
+  await requestBluetoothPermissions();
   runApp(const ZenithMonitor());
+}
+
+Future<void> requestBluetoothPermissions() async {
+  final statusScan = await Permission.bluetoothScan.request();
+  final statusConnect = await Permission.bluetoothConnect.request();
+  final statusLocation = await Permission.locationWhenInUse.request();
+
+  if (!statusScan.isGranted ||
+      !statusConnect.isGranted ||
+      !statusLocation.isGranted) {
+    openAppSettings();
+  }
 }
 
 class ZenithMonitor extends StatelessWidget {
@@ -82,8 +96,8 @@ class Application extends StatelessWidget {
                       backgroundColor: Colors.black.withOpacity(0)),
                   primaryColor: Colors.black,
                 ),
-                initialRoute: currentUser != null ? '/home' : '/login',
-                // initialRoute: '/login',
+                //initialRoute: currentUser != null ? '/home' : '/login',
+                initialRoute: '/login',
                 routes: {
                   '/login': (context) => const LoginScreen(),
                   '/signup': (context) => const SignUpScreen(),
