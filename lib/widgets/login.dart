@@ -43,6 +43,9 @@ class LoginWidgetState extends State<LoginWidget> {
             if (state is LoginSuccess) {
               Navigator.popAndPushNamed(context, '/home');
             }
+            if (state is SignOutSuccess) {
+              Navigator.popAndPushNamed(context, '/login');
+            }
           },
           builder: (context, state) {
             if (state is LoadingState) {

@@ -19,3 +19,7 @@ class LoadingState extends LoginState {}
 class LoginSuccess extends LoginState {
   LoginSuccess(LocalUser newUser) : super(user: newUser);
 }
+
+class SignOutSuccess extends LoginState {}
+
+class CheckSessionEvent extends LoginEvent {}

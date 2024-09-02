@@ -18,6 +18,7 @@ import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/modules/login/screen/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,17 +43,22 @@ class Application extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    UsbManager usbManager = UsbManager();
-    FirestoreServices fireServices = FirestoreServices();
+    // UsbManager usbManager = UsbManager();
+    // FirestoreServices fireServices = FirestoreServices();
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => LoginBloc(auth: GoogleAuth())),
+          // BlocProvider(
+          //     create: (context) =>
+          //         DataBloc(usbManager: usbManager, fireServices: fireServices)),
+          // BlocProvider(
+          //     create: (context) => MapDataBloc(
+          //         usbManager: usbManager, fireServices: fireServices)),
           BlocProvider(
               create: (context) =>
-                  DataBloc(usbManager: usbManager, fireServices: fireServices)),
-          BlocProvider(
-              create: (context) => MapDataBloc(
-                  usbManager: usbManager, fireServices: fireServices)),
+                  TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
+
+          BlocProvider(create: (context) => LoginBloc(auth: GoogleAuth())),
           BlocProvider(
               create: (context) =>
                   TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
@@ -65,6 +71,8 @@ class Application extends StatelessWidget {
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
+              final User? currentUser = FirebaseAuth.instance.currentUser;
+
               return MaterialApp(
                 showPerformanceOverlay: false, // shows fps
                 debugShowCheckedModeBanner: false,
@@ -74,7 +82,8 @@ class Application extends StatelessWidget {
                       backgroundColor: Colors.black.withOpacity(0)),
                   primaryColor: Colors.black,
                 ),
-                initialRoute: '/login',
+                initialRoute: currentUser != null ? '/home' : '/login',
+                // initialRoute: '/login',
                 routes: {
                   '/login': (context) => const LoginScreen(),
                   '/signup': (context) => const SignUpScreen(),

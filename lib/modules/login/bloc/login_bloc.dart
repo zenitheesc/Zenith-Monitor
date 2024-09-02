@@ -34,11 +34,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _onSignOut(SignOutEvent event, Emitter<LoginState> emit) async {
     await _auth.signOut();
-    Navigator.pushAndRemoveUntil(
-      // ignore: use_build_context_synchronously
-      event.context,
-      MaterialPageRoute(builder: (BuildContext context) => const LoginScreen()),
-      ModalRoute.withName('/login'),
-    );
+    emit(SignOutSuccess());
+    // Navigator.pushAndRemoveUntil(
+    //   // ignore: use_build_context_synchronously
+    //   event.context,
+    //   MaterialPageRoute(builder: (BuildContext context) => const LoginScreen()),
+    //   ModalRoute.withName('/login'),
+    // );
   }
 }
