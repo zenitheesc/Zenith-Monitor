@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:zenith_monitor/modules/bluetooth/bluetooth_screen.dart';
 import 'package:zenith_monitor/modules/home_page/screen/home_screen.dart';
 import 'package:zenith_monitor/utils/services/authentication/google_auth.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
@@ -96,13 +97,14 @@ class Application extends StatelessWidget {
                       backgroundColor: Colors.black.withOpacity(0)),
                   primaryColor: Colors.black,
                 ),
-                //initialRoute: currentUser != null ? '/home' : '/login',
-                initialRoute: '/login',
+                initialRoute: currentUser != null ? '/home' : '/login',
+                //initialRoute: '/login',
                 routes: {
                   '/login': (context) => const LoginScreen(),
                   '/signup': (context) => const SignUpScreen(),
                   // '/forgotPwd': (context) => const ForgotMyPassword(),
-                  '/home': (context) => HomeScreen(),
+                  '/home': (context) => HomeScreen(currentUser: currentUser),
+                  '/bluetooth': (context) => BluetoothScreen(),
                   '/map': (context) => const MapScreen(),
                   '/configuration': (context) => ConfigurationScreen(),
                   '/terminal': (context) => const TerminalScreen(),

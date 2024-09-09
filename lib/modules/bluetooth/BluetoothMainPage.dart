@@ -13,12 +13,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 // import './helpers/LineChart.dart';
 
-class MainPage extends StatefulWidget {
+class BluetoothMainPage extends StatefulWidget {
   @override
   MainPageState createState() => MainPageState();
 }
 
-class MainPageState extends State<MainPage> {
+class MainPageState extends State<BluetoothMainPage> {
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
   String _address = "...";
@@ -97,7 +97,7 @@ class MainPageState extends State<MainPage> {
           const Divider(),
           const ListTile(title: Text('General')),
           SwitchListTile(
-            title: const Text('Enable Bluetooth'),
+            title: const Text('Ativar Bluetooth'),
             value: _bluetoothState.isEnabled,
             onChanged: (bool value) {
               // Do the request and update with the true value then
