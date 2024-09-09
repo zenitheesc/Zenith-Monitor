@@ -58,21 +58,20 @@ class Application extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    // UsbManager usbManager = UsbManager();
-    // FirestoreServices fireServices = FirestoreServices();
+    UsbManager usbManager = UsbManager();
+    FirestoreServices fireServices = FirestoreServices();
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => LoginBloc(auth: GoogleAuth())),
-          // BlocProvider(
-          //     create: (context) =>
-          //         DataBloc(usbManager: usbManager, fireServices: fireServices)),
-          // BlocProvider(
-          //     create: (context) => MapDataBloc(
-          //         usbManager: usbManager, fireServices: fireServices)),
+          BlocProvider(
+              create: (context) =>
+                  DataBloc(usbManager: usbManager, fireServices: fireServices)),
+          BlocProvider(
+              create: (context) => MapDataBloc(
+                  usbManager: usbManager, fireServices: fireServices)),
           BlocProvider(
               create: (context) =>
                   TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
-
           BlocProvider(create: (context) => LoginBloc(auth: GoogleAuth())),
           BlocProvider(
               create: (context) =>
@@ -91,7 +90,7 @@ class Application extends StatelessWidget {
               return MaterialApp(
                 showPerformanceOverlay: false, // shows fps
                 debugShowCheckedModeBanner: false,
-                title: 'Main Screen',
+                title: 'Zenith Monitor Main Screen',
                 theme: ThemeData(
                   bottomSheetTheme: BottomSheetThemeData(
                       backgroundColor: Colors.black.withOpacity(0)),
