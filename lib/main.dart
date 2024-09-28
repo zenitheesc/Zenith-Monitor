@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:zenith_monitor/modules/bluetooth/bluetooth_screen.dart';
+import 'package:zenith_monitor/modules/home_page/screen/home_screen.dart';
+import 'package:zenith_monitor/utils/services/authentication/google_auth.dart';
 import 'package:zenith_monitor/utils/services/firestore_services/firestore_services.dart';
 import 'package:zenith_monitor/widgets/not_found_screen.dart';
 import 'firebase_options.dart';
@@ -11,12 +14,13 @@ import 'package:zenith_monitor/modules/terminal/bloc/terminal_bloc.dart';
 import 'package:zenith_monitor/modules/terminal/screen/terminal_screen.dart';
 import 'package:zenith_monitor/utils/services/usb/usb.dart';
 import 'package:zenith_monitor/core/pipelines/data_pipeline/data_bloc.dart';
-import 'package:zenith_monitor/modules/forget_password/screen/forgot_my_password_screen.dart';
 import 'package:zenith_monitor/modules/login/bloc/login_bloc.dart';
 import 'package:zenith_monitor/modules/map/screen/map_screen.dart';
 import 'package:zenith_monitor/modules/signup/screen/sign_up_screen.dart';
 import 'package:zenith_monitor/utils/ui/animations/zenith_progress_indicator.dart';
 import 'package:zenith_monitor/modules/login/screen/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +28,20 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load(fileName: ".env");
+  await requestBluetoothPermissions();
   runApp(const ZenithMonitor());
+}
+
+Future<void> requestBluetoothPermissions() async {
+  final statusScan = await Permission.bluetoothScan.request();
+  final statusConnect = await Permission.bluetoothConnect.request();
+  final statusLocation = await Permission.locationWhenInUse.request();
+
+  if (!statusScan.isGranted ||
+      !statusConnect.isGranted ||
+      !statusLocation.isGranted) {
+    openAppSettings();
+  }
 }
 
 class ZenithMonitor extends StatelessWidget {
@@ -45,13 +62,17 @@ class Application extends StatelessWidget {
     FirestoreServices fireServices = FirestoreServices();
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => LoginBloc()),
+          BlocProvider(create: (context) => LoginBloc(auth: GoogleAuth())),
           BlocProvider(
               create: (context) =>
                   DataBloc(usbManager: usbManager, fireServices: fireServices)),
           BlocProvider(
               create: (context) => MapDataBloc(
                   usbManager: usbManager, fireServices: fireServices)),
+          BlocProvider(
+              create: (context) =>
+                  TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
+          BlocProvider(create: (context) => LoginBloc(auth: GoogleAuth())),
           BlocProvider(
               create: (context) =>
                   TerminalBloc(dataBloc: BlocProvider.of<DataBloc>(context))),
@@ -64,20 +85,25 @@ class Application extends StatelessWidget {
             }
 
             if (snapshot.connectionState == ConnectionState.done) {
+              final User? currentUser = FirebaseAuth.instance.currentUser;
+
               return MaterialApp(
                 showPerformanceOverlay: false, // shows fps
                 debugShowCheckedModeBanner: false,
-                title: 'Main Screen',
+                title: 'Zenith Monitor Main Screen',
                 theme: ThemeData(
                   bottomSheetTheme: BottomSheetThemeData(
                       backgroundColor: Colors.black.withOpacity(0)),
                   primaryColor: Colors.black,
                 ),
-                initialRoute: '/login',
+                initialRoute: currentUser != null ? '/home' : '/login',
+                //initialRoute: '/login',
                 routes: {
                   '/login': (context) => const LoginScreen(),
                   '/signup': (context) => const SignUpScreen(),
-                  '/forgotPwd': (context) => const ForgotMyPassword(),
+                  // '/forgotPwd': (context) => const ForgotMyPassword(),
+                  '/home': (context) => HomeScreen(currentUser: currentUser),
+                  '/bluetooth': (context) => BluetoothScreen(),
                   '/map': (context) => const MapScreen(),
                   '/configuration': (context) => ConfigurationScreen(),
                   '/terminal': (context) => const TerminalScreen(),
