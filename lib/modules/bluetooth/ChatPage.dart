@@ -192,69 +192,54 @@ class ChatPageState extends State<ChatPage> {
   }
 
   void _onDataReceived(Uint8List data) {
-    // Allocate buffer for parsed data
-    int backspacesCounter = 0;
-    for (var byte in data) {
-      if (byte == 8 || byte == 127) {
-        backspacesCounter++;
-      }
-    }
-    Uint8List buffer = Uint8List(data.length - backspacesCounter);
-    int bufferIndex = buffer.length;
-
-    // Apply backspace control character
-    backspacesCounter = 0;
-    for (int i = data.length - 1; i >= 0; i--) {
-      if (data[i] == 8 || data[i] == 127) {
-        backspacesCounter++;
-      } else {
-        if (backspacesCounter > 0) {
-          backspacesCounter--;
-        } else {
-          buffer[--bufferIndex] = data[i];
-        }
-      }
+    // Converter buffer para string
+    String dataString = String.fromCharCodes(data);
+    print("Data received (len: ${data.length}): $dataString");
+    if (dataString.isEmpty) {
+      // descartar se estiver em branco
+      return;
     }
 
-    // Cria uma string a partir do buffer
-    String dataString = String.fromCharCodes(buffer);
+    // Checar pacote
+    RegExp regExp =
+        RegExp(r'-?[0-9.]+;[0-9]+;-?[0-9.]+;-?[0-9.]+;[0-9.]+;"[0-9:]+"');
+    if (regExp.hasMatch(dataString) == false) {
+      print("Pacote inválido: $dataString");
+      return;
+    }
 
-    // Divide a string em partes usando ponto e vírgula como delimitador
+    // Dividir pacote
+    // 85;6;-23.550501;-46.633301;760;"12:30:45"
+    // rssi;id;latitude;longitude;altitude
     List<String> parts = dataString.split(';');
-    String message = dataString; // Mensagem original
-    double? longitude;
+
+    // Extrair dados
+    double? rssi;
+    double? id;
     double? latitude;
+    double? longitude;
+    double? altitude;
+    String? datahora;
 
-    if (parts.length >= 3) {
-      // Extrai longitude e latitude (segundo e terceiro valores)
-      longitude = double.tryParse(parts[1].trim());
-      latitude = double.tryParse(parts[2].trim());
-    }
+    if (parts.length >= 1) rssi = double.tryParse(parts[0].trim());
+    if (parts.length >= 2) id = double.tryParse(parts[1].trim());
+    if (parts.length >= 3) latitude = double.tryParse(parts[2].trim());
+    if (parts.length >= 4) longitude = double.tryParse(parts[3].trim());
+    if (parts.length >= 5) altitude = double.tryParse(parts[4].trim());
+    if (parts.length >= 6) datahora = parts[5].trim();
+    print(
+        "- RSSI: $rssi, ID: $id, Latitude: $latitude, Longitude: $longitude, Altitude: $altitude, Data/Hora: $datahora");
 
-    // Create message if there is new line character
-    // String dataString = String.fromCharCodes(buffer);
-    int index = buffer.indexOf(13);
-    if (~index != 0) {
-      setState(() {
-        messages.add(
-          Message(
-            1,
-            backspacesCounter > 0
-                ? _messageBuffer.substring(
-                    0, _messageBuffer.length - backspacesCounter)
-                : _messageBuffer + dataString.substring(0, index),
-            longitude: longitude,
-            latitude: latitude,
-          ),
-        );
-        _messageBuffer = dataString.substring(index);
-      });
-    } else {
-      _messageBuffer = (backspacesCounter > 0
-          ? _messageBuffer.substring(
-              0, _messageBuffer.length - backspacesCounter)
-          : _messageBuffer + dataString);
-    }
+    setState(() {
+      messages.add(
+        Message(
+          1,
+          "$id ($datahora, $rssi dB)",
+          longitude: longitude,
+          latitude: latitude,
+        ),
+      );
+    });
   }
 
   void _sendMessage(String text) async {
